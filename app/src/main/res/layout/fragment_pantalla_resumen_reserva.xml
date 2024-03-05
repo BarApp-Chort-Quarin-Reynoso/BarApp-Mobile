@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.barapp.ui.pantallas.PantallaResumenReserva">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="@string/pantalla_resumen_reserva_titulo_datos_sobre_reserva_en"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Body1"
+
+            app:subtitle="@string/pantalla_resumen_reserva_titulo_nombre_restaurante"
+            app:subtitleCentered="true"
+            app:subtitleTextAppearance="@style/TextAppearance.AppCompat.Headline"
+            app:subtitleTextColor="@color/md_theme_dark_inversePrimary"
+            app:navigationIcon="@drawable/icon_outlined_arrow_back_24"
+            app:navigationIconTint="?attr/colorOnSurface"
+            style="@style/Widget.Barapp.Toolbar"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardDatosReserva"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txtViewTituloDatosReserva"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="5dp"
+                android:text="@string/pantalla_resumen_reserva_titulo_datos_reserva"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imageViewCantidadPersonas"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
+                    app:srcCompat="@drawable/icon_outlined_people_24" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/labelCantidadPersonas"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pantalla_resumen_reserva_label_cantidad_personas"
+                    android:layout_marginVertical="10dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textViewCantidadPersonas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pantalla_resumen_reserva_texto_cantidad_personas"
+                    android:layout_marginVertical="10dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imageViewCalendario"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
+                    app:srcCompat="@drawable/icon_outlined_insert_invitation_24"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/labelFechaReserva"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pantalla_resumen_reserva_label_fecha_reserva"
+                    android:layout_marginVertical="10dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textViewFechaReserva"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pantalla_resumen_reserva_texto_fecha_reserva"
+                    android:layout_marginVertical="10dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imageViewHoraReserva"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
+                    app:srcCompat="@drawable/icon_outlined_access_time_24" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/labelHoraReserva"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:text="@string/pantalla_resumen_reserva_label_hora_reserva"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textViewHoraReserva"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pantalla_resumen_reserva_texto_hora_reserva"
+                    android:layout_marginVertical="10dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardDetallePersona"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/labelDetallePersona"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="5dp"
+                android:text="@string/pantalla_resumen_reserva_titulo_detalle_persona"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imageViewPersona"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
+                    app:srcCompat="@drawable/icon_outlined_person_24" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/labelNombre"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pantalla_resumen_reserva_label_nombre"
+                    android:layout_marginVertical="10dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textViewNombre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pantalla_resumen_reserva_texto_nombre"
+                    android:layout_marginVertical="10dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imageViewMail"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
+                    app:srcCompat="@drawable/icon_outlined_email_24"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/labelMail"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pantalla_resumen_reserva_label_mail"
+                    android:layout_marginVertical="10dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textViewMail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pantalla_resumen_reserva_texto_mail"
+                    android:layout_marginVertical="10dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imageViewTelefono"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
+                    app:srcCompat="@drawable/icon_outlined_call_24"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/labelTelefono"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:text="@string/pantalla_resumen_reserva_label_telefono"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textViewTelefono"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pantalla_resumen_reserva_texto_telefono"
+                    android:layout_marginVertical="10dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonCancelarReserva"
+        style="@style/Widget.Material3.Button.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginVertical="10dp"
+        android:text="@string/boton_cancelar_reserva"
+        android:contentDescription="@string/boton_cancelar_reserva_descripcion"
+        app:backgroundTint="@color/md_theme_light_error"
+        app:icon="@drawable/icon_outlined_close_24" />
+
+
+</LinearLayout>

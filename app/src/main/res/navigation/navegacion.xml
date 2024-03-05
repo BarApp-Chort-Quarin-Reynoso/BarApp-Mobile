@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navegacion"
+    app:startDestination="@id/pantallaNavegacionPrincipal">
+
+    <fragment
+        android:id="@+id/pantallaNavegacionPrincipal"
+        android:name="com.barapp.ui.pantallas.PantallaNavegacionPrincipal"
+        android:label="fragment_pantalla_navegacion"
+        tools:layout="@layout/fragment_pantalla_navegacion_principal" >
+        <action
+            android:id="@+id/action_pantallaNavegacionPrincipal_to_pantallaBusqueda"
+            app:destination="@id/pantallaBusqueda" />
+        <action
+            android:id="@+id/action_pantallaNavegacionPrincipal_to_pantallaBar"
+            app:destination="@id/pantallaBar" />
+        <action
+            android:id="@+id/action_pantallaNavegacionPrincipal_to_pantallaResumenReserva"
+            app:destination="@id/pantallaResumenReserva" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/pantallaBusqueda"
+        android:name="com.barapp.ui.pantallas.PantallaBusqueda"
+        android:label="fragment_pantalla_busqueda"
+        tools:layout="@layout/fragment_pantalla_busqueda" >
+        <action
+            android:id="@+id/action_pantallaBusqueda_to_pantallaResultadosBusqueda"
+            app:destination="@id/pantallaResultadosBusqueda" />
+    </fragment>
+    <fragment
+        android:id="@+id/pantallaResultadosBusqueda"
+        android:name="com.barapp.ui.pantallas.PantallaResultadosBusqueda"
+        android:label="PantallaResultadosBusqueda"
+        tools:layout="@layout/fragment_pantalla_resultados_busqueda">
+        <action
+            android:id="@+id/action_pantallaResultadosBusqueda_to_pantallaBar"
+            app:destination="@id/pantallaBar" />
+    </fragment>
+    <fragment
+        android:id="@+id/pantallaBar"
+        android:name="com.barapp.ui.pantallas.PantallaBar"
+        android:label="fragment_pantalla_bar"
+        tools:layout="@layout/fragment_pantalla_bar" >
+        <action
+            android:id="@+id/action_pantallaBar_to_pantallaUbicacionBar"
+            app:destination="@id/pantallaUbicacionBar" />
+        <action
+            android:id="@+id/action_pantallaBar_to_pantallaCrearReserva"
+            app:destination="@id/pantallaCrearReserva" />
+    </fragment>
+    <fragment
+        android:id="@+id/pantallaUbicacionBar"
+        android:name="com.barapp.ui.pantallas.PantallaUbicacionBar"
+        android:label="fragment_pantalla_ubicacion_bar"
+        tools:layout="@layout/fragment_pantalla_ubicacion_bar" />
+    <fragment
+        android:id="@+id/pantallaCrearReserva"
+        android:name="com.barapp.ui.pantallas.PantallaCrearReserva"
+        android:label="PantallaCrearReserva"
+        tools:layout="@layout/fragment_pantalla_crear_reserva">
+        <action
+            android:id="@+id/action_pantallaCrearReserva_to_pantallaConfirmacionReserva"
+            app:destination="@id/pantallaConfirmacionReserva" />
+    </fragment>
+        <action
+            android:id="@+id/action_global_pantallaBar"
+            app:destination="@id/pantallaBar"/>
+    <fragment
+        android:id="@+id/pantallaConfirmacionReserva"
+        android:name="com.barapp.ui.pantallas.PantallaConfirmacionReserva"
+        android:label="pantallaConfirmacionReserva"
+        tools:layout="@layout/fragment_pantalla_confirmacion_reserva">
+        <action
+            android:id="@+id/action_pantallaConfirmacionReserva_to_pantallaNavegacionPrincipal"
+            app:destination="@id/pantallaNavegacionPrincipal"
+            app:popUpTo="@id/pantallaNavegacionPrincipal"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/pantallaResumenReserva"
+        android:name="com.barapp.ui.pantallas.PantallaResumenReserva"
+        android:label="PantallaResumenReserva"
+        tools:layout="@layout/fragment_pantalla_resumen_reserva"/>
+
+</navigation>

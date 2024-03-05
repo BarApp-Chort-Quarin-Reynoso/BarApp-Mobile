@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
+        style="?attr/materialCardViewElevatedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="109dp"
+        android:layout_margin="@dimen/layout_margin_card_view"
+        android:clipToPadding="false"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botonFavorito"
+                style="?attr/materialIconButtonFilledStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#F9F2F2"
+                android:checkable="true"
+                android:contentDescription="@string/boton_favorito_descripcion"
+                app:buttonTint="@android:color/black"
+                app:icon="@drawable/icon_outlined_favorite_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageViewLogo"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="@string/imagen_logo_restaurante_descripcion"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/txtViewNombreRestaurante"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                app:srcCompat="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/txtViewNombreRestaurante"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/texto_ejemplo_bar_nombre"
+                android:textAppearance="@style/BarApp.TextAppearanceBarName"
+                app:layout_constraintBottom_toTopOf="@+id/txtViewUbicacionRestaurante"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageViewLogo"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txtViewUbicacionRestaurante"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/texto_ejemplo_bar_direccion"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintBottom_toTopOf="@+id/txtViewDistanciaRestaurante"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/txtViewNombreRestaurante"
+                app:layout_constraintTop_toBottomOf="@+id/txtViewNombreRestaurante" />
+
+            <TextView
+                android:id="@+id/txtViewDistanciaRestaurante"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/texto_ejemplo_bar_distancia"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/txtViewPuntuacionRestaurante"
+                app:layout_constraintStart_toStartOf="@+id/txtViewNombreRestaurante"
+                app:layout_constraintTop_toBottomOf="@+id/txtViewUbicacionRestaurante" />
+
+            <TextView
+                android:id="@+id/txtViewPuntuacionRestaurante"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="@string/texto_ejemplo_bar_nota"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintBottom_toBottomOf="@+id/txtViewDistanciaRestaurante"
+                app:layout_constraintEnd_toStartOf="@+id/imageViewEstrella"
+                app:layout_constraintHorizontal_bias="0.97"
+                app:layout_constraintStart_toEndOf="@+id/txtViewDistanciaRestaurante"
+                app:layout_constraintTop_toTopOf="@+id/txtViewDistanciaRestaurante" />
+
+            <ImageView
+                android:id="@+id/imageViewEstrella"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/imagen_estrella_descripcion"
+                app:layout_constraintBottom_toBottomOf="@+id/txtViewPuntuacionRestaurante"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txtViewPuntuacionRestaurante"
+                app:layout_constraintTop_toTopOf="@+id/txtViewPuntuacionRestaurante"
+                app:srcCompat="@drawable/icon_filled_star_24"
+                app:tint="#FFC107" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

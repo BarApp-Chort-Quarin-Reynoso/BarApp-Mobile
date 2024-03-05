@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:transitionName="transition_pantalla_buscar">
+
+    <TextView
+        android:id="@+id/labelBuscandoEn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="45dp"
+        android:text="@string/pantalla_busqueda_buscando_en"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtViewUbicacionBusqueda"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/pantalla_busqueda_ubicacion"
+        android:textColor="#6750A4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/labelBuscandoEn"
+        app:layout_constraintTop_toTopOf="@+id/labelBuscandoEn" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:hint="@string/hint_buscar"
+        app:endIconDrawable="@drawable/icon_outlined_search_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelBuscandoEn">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textViewBuscar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionSearch"
+            android:inputType="text|textCapSentences"
+            android:maxLines="1"
+            android:minHeight="48dp"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/labelBusquedasRecientes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="35dp"
+        android:text="@string/pantalla_busqueda_busquedas_recientes"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textField" />
+
+    <LinearLayout
+        android:id="@+id/layoutBusquedasRecientes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelBusquedasRecientes"
+        app:layout_constraintVertical_bias="0.0">
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/botonEliminarHistorial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/boton_eliminar_historial_descripcion"
+        app:icon="@drawable/icon_filled_delete_24"
+        app:backgroundTint="@color/md_theme_light_background"
+        app:layout_constraintBottom_toBottomOf="@+id/labelBusquedasRecientes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toEndOf="@+id/labelBusquedasRecientes"
+        app:layout_constraintTop_toTopOf="@+id/labelBusquedasRecientes"
+        style="?attr/materialIconButtonFilledStyle"/>
+
+    <TextView
+        android:id="@+id/textViewBusquedasRecientesVacia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/pantalla_busqueda_no_has_buscado_nada_recientemente"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutBusquedasRecientes" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

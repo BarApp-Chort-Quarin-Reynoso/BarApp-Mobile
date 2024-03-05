@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView"
+        style="?attr/materialCardViewElevatedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin_card_view"
+        app:cardUseCompatPadding="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/inner_margin_card_view">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageViewLogo"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:contentDescription="@string/imagen_logo_restaurante_descripcion"
+                app:layout_constraintBottom_toBottomOf="@+id/txtViewDatosReserva"
+                app:layout_constraintEnd_toStartOf="@+id/txtViewNombreRestaurante"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
+                app:srcCompat="@drawable/logo_mc" />
+
+            <TextView
+                android:id="@+id/txtViewNombreRestaurante"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/texto_ejemplo_bar_nombre"
+                android:textAppearance="@style/BarApp.TextAppearanceBarName"
+                app:layout_constraintBottom_toTopOf="@+id/txtViewDireccionRestaurante"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageViewLogo"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txtViewDireccionRestaurante"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/texto_ejemplo_bar_direccion"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintBottom_toTopOf="@+id/txtViewDatosReserva"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageViewLogo"
+                app:layout_constraintTop_toBottomOf="@id/txtViewNombreRestaurante" />
+
+            <TextView
+                android:id="@+id/txtViewDatosReserva"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/texto_ejemplo_datos_reserva"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintEnd_toStartOf="@+id/botonOpinar"
+                app:layout_constraintStart_toEndOf="@id/imageViewLogo"
+                app:layout_constraintTop_toBottomOf="@id/txtViewDireccionRestaurante" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botonOpinar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/boton_opinar"
+                android:contentDescription="@string/boton_opinar_descripcion"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/txtViewDatosReserva"
+                app:layout_constraintTop_toBottomOf="@id/txtViewDireccionRestaurante"
+                style="@style/Widget.Material3.Button.TextButton" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+</FrameLayout>

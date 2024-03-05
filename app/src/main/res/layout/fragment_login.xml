@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.barapp.ui.loginSignup.PantallaLogin">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/labelCrearCuenta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/pantalla_login_iniciar_sesion"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtViewEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
+            android:hint="@string/hint_mail"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/labelCrearCuenta"
+            app:startIconDrawable="@drawable/icon_filled_email_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtViewContrasenia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
+            android:hint="@string/hint_contrasenia"
+            app:endIconMode="password_toggle"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtViewEmail"
+            app:startIconDrawable="@drawable/icon_filled_lock_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <Button
+            android:id="@+id/botonIngresar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="30dp"
+            android:contentDescription="@string/boton_ingresar_descripcion"
+            android:text="@string/boton_ingresar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtViewContrasenia" />
+
+        <ImageButton
+            android:id="@+id/botonGoogle"
+            style="?android:attr/buttonStyleInset"
+            android:layout_width="102dp"
+            android:layout_height="58dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="30dp"
+            android:backgroundTint="#FFFFFF"
+            android:contentDescription="@string/boton_google_descripcion"
+            android:src="@drawable/logo_google"
+            app:layout_constraintBottom_toTopOf="@+id/botonRegistrarse"
+            app:layout_constraintEnd_toStartOf="@+id/botonFacebook"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageButton
+            android:id="@+id/botonFacebook"
+            style="?android:attr/buttonStyleInset"
+            android:layout_width="102dp"
+            android:layout_height="58dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="30dp"
+            android:backgroundTint="#FFFFFF"
+            android:contentDescription="@string/boton_facebook_descripcion"
+            android:src="@drawable/logo_facebook"
+            app:layout_constraintBottom_toTopOf="@+id/botonRegistrarse"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/botonGoogle" />
+
+        <TextView
+            android:id="@+id/labelIniciarSesionCon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:textColor="#FFFFFF"
+            android:text="@string/pantalla_login_texto_o_inicia_sesion_con"
+            app:layout_constraintBottom_toTopOf="@+id/botonGoogle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/labelNoTienesCuenta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pantalla_login_texto_no_tienes_una_cuenta"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBaseline_toBaselineOf="@+id/botonRegistrarse"
+            app:layout_constraintEnd_toStartOf="@+id/botonRegistrarse"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <Button
+            android:id="@+id/botonRegistrarse"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:contentDescription="@string/boton_registrarse_descripcion"
+            android:padding="0dp"
+            android:text="@string/boton_registrarse"
+            android:textAllCaps="false"
+            android:textColor="@color/md_theme_light_primaryContainer"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/labelNoTienesCuenta" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@drawable/bg_blue"
+            android:backgroundTint="@color/md_theme_dark_primaryContainer"
+            android:cropToPadding="true"
+            android:elevation="-1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tint="@color/md_theme_dark_primaryContainer" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

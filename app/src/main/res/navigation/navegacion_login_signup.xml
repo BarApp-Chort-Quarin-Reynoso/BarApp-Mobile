@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_login_signup"
+    app:startDestination="@id/pantallaLogin">
+
+    <fragment
+        android:id="@+id/pantallaLogin"
+        android:name="com.barapp.ui.loginSignup.PantallaLogin"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_pantallaLogin_to_pantallaSignUp"
+            app:destination="@id/pantallaSignUp" />
+    </fragment>
+    <fragment
+        android:id="@+id/pantallaSignUp"
+        android:name="com.barapp.ui.loginSignup.PantallaSignUp"
+        android:label="fragment_signup"
+        tools:layout="@layout/fragment_signup" />
+</navigation>

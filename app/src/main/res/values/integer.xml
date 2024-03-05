@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="marker_size">256</integer>
+
+
+    <!-- Animaciones -->
+    <integer name="fragment_transition_enter_long_duration">500</integer>
+    <integer name="fragment_transition_exit_long_duration">400</integer>
+    <integer name="fragment_transition_enter_short_duration">400</integer>
+    <integer name="fragment_transition_exit_short_duration">200</integer>
+    <integer name="fragment_transition_duration">500</integer>
+</resources>

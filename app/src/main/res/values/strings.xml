@@ -1,0 +1,272 @@
+<resources>
+    <string name="app_name">BarApp</string>
+
+    <!-- Texto de botones -->
+    <string name="boton_ingresar">Ingresar</string>
+    <string name="boton_facebook">Facebook</string>
+    <string name="boton_google">Google</string>
+    <string name="boton_registrarse">Registrarse</string>
+    <string name="boton_crear_cuenta">Crear cuenta</string>
+    <string name="boton_cancelar">Cancelar</string>
+    <string name="boton_confirmar">Confirmar</string>
+    <string name="boton_menu">Menú</string>
+    <string name="boton_ubicacion">Ubicación</string>
+    <string name="boton_favorito">Favorito</string>
+    <string name="boton_opinar">Opinar</string>
+    <string name="boton_reservar">Reservar</string>
+    <string name="boton_permitir">Permitir</string>
+    <string name="boton_no_permitir">No permitir</string>
+    <string name="boton_ajustes">Ajustes</string>
+    <string name="boton_ahora_no">Ahora no</string>
+    <string name="boton_crear_reserva">Crear Reserva</string>
+    <string name="boton_cancelar_reserva">Cancelar reserva</string>
+    <string name="boton_confirmar_reserva">Confirmar reserva</string>
+    <string name="boton_guardar_cambios">Guardar cambios</string>
+    <string name="boton_ver_mas_opiniones">Ver más opiniones</string>
+    <string name="boton_cerrar_sesion">Cerrar sesión</string>
+    <string name="boton_aceptar">Aceptar</string>
+    <string name="boton_rechazar">Rechazar</string>
+    <string name="boton_seleccionar">Seleccionar</string>
+    <string name="boton_ver">Ver</string>
+
+    <!-- Descripcion de botones -->
+    <string name="boton_ingresar_descripcion">Botón ingresar</string>
+    <string name="boton_facebook_descripcion">Botón Facebook</string>
+    <string name="boton_google_descripcion">Botón Google</string>
+    <string name="boton_registrarse_descripcion">Botón registarse</string>
+    <string name="boton_crear_cuenta_descripcion">Botón crear cuenta</string>
+    <string name="boton_buscar_descripcion">Botón buscar</string>
+    <string name="boton_cancelar_descripcion">Botón cancelar</string>
+    <string name="boton_confirmar_descripcion">Botón confirmar</string>
+    <string name="boton_menu_descripcion">Botón menú</string>
+    <string name="boton_ubicacion_descripcion">Botón ubicaciónEntity</string>
+    <string name="boton_favorito_descripcion">Botón favorito</string>
+    <string name="boton_atras_descripcion">Botón atrás</string>
+    <string name="boton_opinar_descripcion">Botón opinar</string>
+    <string name="boton_reservar_descripcion">Botón reservar</string>
+    <string name="boton_permitir_descripcion">Botón permitir</string>
+    <string name="boton_no_permitir_descripcion">Botón no permitir</string>
+    <string name="boton_ajustes_descripcion">Botón ajustes</string>
+    <string name="boton_ahora_no_descripcion">Botón ahora no</string>
+    <string name="boton_agregar_persona_descripcion">Botón agregar persona</string>
+    <string name="boton_quitar_persona_descripcion">Botón quitar persona</string>
+    <string name="boton_crear_reserva_descripcion">Botón crear reserva</string>
+    <string name="boton_cancelar_reserva_descripcion">Botón cancelar reserva</string>
+    <string name="boton_confirmar_reserva_descripcion">Botón confirmar reserva</string>
+    <string name="boton_guardar_cambios_descripcion">Botón guardar cambios</string>
+    <string name="boton_ver_mas_opiniones_descripcion">Botón ver más opiniones</string>
+    <string name="boton_ordenar_descripcion">Botón ordenar</string>
+    <string name="boton_filtros_descripcion">Botón filtros</string>
+    <string name="boton_pedir_ubicacion_descripcion">Botón pedir ubicación</string>
+    <string name="boton_cerrar_sesion_descripcion">Botón cerrar sesión</string>
+    <string name="boton_editar_descripcion">Botón editar foto usuario</string>
+    <string name="boton_eliminar_historial_descripcion">Botón eliminar historial</string>
+    <string name="boton_como_llegar_descripcion">Botón ¿cómo llegar?</string>
+    <string name="boton_aceptar_descripcion">Botón aceptar</string>
+    <string name="boton_rechazar_descripcion">Botón rechazar</string>
+
+    <!-- Acciones no implementadas -->
+    <string name="boton_ordenar_lista_accion">Ordenar lista no implementado</string>
+    <string name="boton_filtros_lista_accion">Filtrar lista no implementado</string>
+    <string name="boton_opinar_accion">Opinar no implementado</string>
+
+    <!-- Texto hints -->
+    <string name="hint_mail">Mail</string>
+    <string name="hint_contrasenia">Contraseña</string>
+    <string name="hint_confirmar_contrasenia">Confirme su contraseña</string>
+    <string name="hint_buscar">Buscar</string>
+    <string name="hint_nombre">Nombre</string>
+    <string name="hint_apellido">Apellido</string>
+    <string name="hint_telefono">Teléfono</string>
+
+    <!-- Descripcion de imagenes -->
+    <string name="imagen_logo_barapp_descripcion">Logo de la aplicación</string>
+    <string name="imagen_foto_restaurante_descripcion">Foto del restaurante</string>
+    <string name="imagen_logo_restaurante_descripcion">Logo del restaurante</string>
+    <string name="imagen_foto_usuario_descripcion">Foto de perfil del usuario</string>
+    <string name="imagen_estrella_descripcion">Imagen de una estrella</string>
+    <string name="imagen_persona_descripcion">Imagen de una persona</string>
+    <string name="imagen_calendario_descripcion">Imagen de un calendario</string>
+    <string name="imagen_dos_personas_descripcion">Imagen de dos personas</string>
+    <string name="imagen_reloj_descripcion">Imagen de un reloj</string>
+    <string name="imagen_carta_descripcion">Imagen de una carta</string>
+    <string name="imagen_telefono_descripcion">Imagen de un teléfono</string>
+    <string name="imagen_flecha_descripcion">Imagen de una flecha</string>
+
+    <!-- Globales de cardViews -->
+    <string name="cardview_texto_distancia">a %1$d mts</string>
+    <string name="cardview_texto_direccion">%1$s %2$d</string>
+
+    <!-- Pantalla LogIn -->
+    <string name="pantalla_login_iniciar_sesion">Iniciar Sesión</string>
+    <string name="pantalla_login_texto_o_inicia_sesion_con">- O inicia sesión con -</string>
+    <string name="pantalla_login_texto_no_tienes_una_cuenta">¿No tienes una cuenta?</string>
+
+    <!-- Pantalla SignUp -->
+    <string name="pantalla_signup_crea_tu_cuenta">Crea tu cuenta</string>
+
+    <!-- Pantalla Principal -->
+    <string name="pantalla_principal_restaurantes_destacados">Restaurantes destacados</string>
+    <string name="pantalla_principal_titulo_novedades">NOVEDADES</string>
+    <string name="pantalla_principal_texto_novedades">Enterate de las últimas novedades</string>
+    <string name="pantalla_principal_cerca_de_ti">Cerca de tí</string>
+    <string name="pantalla_principal_vistos_recientemente">Vistos recientemente</string>
+
+    <!-- Pantalla Busqueda -->
+    <string name="pantalla_busqueda_buscando_en">Buscando en:</string>
+    <string name="pantalla_busqueda_ubicacion"><i><u>Santa Fe, Santa Fe</u></i></string>
+    <string name="pantalla_busqueda_busquedas_recientes">Busquedas recientes</string>
+    <string name="pantalla_busqueda_no_has_buscado_nada_recientemente">No has buscado nada recientemente</string>
+
+    <string name="pantalla_busqueda_dialog_titulo">¿Eliminar historial?</string>
+    <string name="pantalla_busqueda_dialog_texto">Se eliminará el historial de busquedas recientes.</string>
+
+    <!-- Pantalla Bar -->
+    <string name="pantalla_bar_titulo_descripcion_bar">Sobre el lugar</string>
+    <string name="pantalla_bar_titulo_opiniones_bar">Opiniones</string>
+
+    <string name="pantalla_bar_texto_nombre_usuario">%1$s %2$s</string>
+    <string name="pantalla_bar_texto_opinion">\"%1$s\"</string>
+    <string name="pantalla_bar_texto_no_hay_opiniones">Aun no existen opiniones sobre este bar.</string>
+
+    <!-- Pantalla Ubicacion Bares -->
+    <string name="pantalla_ubicacion_pedir_ubicacion">Se necesita acceder a su ubicación para mostrar los bares cercanos</string>
+
+    <!-- Textos de ejemplo -->
+    <string name="texto_ejemplo_bar_nombre">Restaurante 1</string>
+    <string name="texto_ejemplo_bar_direccion">Rivadavia 3186</string>
+    <string name="texto_ejemplo_bar_distancia">a 200 mts</string>
+    <string name="texto_ejemplo_bar_nota">1.0</string>
+    <string name="texto_ejemplo_bar_descripcion">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam mattis libero eu neque finibus interdum. Fusce eget sem elit. Proin sit amet massa vel diam malesuada maximus. Nullam cursus leo ligula, in vulputate eros sagittis vel. Maecenas pharetra.</string>
+    <string name="texto_ejemplo_nombre_usuario">Juan Carlos Pintos</string>
+    <string name="texto_ejemplo_opinion">“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam mattis libero eu neque finibus interdum.”</string>
+    <string name="texto_ejemplo_datos_reserva">4 personas | 22/03 | 13:00</string>
+
+    <!-- Rational permission request dialog -->
+    <string name="titulo_pedir_permisos_dialog">Permisos necesarios</string>
+    <string name="texto_pedir_permisos_dialog">Se necesita acceder a la ubicacion de su dispositivo para acceder a esta funcionalidad. ¿Desea otorgar este permiso?</string>
+
+    <!-- cambiarPermisosEnConfiguracionesDialog -->
+    <string name="texto_cambiar_permisos_dialog">Se necesita acceder a su ubicación para mostrar los bares cercanos. Para permitirlo, vaya a Ajustes > Permisos y permita acceder a la ubicación</string>
+
+    <!-- Rational permission request dialog -->
+    <string name="permission_request_dialog_supporting_text">Se necesita acceder a la ubicacionEntity de su dispositivo para acceder a esta funcionalidad. ¿Desea otorgar este permiso?</string>
+
+    <!-- Shared preferences -->
+    <string name="prefs_file">com.barapp.barapp.PREFERENCE_FILE_KEY</string>
+
+    <!-- Errores -->
+    <string name="error_ubicacion_no_disponible">No se puede acceder a su ubicación</string>
+    <string name="error_no_se_puede_acceder_al_menu">El menú no se encuentra disponible en este momento</string>
+    <string name="error_campo_obligatorio">"El campo es obligatorio"</string>
+    <string name="error_campo_fuera_de_rango">"El campo debe tener entre %1$d y %2$d caracteres"</string>
+    <string name="error_campo_con_al_menos_un_digito">El campo debe tener al menos un dígito</string>
+    <string name="error_campo_por_debajo_valor">El campo debe tener al menos %1$d caracteres</string>
+    <string name="error_contrasenia_no_coincide">"Las contraseñas deben ser las mismas"</string>
+    <string name="error_mail_no_valido">El mail ingresado no es válido</string>
+
+    <!-- Notification channel -->
+    <string name="notificacion_reserva_channel_name">"General"</string>
+    <string name="notificacion_reserva_channel_description">"Notificaciones generales de la aplicación"</string>
+
+    <!-- Notification -->
+    <string name="notificacion_reserva_title">"Reserva en %1$s"</string>
+    <string name="notificacion_reserva_text">"Su reserva en %1$s es en una hora. ¡Lo estamos esperando!"</string>
+
+    <!-- Pantalla Crear Reserva -->
+    <string name="pantalla_reservar_titulo_tamanio_grupo">Tamaño de grupo</string>
+    <string name="pantalla_reservar_titulo_fecha_de_reserva">Fecha de la reserva</string>
+    <string name="pantalla_reservar_titulo_horarios_disponibles">Horarios disponibles</string>
+    <string name="pantalla_reservar_titulo_desayuno">Desayuno</string>
+    <string name="pantalla_reservar_titulo_almuerzo">Almuerzo</string>
+    <string name="pantalla_reservar_titulo_merienda">Merienda</string>
+    <string name="pantalla_reservar_titulo_cena">Cena</string>
+
+    <string name="pantalla_reservar_titulo_nombre_restaurante">[Nombre_Restaurante]</string>
+    <string name="pantalla_reservar_texto_cantidad_personas_inicial">3 personas</string>
+    <string name="pantalla_reservar_texto_fecha_reserva">[Seleccione una fecha]</string>
+
+    <string name="pantalla_reservar_titulo_calendario">Seleccione un día para la reserva</string>
+
+    <string name="pantalla_reservar_titulo_dialog">No existen horarios disponibles</string>
+    <string name="pantalla_reservar_texto_dialog">No existen horarios disponibles para la fecha seleccionada. Por favor, seleccione una nueva fecha y vuelva a intentarlo.</string>
+
+
+    <!-- Pantalla Confirmación Reservas -->
+    <string name="pantalla_confirmacion_reservas_titulo_confirmar_reserva_en">Confirmá tu reserva en</string>
+    <string name="pantalla_confirmacion_reservas_titulo_datos_reserva">Datos de la reserva</string>
+    <string name="pantalla_confirmacion_reservas_label_fecha_reserva">Fecha de la reserva</string>
+    <string name="pantalla_confirmacion_reservas_label_cantidad_personas">Cantidad de personas</string>
+    <string name="pantalla_confirmacion_reservas_label_hora_reserva">Hora de la reserva</string>
+    <string name="pantalla_confirmacion_reservas_titulo_detalle_persona">Detalle de la persona</string>
+    <string name="pantalla_confirmacion_reservas_label_nombre">Nombre</string>
+    <string name="pantalla_confirmacion_reservas_label_mail">Mail</string>
+    <string name="pantalla_confirmacion_reservas_label_telefono">Teléfono</string>
+    <string name="pantalla_confirmacion_reservas_label_recordatorio_reserva">Recordá que la reserva permanece pendiente un máximo de 15 minutos. Pasado ese tiempo la misma es automáticamente cancelada.</string>
+
+    <string name="pantalla_confirmacion_reservas_titulo_nombre_restaurante">[Nombre_Restaurante]</string>
+    <string name="pantalla_confirmacion_reservas_texto_cantidad_personas">[Cantidad_Personas]</string>
+    <string name="pantalla_confirmacion_reservas_texto_fecha_reserva">[Fecha_Reserva]</string>
+    <string name="pantalla_confirmacion_reservas_texto_hora_reserva">[Hora_Reserva]</string>
+    <string name="pantalla_confirmacion_reservas_texto_nombre">[Nombre_Usuario]</string>
+    <string name="pantalla_confirmacion_reservas_texto_mail">[Mail_Usuario]</string>
+    <string name="pantalla_confirmacion_reservas_texto_telefono">[Telefono_Usuario]</string>
+
+    <string name="pantalla_confirmacion_reservas_snackbar_texto">¡Reserva creada con éxito!</string>
+
+    <!-- Pantalla Resumen Reserva -->
+    <string name="pantalla_resumen_reserva_titulo_datos_sobre_reserva_en">Datos sobre la reserva en</string>
+    <string name="pantalla_resumen_reserva_titulo_datos_reserva">Datos de la reserva</string>
+    <string name="pantalla_resumen_reserva_label_fecha_reserva">Fecha de la reserva</string>
+    <string name="pantalla_resumen_reserva_label_cantidad_personas">Cantidad de personas</string>
+    <string name="pantalla_resumen_reserva_label_hora_reserva">Hora de la reserva</string>
+    <string name="pantalla_resumen_reserva_titulo_detalle_persona">Detalle de la persona</string>
+    <string name="pantalla_resumen_reserva_label_nombre">Nombre</string>
+    <string name="pantalla_resumen_reserva_label_mail">Mail</string>
+    <string name="pantalla_resumen_reserva_label_telefono">Teléfono</string>
+
+    <string name="pantalla_resumen_reserva_titulo_nombre_restaurante">[Nombre_Restaurante]</string>
+    <string name="pantalla_resumen_reserva_texto_fecha_reserva">[Fecha_Reserva]</string>
+    <string name="pantalla_resumen_reserva_texto_cantidad_personas">[Cantidad_Personas]</string>
+    <string name="pantalla_resumen_reserva_texto_hora_reserva">[Hora_Reserva]</string>
+    <string name="pantalla_resumen_reserva_texto_nombre">[Nombre_Usuario]</string>
+    <string name="pantalla_resumen_reserva_texto_mail">[Mail_Usuario]</string>
+    <string name="pantalla_resumen_reserva_texto_telefono">[Telefono_Usuario]</string>
+
+    <!-- Pantalla Mis Favoritos -->
+    <string name="pantalla_mis_favoritos_titulo">Mis Favoritos</string>
+    <string name="pantalla_mis_favoritos_label_cantidad_favoritos_encontrados">[Cantidad restaurantes favoritos]</string>
+
+    <!-- Pantalla Mis Reservas -->
+    <string name="pantalla_mis_reservas_titulo">Mis reservas</string>
+    <string name="pantalla_mis_reservas_pendientes">Pendientes</string>
+    <string name="pantalla_mis_reservas_pasadas">Pasadas</string>
+
+    <!--Pantalla Resultado busqueda-->
+    <string name="pantalla_resultados_busqueda_label_cantidad_resultados_encontrados">[Cantidad resultados encontrados]</string>
+
+    <!-- Pantalla Mi Cuenta -->
+    <string name="pantalla_mi_cuenta_titulo">Mi Cuenta</string>
+
+    <string name="pantalla_mi_cuenta_dialog_titulo">¿Cerrar la sesión actual?</string>
+    <string name="pantalla_mi_cuenta_dialog_texto">Deberá volver a ingresar para poder reservar en algún restaurante.</string>
+
+    <!-- Listas vacías -->
+    <string name="lista_vacia_default">[Texto lista vacía]</string>
+    <string name="lista_vacia_mis_favoritos">¡No has agregado ningún restaurante a favoritos!</string>
+    <string name="lista_vacia_resultados_busqueda">¡No se encontró ningún restaurante!</string>
+    <string name="lista_vacia_mis_reservas">¡No posee ninguna reserva a su nombre!</string>
+
+    <string name="menu_title_inicio">Inicio</string>
+    <string name="menu_title_mapa">Mapa</string>
+    <string name="menu_title_favoritos">Favoritos</string>
+    <string name="menu_title_reservas">Reservas</string>
+    <string name="menu_title_mi_cuenta">Mi cuenta</string>
+
+    <string name="placeholder_telefono_argentina">"+54 %1$s"</string>
+    <string name="placeholder_nombre_apellido">"%1$s %2$s"</string>
+    <string name="placeholder_restaurante_encontrado">"%1$d restaurante encontrado"</string>
+    <string name="placeholder_restaurantes_encontrados">"%1$d restaurantes encontrados"</string>
+    <string name="placeholder_persona">"%1$d persona"</string>
+    <string name="placeholder_personas">"%1$d personas"</string>
+</resources>

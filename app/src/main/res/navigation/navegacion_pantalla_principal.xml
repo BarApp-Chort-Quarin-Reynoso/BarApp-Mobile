@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_pantalla_principal"
+    app:startDestination="@id/pantallaPrincipal">
+
+    <fragment
+        android:id="@+id/pantallaMisFavoritos"
+        android:name="com.barapp.ui.pantallas.PantallaMisFavoritos"
+        android:label="fragment_pantalla_mis_favoritos"
+        tools:layout="@layout/fragment_pantalla_mis_favoritos" />
+    <fragment
+        android:id="@+id/pantallaPrincipal"
+        android:name="com.barapp.ui.pantallas.PantallaPrincipal"
+        android:label="fragment_pantalla_principal"
+        tools:layout="@layout/fragment_pantalla_principal" />
+    <action
+        android:id="@+id/action_global_pantallaPrincipal"
+        app:destination="@id/pantallaPrincipal"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/pantallaPrincipal"
+        app:popUpToInclusive="true" />
+    <action
+        android:id="@+id/action_global_pantallaMisFavoritos"
+        app:destination="@id/pantallaMisFavoritos"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/pantallaPrincipal"
+        app:popUpToInclusive="false" />
+    <fragment
+        android:id="@+id/pantallaUbicacionBares"
+        android:name="com.barapp.ui.pantallas.PantallaUbicacionBares"
+        android:label="fragment_pantalla_ubicacion_bares"
+        tools:layout="@layout/fragment_pantalla_ubicacion_bares" />
+    <action
+        android:id="@+id/action_global_pantallaUbicacionBares"
+        app:destination="@id/pantallaUbicacionBares"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/pantallaPrincipal"
+        app:popUpToInclusive="false" />
+    <fragment
+        android:id="@+id/pantallaMiCuenta"
+        android:name="com.barapp.ui.pantallas.PantallaMiCuenta"
+        android:label="fragment_pantalla_mi_cuenta"
+        tools:layout="@layout/fragment_pantalla_mi_cuenta"/>
+    <fragment
+        android:id="@+id/pantallaMisReservas"
+        android:name="com.barapp.ui.pantallas.PantallaMisReservas"
+        android:label="fragment_pantalla_mis_reservas"
+        tools:layout="@layout/fragment_pantalla_mis_reservas" >
+    </fragment>
+    <action
+        android:id="@+id/action_global_pantallaMisReservas"
+        app:destination="@id/pantallaMisReservas"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/pantallaPrincipal" />
+    <action
+        android:id="@+id/action_global_pantallaMiCuenta"
+        app:destination="@id/pantallaMiCuenta"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/pantallaPrincipal" />
+</navigation>

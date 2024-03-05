@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/pantallaPrincipal"
+        android:enabled="true"
+        android:icon="@drawable/icon_outlined_home_24"
+        android:title="@string/menu_title_inicio"/>
+    <item
+        android:id="@+id/pantallaUbicacionBares"
+        android:enabled="true"
+        android:icon="@drawable/icon_outlined_map_24"
+        android:title="@string/menu_title_mapa"/>
+    <item
+        android:id="@+id/pantallaMisFavoritos"
+        android:enabled="true"
+        android:icon="@drawable/icon_outlined_favorite_24"
+        android:title="@string/menu_title_favoritos"/>
+    <item
+        android:id="@+id/pantallaMisReservas"
+        android:enabled="true"
+        android:icon="@drawable/icon_outlined_insert_invitation_24"
+        android:title="@string/menu_title_reservas"/>
+    <item
+        android:id="@+id/pantallaMiCuenta"
+        android:enabled="true"
+        android:icon="@drawable/icon_outlined_account_circle_24"
+        android:title="@string/menu_title_mi_cuenta"/>
+</menu>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="layout_margin_fab">16dp</dimen>    <!-- Espacio del borde del layout al FAB -->
+    <dimen name="space_surfaces">10dp</dimen>     <!-- Espacio entre superficies (ej: dentro de un linear layout) -->
+
+    <dimen name="card_inner_horizontal_margin">16dp</dimen>         <!-- Borde interior de un card u otras superficies similares -->
+    <dimen name="card_inner_vertical_margin">16dp</dimen>           <!-- Borde interior de un card u otras superficies similares -->
+    <dimen name="card_bar_con_foto_vertical_space">4dp</dimen>
+    <dimen name="space_title_body">8dp</dimen>                      <!-- Distancia desde el titulo al cuerpo -->
+
+    <dimen name="space_user_photo_and_name">16dp</dimen>            <!-- Distancia entre la foto del usuario y su nombre -->
+
+    <dimen name="button_margin_horizontal">16dp</dimen>
+    <dimen name="button_margin_vertical">16dp</dimen>
+
+    <dimen name="round_button_margin">6dp</dimen>
+    <dimen name="nav_buttons_group_margin_horizontal">8dp</dimen>
+    <dimen name="nav_buttons_group_margin_vertical">8dp</dimen>
+
+    <!-- Card views -->
+    <dimen name="layout_margin_card_view">2dp</dimen>
+    <dimen name="inner_margin_card_view">10dp</dimen>
+</resources>

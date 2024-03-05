@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="20dp">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="@string/pantalla_mi_cuenta_titulo"
+                style="@style/Widget.Barapp.Toolbar"/>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="20dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardElevation="5dp"
+            style="?attr/materialCardViewElevatedStyle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/botonEditarFoto"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginVertical="10dp"
+                android:layout_alignEnd="@id/imageViewFotoUsuario"
+                android:layout_alignBottom="@id/imageViewFotoUsuario"
+                android:clickable="true"
+                android:contentDescription="@string/boton_editar_descripcion"
+                android:foreground="@drawable/icon_outlined_edit_24"
+                app:backgroundTint="@color/md_theme_light_surfaceVariant" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageViewFotoUsuario"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:contentDescription="@string/imagen_foto_usuario_descripcion"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
+                app:srcCompat="@drawable/avatar_persona" />
+        </RelativeLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textFieldNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:hint="@string/hint_nombre"
+            app:boxBackgroundColor="#FFFFFF"
+            app:errorEnabled="true"
+            style="?attr/textInputFilledStyle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textFieldApellido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:hint="@string/hint_apellido"
+            app:boxBackgroundColor="#FFFFFF"
+            app:errorEnabled="true"
+            style="?attr/textInputFilledStyle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textFieldMail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:hint="@string/hint_mail"
+            app:boxBackgroundColor="#FFFFFF"
+            app:errorEnabled="true"
+            style="?attr/textInputFilledStyle" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textFieldTelefono"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:hint="@string/hint_telefono"
+            app:boxBackgroundColor="#FFFFFF"
+            app:prefixText="+54"
+            app:errorEnabled="true"
+            style="?attr/textInputFilledStyle" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botonGuardarCambios"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0"
+            android:text="@string/boton_guardar_cambios"
+            android:contentDescription="@string/boton_guardar_cambios_descripcion"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botonCerrarSesion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0"
+            android:layout_marginVertical="5dp"
+            android:text="@string/boton_cerrar_sesion"
+            android:contentDescription="@string/boton_cerrar_sesion_descripcion"
+            style="@style/Widget.Material3.Button.ElevatedButton.Icon"/>
+    </LinearLayout>
+</ScrollView>
