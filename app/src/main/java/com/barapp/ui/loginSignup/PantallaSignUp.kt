@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.barapp.R
@@ -61,6 +62,15 @@ class PantallaSignUp : Fragment() {
         crearUsuarioEnFirebase()
       }
     }
+
+    viewModel.idUsuario.observe(viewLifecycleOwner) {
+      (activity as AuthActivity?)!!.onLoginExitoso(it)
+    }
+
+    viewModel.error.observe(viewLifecycleOwner) {
+      (activity as AuthActivity?)!!.errorAutenticacion()
+      Timber.e(it)
+    }
   }
 
   private fun crearUsuarioEnFirebase() {
@@ -77,110 +87,98 @@ class PantallaSignUp : Fragment() {
       email.editText!!.text.toString(),
       contrasenia.editText!!.text.toString(),
       usuario)
-
-    viewModel.idUsuario.observe(viewLifecycleOwner) {
-      (activity as AuthActivity?)!!.onLoginExitoso(it)
-    }
-
-    viewModel.error.observe(viewLifecycleOwner) {
-      (activity as AuthActivity?)!!.errorAutenticacion()
-      Timber.e(it)
-    }
   }
 
   private fun validarDatos(): Boolean {
-    var camposCorrectos = true
-    val editableNombre = nombre.editText!!.text
-    val editableApellido = apellido.editText!!.text
-    val editableEmail = email.editText!!.text
-    val editableTelefono = telefono.editText!!.text
-    val editableContrasenia = contrasenia.editText!!.text
-    val editableConfirmarContrasenia = confirmarContrasenia.editText!!.text
+    return validarNombre() && validarApellido() && validarEmail() && validarTelefono() &&
+      validarContrasenia() && validarConfirmarContrasenia()
+  }
 
-    // Nombre
-    if (TextUtils.isEmpty(editableNombre)) {
+  private fun validarNombre(): Boolean {
+    val editableNombre = nombre.editText?.text
+    return if (TextUtils.isEmpty(editableNombre)) {
       nombre.error = getString(R.string.error_campo_obligatorio)
-      camposCorrectos = false
-    } else if (editableNombre.toString().length < 3 || editableNombre.toString().length > 20) {
+      false
+    } else if (editableNombre.toString().length !in 3..20) {
       nombre.error = getString(R.string.error_campo_fuera_de_rango, 3, 20)
-      camposCorrectos = false
-    }
+      false
+    } else true
+  }
 
-    // Apellido
-    if (TextUtils.isEmpty(editableApellido)) {
+  private fun validarApellido(): Boolean {
+    val editableApellido = apellido.editText?.text
+    return if (TextUtils.isEmpty(editableApellido)) {
       apellido.error = getString(R.string.error_campo_obligatorio)
-      camposCorrectos = false
-    } else if (editableApellido.toString().length < 3 || editableApellido.toString().length > 20) {
+      false
+    } else if (editableApellido.toString().length !in 3..20) {
       apellido.error = getString(R.string.error_campo_fuera_de_rango, 3, 20)
-      camposCorrectos = false
-    }
+      false
+    } else true
+  }
 
-    // Email
-    if (TextUtils.isEmpty(editableEmail)) {
+  private fun validarEmail(): Boolean {
+    val editableEmail = email.editText?.text
+    return if (TextUtils.isEmpty(editableEmail)) {
       email.error = getString(R.string.error_campo_obligatorio)
-      camposCorrectos = false
-    } else if (editableEmail.toString().length < 3 || editableEmail.toString().length > 45) {
+      false
+    } else if (editableEmail.toString().length !in 3..45) {
       email.error = getString(R.string.error_campo_fuera_de_rango, 3, 45)
-      camposCorrectos = false
+      false
     } else if (!Patterns.EMAIL_ADDRESS.matcher(editableEmail.toString()).matches()) {
       email.error = getString(R.string.error_mail_no_valido)
-      camposCorrectos = false
-    }
+      false
+    } else true
+  }
 
-    // Telefono
-    if (TextUtils.isEmpty(editableTelefono)) {
+  private fun validarTelefono(): Boolean {
+    val editableTelefono = telefono.editText?.text
+    return if (TextUtils.isEmpty(editableTelefono)) {
       telefono.error = getString(R.string.error_campo_obligatorio)
-      camposCorrectos = false
-    } else if (editableTelefono.toString().length < 6 || editableTelefono.toString().length > 13) {
+      false
+    } else if (editableTelefono.toString().length !in 6..13) {
       telefono.error = getString(R.string.error_campo_fuera_de_rango, 7, 12)
-      camposCorrectos = false
-    }
+      false
+    } else true
+  }
 
-    // Contraseña
-    if (TextUtils.isEmpty(editableContrasenia)) {
+  private fun validarContrasenia(): Boolean {
+    val editableContrasenia = contrasenia.editText?.text
+    return if (TextUtils.isEmpty(editableContrasenia)) {
       contrasenia.error = getString(R.string.error_campo_obligatorio)
-      camposCorrectos = false
+      false
     } else if (editableContrasenia.toString().length < 5) {
       contrasenia.error = getString(R.string.error_campo_por_debajo_valor, 6)
-      camposCorrectos = false
+      false
     } else if (!editableContrasenia.toString().matches(".*\\d.*".toRegex())) {
       contrasenia.error = getString(R.string.error_campo_con_al_menos_un_digito)
-      camposCorrectos = false
-    }
+      false
+    } else true
+  }
 
-    // Repetir contraseña
-    if (TextUtils.isEmpty(editableConfirmarContrasenia)) {
+  private fun validarConfirmarContrasenia(): Boolean {
+    val editableConfirmarContrasenia = confirmarContrasenia.editText?.text
+    return if (TextUtils.isEmpty(editableConfirmarContrasenia)) {
       confirmarContrasenia.error = getString(R.string.error_campo_obligatorio)
-      camposCorrectos = false
-    } else if (
-      !TextUtils.isEmpty(editableContrasenia) &&
-        editableConfirmarContrasenia.toString() != editableContrasenia.toString()
-    ) {
+      false
+    } else if (editableConfirmarContrasenia.toString() != contrasenia.editText?.text.toString()) {
       confirmarContrasenia.error = getString(R.string.error_contrasenia_no_coincide)
-      camposCorrectos = false
-    }
-    return camposCorrectos
+      false
+    } else true
   }
 
   private fun setearTextChangedListeners() {
-    nombre.editText!!.addTextChangedListener(textChangeListener(nombre))
-    apellido.editText!!.addTextChangedListener(textChangeListener(apellido))
-    email.editText!!.addTextChangedListener(textChangeListener(email))
-    telefono.editText!!.addTextChangedListener(textChangeListener(telefono))
-    contrasenia.editText!!.addTextChangedListener(textChangeListener(contrasenia))
-    confirmarContrasenia
-      .editText!!
-      .addTextChangedListener(textChangeListener(confirmarContrasenia))
+    val textInputLayouts = listOf(nombre, apellido, email, telefono, contrasenia, confirmarContrasenia)
+    textInputLayouts.forEach { it.editText?.addTextChangedListener(textChangeListener(it)) }
   }
 
-  private fun textChangeListener(textInputLayout: TextInputLayout?): TextWatcher {
+  private fun textChangeListener(textInputLayout: TextInputLayout): TextWatcher {
     return object : TextWatcher {
       override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
         // noop
       }
 
       override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-        textInputLayout?.error = null
+        textInputLayout.error = null
       }
 
       override fun afterTextChanged(s: Editable) {

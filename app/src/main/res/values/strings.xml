@@ -69,6 +69,9 @@
     <string name="boton_ordenar_lista_accion">Ordenar lista no implementado</string>
     <string name="boton_filtros_lista_accion">Filtrar lista no implementado</string>
     <string name="boton_opinar_accion">Opinar no implementado</string>
+    <string name="login_with_google_not_implemented">Iniciar sesión con Google no implementado</string>
+    <string name="login_with_facebook_not_implemented">Iniciar sesión con Facebook no implementado</string>
+    <string name="search_near_bars_not_implemented">Buscar bares cercanos no implementado</string>
 
     <!-- Texto hints -->
     <string name="hint_mail">Mail</string>
@@ -156,6 +159,7 @@
     <string name="prefs_file">com.barapp.barapp.PREFERENCE_FILE_KEY</string>
 
     <!-- Errores -->
+    <string name="error_title">Error</string>
     <string name="error_ubicacion_no_disponible">No se puede acceder a su ubicación</string>
     <string name="error_no_se_puede_acceder_al_menu">El menú no se encuentra disponible en este momento</string>
     <string name="error_campo_obligatorio">"El campo es obligatorio"</string>
@@ -164,6 +168,7 @@
     <string name="error_campo_por_debajo_valor">El campo debe tener al menos %1$d caracteres</string>
     <string name="error_contrasenia_no_coincide">"Las contraseñas deben ser las mismas"</string>
     <string name="error_mail_no_valido">El mail ingresado no es válido</string>
+    <string name="error_authenticating_user">Se ha producido un error autenticando al usuario</string>
 
     <!-- Notification channel -->
     <string name="notificacion_reserva_channel_name">"General"</string>
