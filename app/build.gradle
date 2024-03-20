@@ -125,5 +125,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
     androidTestImplementation "org.hamcrest:hamcrest:2.2"
     androidTestImplementation 'com.google.truth:truth:1.1.3'
+    debugImplementation "androidx.fragment:fragment-testing:1.4.1"
 
 }
