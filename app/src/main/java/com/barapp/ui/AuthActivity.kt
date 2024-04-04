@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.barapp.R
 import com.barapp.databinding.ActivityAutentificacionBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -26,9 +27,9 @@ class AuthActivity : AppCompatActivity() {
 
   fun errorAutenticacion() {
     MaterialAlertDialogBuilder(this)
-      .setTitle("Error")
-      .setMessage("Se ha producido un error autenticando al usuario")
-      .setPositiveButton("Aceptar", null)
+      .setTitle(getString(R.string.error_title))
+      .setMessage(getString(R.string.error_authenticating_user))
+      .setPositiveButton(getString(R.string.boton_aceptar), null)
       .show()
   }
 

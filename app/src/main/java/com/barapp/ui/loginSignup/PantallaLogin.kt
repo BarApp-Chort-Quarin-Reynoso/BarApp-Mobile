@@ -74,10 +74,12 @@ class PantallaLogin : Fragment() {
       NavHostFragment.findNavController(this).navigate(R.id.action_pantallaLogin_to_pantallaSignUp)
     }
     botonGoogle.setOnClickListener {
-      Snackbar.make(view, "Iniciar sesión con Google no implementado", Snackbar.LENGTH_LONG).show()
+      val message = getString(R.string.login_with_google_not_implemented)
+      Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
     }
     botonFacebook.setOnClickListener {
-      Snackbar.make(view, "Iniciar sesión con Facebook no implementado", Snackbar.LENGTH_LONG)
+      val message = getString(R.string.login_with_facebook_not_implemented)
+      Snackbar.make(view, message, Snackbar.LENGTH_LONG)
         .show()
     }
   }
@@ -94,25 +96,25 @@ class PantallaLogin : Fragment() {
 
     // Email
     if (TextUtils.isEmpty(editableEmail)) {
-      email.error = "El campo es obligatorio"
+      email.error = getString(R.string.error_campo_obligatorio)
       camposCorrectos = false
     } else if (editableEmail.toString().length < 3 || editableEmail.toString().length > 45) {
-      email.error = "El campo debe tener entre 3 y 45 caracteres"
+      email.error = getString(R.string.error_campo_fuera_de_rango, 3, 45)
       camposCorrectos = false
     } else if (!Patterns.EMAIL_ADDRESS.matcher(editableEmail.toString()).matches()) {
-      email.error = "El email ingresado no es válido"
+      email.error = getString(R.string.error_mail_no_valido)
       camposCorrectos = false
     }
 
     // Contraseña
     if (TextUtils.isEmpty(editableContrasenia)) {
-      contrasenia.error = "El campo es obligatorio"
+      contrasenia.error = getString(R.string.error_campo_obligatorio)
       camposCorrectos = false
     } else if (editableContrasenia.toString().length < 5) {
-      contrasenia.error = "El campo debe tener al menos 6 caracteres"
+      contrasenia.error = getString(R.string.error_campo_por_debajo_valor, 5)
       camposCorrectos = false
     } else if (!editableContrasenia.toString().matches(".*\\d.*".toRegex())) {
-      contrasenia.error = "El campo debe tener al menos un dígito"
+      contrasenia.error = getString(R.string.error_campo_con_al_menos_un_digito)
       camposCorrectos = false
     }
     return camposCorrectos

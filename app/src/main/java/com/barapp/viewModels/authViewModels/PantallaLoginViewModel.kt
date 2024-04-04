@@ -5,9 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.barapp.data.repositories.UsuarioRepository
 import com.barapp.data.utils.FirestoreCallback
-import com.barapp.ui.AuthActivity
 import com.hadilq.liveevent.LiveEvent
-import timber.log.Timber
 
 class PantallaLoginViewModel : ViewModel() {
   private val usuarioRepository = UsuarioRepository.instance
@@ -28,16 +26,5 @@ class PantallaLoginViewModel : ViewModel() {
         _error.value = exception
       }
     })
-
-//    FirebaseAuth.getInstance()
-//      .signInWithEmailAndPassword(email, contrasenia)
-//      .addOnCompleteListener { task ->
-//        if (task.isSuccessful) {
-//          (activity as AuthActivity?)!!.onLoginExitoso(task.result.user!!.uid)
-//        } else {
-//          (activity as AuthActivity?)!!.errorAutenticacion()
-//          Timber.e(task.exception!!.message)
-//        }
-//      }
   }
 }
