@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.OneShotPreDrawListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -14,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.barapp.R
+import com.barapp.databinding.BottomShiftFiltersBinding
 import com.barapp.databinding.FragmentPantallaResultadosBusquedaBinding
 import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
@@ -21,12 +21,14 @@ import com.barapp.ui.recyclerViewAdapters.ResultadosRestauranteRecyclerAdapter
 import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.PantallaResultadosBusquedaViewModel
 import com.barapp.viewModels.sharedViewModels.RestauranteSeleccionadoSharedViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.transition.Hold
 import com.google.android.material.transition.MaterialSharedAxis
 
 class PantallaResultadosBusqueda : Fragment(), ResultadosRestauranteRecyclerAdapter.Callbacks {
 
   private lateinit var binding: FragmentPantallaResultadosBusquedaBinding
+  private lateinit var bottomSheetDialog: BottomSheetDialog
 
   private val pantallaResultadosBusquedaViewModel: PantallaResultadosBusquedaViewModel by
     viewModels()
@@ -51,11 +53,30 @@ class PantallaResultadosBusqueda : Fragment(), ResultadosRestauranteRecyclerAdap
     savedInstanceState: Bundle?,
   ): View {
     binding = FragmentPantallaResultadosBusquedaBinding.inflate(inflater, container, false)
+    val filtersBinding = BottomShiftFiltersBinding.inflate(inflater, container, false)
+
+    // Initialize the BottomSheetDialog
+    bottomSheetDialog = BottomSheetDialog(requireContext())
+    bottomSheetDialog.setContentView(filtersBinding.root)
+
+    // Inflate the bottom_shift_filters.xml layout
+    val bottomShiftFiltersView = inflater.inflate(R.layout.bottom_shift_filters, container, false)
+
+    // Add the bottom_shift_filters.xml layout to the parent layout
+    binding.parentLayout.addView(bottomShiftFiltersView)
+
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+
+    // Inflate your custom layout
+    val bottomShiftFiltersView = layoutInflater.inflate(R.layout.bottom_shift_filters, null)
+
+    // Set your custom layout as the content view of the BottomSheetDialog
+    bottomSheetDialog.setContentView(bottomShiftFiltersView)
+
 
     binding.listaVacia.textListaVacia.text = getString(R.string.lista_vacia_resultados_busqueda)
     binding.listaVacia.textListaVacia.visibility = View.GONE
@@ -86,13 +107,13 @@ class PantallaResultadosBusqueda : Fragment(), ResultadosRestauranteRecyclerAdap
     }
 
     binding.botonSwap.setOnClickListener {
-      Toast.makeText(binding.root.context, R.string.boton_ordenar_lista_accion, Toast.LENGTH_SHORT)
-        .show()
+//      pantallaResultadosBusquedaViewModel.ordenarPorDistancia()
+        pantallaResultadosBusquedaViewModel.ordenarPorRating()
     }
 
-    binding.botonFiltros.setOnClickListener { v ->
-      Toast.makeText(binding.root.context, R.string.boton_filtros_lista_accion, Toast.LENGTH_SHORT)
-        .show()
+    binding.botonFiltros.setOnClickListener {
+      // Show the BottomSheetDialog when the button is clicked
+      bottomSheetDialog.show()
     }
 
     binding.toolbar.setNavigationOnClickListener { volverAtras() }

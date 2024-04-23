@@ -18,6 +18,8 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
   private var ubicacionUsuario: Location? = null
   private val _listaRestaurantes = MutableLiveData<List<Restaurante>>()
   val listaRestaurantes: LiveData<List<Restaurante>> = _listaRestaurantes
+  private val _listaRestaurantesCompleta = MutableLiveData<List<Restaurante>>()
+  val listaRestaurantesCompleta: LiveData<List<Restaurante>> = _listaRestaurantesCompleta
   private val _distancias = MutableLiveData<HashMap<String, Int?>>(LinkedHashMap())
   val distancias: LiveData<HashMap<String, Int?>> = _distancias
   private val _loading = MutableLiveData<Boolean>()
@@ -64,4 +66,46 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
   fun ubicacionDisponible(ubicacionUsuario: Location?) {
     this.ubicacionUsuario = ubicacionUsuario
   }
+
+  fun ordenarPorDistancia() {
+    val listaRestaurantes = listaRestaurantes.value
+    val distancias = distancias.value
+    if (listaRestaurantes != null && distancias != null) {
+      val listaOrdenada = listaRestaurantes.sortedBy { distancias[it.id] }
+      _listaRestaurantes.postValue(listaOrdenada)
+    }
+  }
+
+  fun ordenarPorRating() {
+    val listaRestaurantes = listaRestaurantes.value
+    if (listaRestaurantes != null) {
+      val listaOrdenada = listaRestaurantes.sortedByDescending { it.puntuacion }
+      _listaRestaurantes.postValue(listaOrdenada)
+    }
+  }
+
+  fun applyFilters() {
+    // log "ApplyFilters"
+    System.out.println("ApplyFilters")
+
+    val listaRestaurantesCompleta = listaRestaurantesCompleta.value
+    if (listaRestaurantesCompleta != null) {
+      val listaFiltrada = listaRestaurantesCompleta
+        .filter { restaurante: Restaurante ->
+          restaurante.puntuacion > 4 // TODO: Use selected chip
+        }
+      _listaRestaurantes.postValue(listaFiltrada)
+    }
+  }
+
+  fun resetFilters() {
+    System.out.println("RestFilters")
+
+    val listaRestaurantesCompleta = listaRestaurantesCompleta.value
+    if (listaRestaurantesCompleta != null) {
+      _listaRestaurantes.postValue(listaRestaurantesCompleta)
+    }
+
+  }
+
 }

@@ -274,4 +274,16 @@
     <string name="placeholder_restaurantes_encontrados">"%1$d restaurantes encontrados"</string>
     <string name="placeholder_persona">"%1$d persona"</string>
     <string name="placeholder_personas">"%1$d personas"</string>
+
+    <!-- Filtros en pantalla de busqueda -->
+
+    <string name="filters_title">Filtros</string>
+    <string name="filter_quantity_stars_rating">Cantidad de estrellas</string>
+    <string name="filter_2_or_more_stars">2 o más estrellas</string>
+    <string name="filter_3_or_more_stars">3 o más estrellas</string>
+    <string name="filter_4_or_more_stars">4 o más estrellas</string>
+    <string name="filter_5_stars">5 estrellas</string>
+    <string name="filter_action">Filtrar</string>
+    <string name="filter_clear">Limpiar</string>
+
 </resources>
