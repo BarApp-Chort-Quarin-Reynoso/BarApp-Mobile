@@ -19,9 +19,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import androidx.test.platform.app.InstrumentationRegistry
-
+import org.junit.FixMethodOrder
+import org.junit.runners.MethodSorters
 
 @LargeTest
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4::class)
 class PantallaSignUpTest {
 
@@ -40,7 +42,7 @@ class PantallaSignUpTest {
     )
 
   @Test
-  fun validSignUpProcess() {
+  fun test2ValidSignUpProcess() {
     // Press register button
     val registerButton = onView(withId(R.id.botonRegistrarse))
     registerButton.perform(click())
@@ -127,7 +129,7 @@ class PantallaSignUpTest {
   }
 
   @Test
-  fun signUpWithInvalidEmail() {
+  fun test1SignUpWithInvalidEmail() {
 //    val scenario = launchFragmentInContainer<PantallaSignUp>(themeResId = R.style.Theme_BarApp)
     // Press register button
     val registerButton = onView(withId(R.id.botonRegistrarse))
@@ -210,7 +212,7 @@ class PantallaSignUpTest {
         if (view !is TextInputLayout) {
           return false
         }
-        val error = (view as TextInputLayout).error
+        val error = (view).error
           ?: return false
         val hint = error.toString()
         return expectedErrorText == hint
