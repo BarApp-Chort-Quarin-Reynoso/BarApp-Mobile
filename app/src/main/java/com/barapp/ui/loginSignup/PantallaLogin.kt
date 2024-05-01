@@ -1,5 +1,6 @@
 package com.barapp.ui.loginSignup
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -15,11 +16,18 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.barapp.R
 import com.barapp.databinding.FragmentLoginBinding
+import com.barapp.model.Restaurante
+import com.barapp.model.Usuario
 import com.barapp.ui.AuthActivity
+import com.barapp.util.retrofit.LoginService
+import com.barapp.util.retrofit.RetrofitInstance
 import com.barapp.viewModels.authViewModels.PantallaLoginViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import timber.log.Timber
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class PantallaLogin : Fragment() {
   private lateinit var binding: FragmentLoginBinding
@@ -65,22 +73,80 @@ class PantallaLogin : Fragment() {
     setearTextChangedListeners()
     botonLoguearse.setOnClickListener {
       if (validarDatos()) {
-        viewModel.signInUsuarioEnFirebase(
-          email.editText!!.text.toString(),
-          contrasenia.editText!!.text.toString())
+//        val call = RetrofitInstance.loginService.login(email.editText!!.text.toString(), contrasenia.editText!!.text.toString(), "cCwWAQ1vuYRRVkT2jZgkyqpYsm5xWq4XOr9PQrIJV7gQ5i8KER11LDVZ2LN8ZXOSv6lFqZtt1A1C")
+        val call = RetrofitInstance.createService(LoginService::class.java).login("bar@gmail.com", "12345678", "3m_P0F67R-L78poGNvRnC7aj3-AA7x_W-Gocn_GZQ2GC4RWru1__4jvaftTWwvk0D9lTOtTF8tkx3ir7ml9-_Mf_dVXn2Saa")
+        call.enqueue(object : Callback<Void> {
+        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+          val headers = response.headers()
+          println("Headers: $headers")
+          val jsessionIdFull = headers.get("Set-Cookie")
+          val jsessionId = jsessionIdFull?.split("=")?.get(1)?.split(";")?.get(0)
+
+          // Save the JSESSIONID in SharedPreferences
+          val sharedPref = requireContext().getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+          with(sharedPref.edit()) {
+            putString("JSESSIONID", jsessionId)
+            apply()
+          }
+
+          viewModel.signInUsuarioEnFirebase(
+            email.editText!!.text.toString(),
+            contrasenia.editText!!.text.toString()
+          )
+        }
+
+        override fun onFailure(call: Call<Void>, t: Throwable) {
+          (activity as AuthActivity).errorAutenticacion()
+          Timber.e(t)
+        }
+
+      })
       }
     }
     botonRegistrarse.setOnClickListener {
       NavHostFragment.findNavController(this).navigate(R.id.action_pantallaLogin_to_pantallaSignUp)
     }
+//      val message = getString(R.string.login_with_google_not_implemented)
+//      Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
     botonGoogle.setOnClickListener {
-      val message = getString(R.string.login_with_google_not_implemented)
-      Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
+//      RetrofitInstance.userApiService.getAllUsers(emptyMap()).enqueue(object : Callback<List<Usuario>> {
+//        override fun onResponse(call: Call<List<Usuario>>, response: Response<List<Usuario>>) {
+//          if (response.isSuccessful) {
+//            val data = response.body()
+//            // Use your data here
+//            // For example, you can print it to the log:
+//            Timber.d("Data received: $data")
+//          } else {
+//            // Handle the error
+//            Timber.e("Error: ${response.errorBody()}")
+//          }
+//        }
+//
+//        override fun onFailure(call: Call<List<Usuario>>, t: Throwable) {
+//          // Handle the failure
+//          Timber.e(t, "Failure")
+//        }
+//      })
     }
     botonFacebook.setOnClickListener {
-      val message = getString(R.string.login_with_facebook_not_implemented)
-      Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-        .show()
+//      RetrofitInstance.restaurantApiService.getAllRestaurants(emptyMap()).enqueue(object : Callback<List<Restaurante>> {
+//        override fun onResponse(call: Call<List<Restaurante>>, response: Response<List<Restaurante>>) {
+//          if (response.isSuccessful) {
+//            val data = response.body()
+//            // Use your data here
+//            // For example, you can print it to the log:
+//            Timber.d("Data received: $data")
+//          } else {
+//            // Handle the error
+//            Timber.e("Error: ${response.errorBody()}")
+//          }
+//        }
+//
+//        override fun onFailure(call: Call<List<Restaurante>>, t: Throwable) {
+//          // Handle the failure
+//          Timber.e(t, "Failure")
+//        }
+//      })
     }
   }
 

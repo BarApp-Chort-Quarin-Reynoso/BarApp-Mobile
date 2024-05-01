@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:checkable="true"
                     android:contentDescription="@string/boton_menu_descripcion"
-                    android:enabled="false"
+                    android:enabled="true"
                     app:icon="@drawable/icon_outlined_menu_24" />
 
                 <com.google.android.material.button.MaterialButton
