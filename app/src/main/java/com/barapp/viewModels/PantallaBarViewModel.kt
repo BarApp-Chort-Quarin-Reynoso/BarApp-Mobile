@@ -37,6 +37,8 @@ class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) :
   private fun buscarDetalleRestaurante() {
     _loading.value = true
 
+    println("Buscando detalle restaurante con id: $restaurante")
+
     detalleRestauranteRepo.buscarPorId(
       restaurante.idDetalleRestaurante,
       object : FirestoreCallback<DetalleRestaurante> {

@@ -106,6 +106,8 @@ class PantallaBar : Fragment() {
 
     this.postponeEnterTransition()
 
+    println("PantallaBar onViewCreated")
+
     /*
        Se comprueba el origen desde donde se llama al fragmento, para saber quien
        tiene el view model que contiene el restaurante a mostrar

@@ -10,10 +10,15 @@ import com.barapp.data.mappers.DetalleRestauranteMapper.fromEntity
 import com.barapp.data.mappers.DetalleRestauranteMapper.toEntity
 import com.barapp.data.mappers.HorarioMapper.fromEntityToList
 import com.barapp.data.mappers.OpinionMapper.fromOpinionUsuarioToList
+import com.barapp.util.retrofit.RestaurantApiService
+import com.barapp.util.retrofit.RetrofitInstance
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import timber.log.Timber
 
 class DetalleRestauranteRepository private constructor() : IGenericRepository<DetalleRestaurante> {
@@ -23,19 +28,39 @@ class DetalleRestauranteRepository private constructor() : IGenericRepository<De
   // Coleccion
   private val COLECCION_DETALLES_RESTAURANTES = "detallesRestaurantes"
 
+  private val api = RetrofitInstance.createService(RestaurantApiService::class.java)
+
   override fun buscarPorId(id: String, callback: FirestoreCallback<DetalleRestaurante>) {
-    db
-      .collection(COLECCION_DETALLES_RESTAURANTES)
-      .document(id)
-      .get()
-      .addOnSuccessListener { documentSnapshot: DocumentSnapshot ->
-        val detalleRestauranteEntity =
-          documentSnapshot.toObject(DetalleRestauranteEntity::class.java)
-        val listaHorarios = fromEntityToList(detalleRestauranteEntity!!.listaHorarioEntities)
-        val listaOpiniones = fromOpinionUsuarioToList(detalleRestauranteEntity.listaOpinionEntities)
-        callback.onSuccess(fromEntity(detalleRestauranteEntity, listaHorarios, listaOpiniones))
+
+    api.getRestaurantDetailById(id).enqueue(object : Callback<DetalleRestaurante> {
+      override fun onResponse(call: Call<DetalleRestaurante>, response: Response<DetalleRestaurante>) {
+        if (response.isSuccessful) {
+          val data = response.body()
+          Timber.d("Data received: $data")
+          callback.onSuccess(data!!)
+        } else {
+          Timber.e("Error: ${response.errorBody()}")
+          callback.onError(Throwable("Error recuperando Restaurante"))
+        }
       }
-      .addOnFailureListener { t: Exception? -> Timber.e(t) }
+
+      override fun onFailure(call: Call<DetalleRestaurante>, t: Throwable) {
+        Timber.e(t)
+        callback.onError(t)
+      }
+    })
+  //    db
+//      .collection(COLECCION_DETALLES_RESTAURANTES)
+//      .document(id)
+//      .get()
+//      .addOnSuccessListener { documentSnapshot: DocumentSnapshot ->
+//        val detalleRestauranteEntity =
+//          documentSnapshot.toObject(DetalleRestauranteEntity::class.java)
+//        val listaHorarios = fromEntityToList(detalleRestauranteEntity!!.listaHorarioEntities)
+//        val listaOpiniones = fromOpinionUsuarioToList(detalleRestauranteEntity.listaOpinionEntities)
+//        callback.onSuccess(fromEntity(detalleRestauranteEntity, listaHorarios, listaOpiniones))
+//      }
+//      .addOnFailureListener { t: Exception? -> Timber.e(t) }
   }
 
   override fun buscarTodos(callback: FirestoreCallback<List<DetalleRestaurante>>) {}

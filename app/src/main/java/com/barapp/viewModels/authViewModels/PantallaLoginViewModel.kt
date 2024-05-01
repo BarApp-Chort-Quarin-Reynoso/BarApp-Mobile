@@ -27,4 +27,8 @@ class PantallaLoginViewModel : ViewModel() {
       }
     })
   }
+
+  fun updateIdUsuario(id: String) {
+    _idUsuario.value = id
+  }
 }

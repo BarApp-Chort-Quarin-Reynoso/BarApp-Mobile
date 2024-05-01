@@ -16,7 +16,7 @@ internal class PantallaCrearReservaViewModelTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val pantallaCrearReservaViewModel = PantallaCrearReservaViewModel(null)
+    private val pantallaCrearReservaViewModel = PantallaCrearReservaViewModel()
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     fun <T> LiveData<T>.getOrAwaitValue(
@@ -27,7 +27,7 @@ internal class PantallaCrearReservaViewModelTest {
         var data: T? = null
         val latch = CountDownLatch(1)
         val observer = object : Observer<T> {
-            override fun onChanged(o: T?) {
+            override fun onChanged(o: T) {
                 data = o
                 latch.countDown()
                 this@getOrAwaitValue.removeObserver(this)

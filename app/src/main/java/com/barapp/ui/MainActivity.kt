@@ -20,6 +20,7 @@ import com.barapp.ui.pantallas.OnReservaClicked
 import com.barapp.ui.pantallas.PantallaPrincipal
 import com.barapp.util.interfaces.LogOutListener
 import com.barapp.util.notifications.NotificacionReservaManager
+import com.barapp.util.retrofit.RetrofitInstance
 import com.barapp.viewModels.MainActivityViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -74,6 +75,8 @@ class MainActivity :
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    RetrofitInstance.initialize(this)
 
     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
