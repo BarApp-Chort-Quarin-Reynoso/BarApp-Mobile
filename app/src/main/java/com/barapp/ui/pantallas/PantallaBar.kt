@@ -106,8 +106,6 @@ class PantallaBar : Fragment() {
 
     this.postponeEnterTransition()
 
-    println("PantallaBar onViewCreated")
-
     /*
        Se comprueba el origen desde donde se llama al fragmento, para saber quien
        tiene el view model que contiene el restaurante a mostrar
@@ -211,6 +209,7 @@ class PantallaBar : Fragment() {
 
     binding.botonMenu.setOnClickListener { mostrarMenu() }
     binding.botonUbicacion.setOnClickListener { mostrarUbicacion() }
+    binding.botonVerMasOpiniones.setOnClickListener { mostrarMasOpiniones() }
 
     if (viewModel.esFavorito()) {
       binding.botonFavorito.isChecked = true
@@ -351,6 +350,11 @@ class PantallaBar : Fragment() {
         return false
       }
     }
+  }
+
+  private fun mostrarMasOpiniones() {
+    NavHostFragment.findNavController(this)
+      .navigate(R.id.action_pantallaBar_to_pantallaOpiniones)
   }
 
   private fun setearOpinion(opinion: Opinion, binding: OpinionLayoutBinding) {
