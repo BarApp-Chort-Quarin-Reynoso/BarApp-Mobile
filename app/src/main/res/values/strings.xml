@@ -286,4 +286,8 @@
     <string name="filter_action">Filtrar</string>
     <string name="filter_clear">Limpiar</string>
 
+    <!-- Pantalla de opiniones -->
+    <string name="pantalla_opiniones_label_cantidad_opiniones">[Cantidad opiniones]</string>
+    <string name="lista_vacia_opiniones">¡No hay opiniones para mostrar!</string>
+
 </resources>
