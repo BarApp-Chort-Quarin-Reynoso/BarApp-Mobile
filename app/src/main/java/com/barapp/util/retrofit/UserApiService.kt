@@ -29,4 +29,7 @@ interface UserApiService {
 
   @PATCH("/api/usuarios/{id}/busquedas-recientes")
   fun updateRecentSearches(@Path("id") id: String, @Body busqueda: String): Call<Usuario>
+
+  @PATCH("/api/usuarios/{id}/foto")
+  fun updatePhoto(@Path("id") id: String, @Body foto: String): Call<Void>
 }

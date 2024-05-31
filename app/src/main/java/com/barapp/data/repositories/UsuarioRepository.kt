@@ -8,7 +8,8 @@ import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.utils.IGenericRepository
 import com.barapp.model.DetalleUsuario
 import com.barapp.model.Usuario
-import com.barapp.ui.AuthActivity
+import com.barapp.util.retrofit.RetrofitInstance
+import com.barapp.util.retrofit.UserApiService
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -25,6 +26,8 @@ class UsuarioRepository private constructor() : IGenericRepository<Usuario> {
 
   // Coleccion
   private val COLECCION_USUARIOS = "usuarios"
+
+  private val api = RetrofitInstance.createService(UserApiService::class.java)
 
   override fun buscarPorId(id: String, callback: FirestoreCallback<Usuario>) {
     db
@@ -95,13 +98,27 @@ class UsuarioRepository private constructor() : IGenericRepository<Usuario> {
       .addOnFailureListener { e: Exception? -> Timber.w(e, "Error writing document") }
   }
 
-  fun actualizarFoto(entidad: Usuario) {
-    db
-      .collection(COLECCION_USUARIOS)
-      .document(entidad.id)
-      .update("foto", entidad.foto)
-      .addOnSuccessListener { aVoid: Void? -> Timber.d("DocumentSnapshot successfully written!") }
-      .addOnFailureListener { e: Exception? -> Timber.w(e, "Error writing document") }
+  fun actualizarFoto(user: Usuario) {
+
+    api.updatePhoto(user.id, user.foto).enqueue(object : retrofit2.Callback<Void> {
+        override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {
+          if (response.isSuccessful) {
+            Timber.d("Foto de usuario actualizada!")
+          } else {
+            Timber.e("Error al actualizar foto de usuario")
+          }
+        }
+
+        override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
+          Timber.e(t)
+        }
+      })
+//    db
+//      .collection(COLECCION_USUARIOS)
+//      .document(entidad.id)
+//      .update("foto", entidad.foto)
+//      .addOnSuccessListener { aVoid: Void? -> Timber.d("DocumentSnapshot successfully written!") }
+//      .addOnFailureListener { e: Exception? -> Timber.w(e, "Error writing document") }
   }
 
   override fun actualizar(entidad: Usuario) {}
