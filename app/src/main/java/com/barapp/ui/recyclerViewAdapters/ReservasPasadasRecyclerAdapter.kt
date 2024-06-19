@@ -15,7 +15,7 @@ import com.barapp.ui.recyclerViewAdapters.ReservasPasadasRecyclerAdapter.Reserva
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
-class ReservasPasadasRecyclerAdapter(private val reservas: MutableList<Reserva>) :
+class ReservasPasadasRecyclerAdapter(private val reservas: MutableList<Reserva>, private val listener: OnOpinarButtonClickListener) :
   RecyclerView.Adapter<ReservasPasadasViewHolder>() {
   inner class ReservasPasadasViewHolder(binding: ItemRecyclerViewReservasPasadasBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -34,8 +34,9 @@ class ReservasPasadasRecyclerAdapter(private val reservas: MutableList<Reserva>)
       direccion = binding.txtViewDireccionRestaurante
       datosReserva = binding.txtViewDatosReserva
       binding.botonOpinar.setOnClickListener {
-        Toast.makeText(this.root.getContext(), R.string.boton_opinar_accion, Toast.LENGTH_SHORT)
-          .show()
+//        Toast.makeText(this.root.getContext(), R.string.boton_opinar_accion, Toast.LENGTH_SHORT)
+//          .show()
+        listener.onOpinarButtonClick(adapterPosition)
       }
     }
   }
@@ -52,20 +53,20 @@ class ReservasPasadasRecyclerAdapter(private val reservas: MutableList<Reserva>)
 
   override fun onBindViewHolder(reservaHolder: ReservasPasadasViewHolder, position: Int) {
     val reserva = reservas[position]
-    val ubicacion =
-      (reserva.restaurante.ubicacion.calle + " " + reserva.restaurante.ubicacion.numero)
+//    val ubicacion =
+//      (reserva.restaurante.ubicacion.calle + " " + reserva.restaurante.ubicacion.numero)
     val personaPluralOSingular = if (reserva.cantidadPersonas == 1) " persona" else " personas"
     val datosReserva =
       (reserva.cantidadPersonas.toString() +
         personaPluralOSingular +
         " | " +
-        reserva.fecha.dayOfMonth +
+        reserva.getFechaAsLocalDate().dayOfMonth +
         "/" +
-        reserva.fecha.monthValue +
+        reserva.getFechaAsLocalDate().monthValue +
         " | " +
         reserva.horario.hora)
     reservaHolder.titulo.text = reserva.restaurante.nombre
-    reservaHolder.direccion.text = ubicacion
+//    reservaHolder.direccion.text = ubicacion
     reservaHolder.datosReserva.text = datosReserva
     Glide.with(reservaHolder.root.context)
       .load(reserva.restaurante.logo)
@@ -81,5 +82,9 @@ class ReservasPasadasRecyclerAdapter(private val reservas: MutableList<Reserva>)
     this.reservas.clear()
     this.reservas.addAll(reservas!!)
     notifyDataSetChanged()
+  }
+
+  interface OnOpinarButtonClickListener {
+    fun onOpinarButtonClick(position: Int)
   }
 }

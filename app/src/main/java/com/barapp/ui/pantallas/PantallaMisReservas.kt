@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.barapp.R
 import com.barapp.databinding.FragmentPantallaMisReservasBinding
@@ -19,12 +20,13 @@ import com.barapp.viewModels.PantallaMisReservasViewModel
 import com.faltenreich.skeletonlayout.Skeleton
 import com.faltenreich.skeletonlayout.applySkeleton
 import com.google.android.material.transition.MaterialFadeThrough
+import timber.log.Timber
 
 interface OnReservaClicked {
   fun onReservaClicked()
 }
 
-class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItemClickListener {
+class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItemClickListener, ReservasPasadasRecyclerAdapter.OnOpinarButtonClickListener {
 
   private lateinit var onReservaClicked: OnReservaClicked
 
@@ -32,7 +34,7 @@ class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItem
   private val viewModelMisReservas: PantallaMisReservasViewModel by viewModels()
   private val activityViewModel: MainActivityViewModel by activityViewModels()
 
-  private val reservasPasadasAdapter = ReservasPasadasRecyclerAdapter(ArrayList())
+  private val reservasPasadasAdapter = ReservasPasadasRecyclerAdapter(ArrayList(), this)
   private val reservasPendientesAdapter = ReservasPendientesRecyclerAdapter(ArrayList(), this)
 
   private lateinit var skeletonReservasPendientesRecycler: Skeleton
@@ -129,5 +131,15 @@ class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItem
     activityViewModel.reserva = reserva
 
     onReservaClicked.onReservaClicked()
+  }
+
+  override fun onOpinarButtonClick(position: Int) {
+    Timber.d("Opinar button clicked at position $position")
+    // Aquí puedes obtener el item en la posición y pasar datos a la nueva pantalla si es necesario
+//    val item = miAdapter.getItemAt(position)
+//    val action = PantallaNavegacionPrincipalDirections.actionPantallaNavegacionPrincipalToPantallaOpiniones(item.id)
+//    findNavController().navigate(action)
+    NavHostFragment.findNavController(this)
+      .navigate(R.id.action_pantallaMisReservas_to_pantallaCrearOpinion)
   }
 }
