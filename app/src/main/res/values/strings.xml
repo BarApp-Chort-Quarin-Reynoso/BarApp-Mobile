@@ -64,6 +64,7 @@
     <string name="boton_como_llegar_descripcion">Botón ¿cómo llegar?</string>
     <string name="boton_aceptar_descripcion">Botón aceptar</string>
     <string name="boton_rechazar_descripcion">Botón rechazar</string>
+    <string name="boton_enviar_opinion_descripcion">Botón enviar opinión</string>
 
     <!-- Acciones no implementadas -->
     <string name="boton_ordenar_lista_accion">Ordenar lista no implementado</string>
@@ -289,5 +290,12 @@
     <!-- Pantalla de opiniones -->
     <string name="pantalla_opiniones_label_cantidad_opiniones">[Cantidad opiniones]</string>
     <string name="lista_vacia_opiniones">¡No hay opiniones para mostrar!</string>
+
+    <!-- Pantalla Crear Opinión -->
+    <string name="pantalla_crear_opinion_label_calificacion_comida">[Calificador X]</string>
+    <string name="pantalla_crear_opinion_label_calificacion_general">Calificación general</string>
+    <string name="pantalla_crear_opinion_hint_comentario">Escriba su comentario aquí (opcional)</string>
+    <string name="pantalla_crear_opinion_boton_enviar">Enviar opinión</string>
+
 
 </resources>
