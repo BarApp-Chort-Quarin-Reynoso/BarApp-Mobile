@@ -5,24 +5,25 @@ import com.barapp.model.Horario
 import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 class Reserva(
   id: String,
   var cancelada: Boolean,
   var cantidadPersonas: Int,
-  var fecha: LocalDate,
+  var fecha: String,
   var restaurante: Restaurante,
   var horario: Horario,
   var idUsuario: String,
   var usuario: Usuario?,
 ) : BaseClass(id) {
   constructor() :
-    this(UUID.randomUUID().toString(), false, -1, LocalDate.MAX, Restaurante(), Horario(), "", null)
+    this(UUID.randomUUID().toString(), false, -1, LocalDate.MAX.toString(), Restaurante(), Horario(), "", null)
 
   constructor(
     cantidadPersonas: Int,
-    fecha: LocalDate,
+    fecha: String,
     restaurante: Restaurante,
     horario: Horario,
     usuario: Usuario,
@@ -58,5 +59,9 @@ class Reserva(
       ", usuario=" +
       usuario +
       '}'
+  }
+
+  fun getFechaAsLocalDate(): LocalDate {
+    return LocalDate.parse(fecha, DateTimeFormatter.ISO_LOCAL_DATE)
   }
 }

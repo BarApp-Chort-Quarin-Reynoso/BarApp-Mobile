@@ -34,7 +34,7 @@ object ReservaMapper {
       reservaEntity.idReserva,
       reservaEntity.cancelada,
       reservaEntity.cantidadPersonas,
-      LocalDate.parse(reservaEntity.fecha),
+      reservaEntity.fecha,
       restaurante,
       horario,
       reservaEntity.idUsuario,
@@ -65,7 +65,7 @@ object ReservaMapper {
       Timestamp(
         Date.from(
           reserva.horario.hora
-            .atDate(reserva.fecha)
+            .atDate(reserva.getFechaAsLocalDate())
             .atZone(ZoneId.of("America/Buenos_Aires"))
             .toInstant()
         )
