@@ -1,4 +1,4 @@
-package com.barapp.util.retrofit
+package com.barapp.data.retrofit
 
 import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
