@@ -7,8 +7,8 @@ import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.utils.IGenericRepository
 import com.barapp.data.mappers.RestauranteMapper.fromEntity
 import com.barapp.data.mappers.RestauranteMapper.toRestauranteUbicacion
-import com.barapp.util.retrofit.RestaurantApiService
-import com.barapp.util.retrofit.RetrofitInstance
+import com.barapp.data.retrofit.RestaurantApiService
+import com.barapp.data.retrofit.RetrofitInstance
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import retrofit2.Call
