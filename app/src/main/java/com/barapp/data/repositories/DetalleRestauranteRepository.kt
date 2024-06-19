@@ -10,8 +10,8 @@ import com.barapp.data.mappers.DetalleRestauranteMapper.fromEntity
 import com.barapp.data.mappers.DetalleRestauranteMapper.toEntity
 import com.barapp.data.mappers.HorarioMapper.fromEntityToList
 import com.barapp.data.mappers.OpinionMapper.fromOpinionUsuarioToList
-import com.barapp.util.retrofit.RestaurantApiService
-import com.barapp.util.retrofit.RetrofitInstance
+import com.barapp.data.retrofit.RestaurantApiService
+import com.barapp.data.retrofit.RetrofitInstance
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore

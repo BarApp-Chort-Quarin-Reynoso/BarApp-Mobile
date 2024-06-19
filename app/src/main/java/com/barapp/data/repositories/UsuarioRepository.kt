@@ -8,13 +8,17 @@ import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.utils.IGenericRepository
 import com.barapp.model.DetalleUsuario
 import com.barapp.model.Usuario
-import com.barapp.util.retrofit.RetrofitInstance
-import com.barapp.util.retrofit.UserApiService
+import com.barapp.data.retrofit.RetrofitInstance
+import com.barapp.data.retrofit.UserApiService
+import com.barapp.model.Restaurante
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import timber.log.Timber
 
 class UsuarioRepository private constructor() : IGenericRepository<Usuario> {
@@ -30,31 +34,49 @@ class UsuarioRepository private constructor() : IGenericRepository<Usuario> {
   private val api = RetrofitInstance.createService(UserApiService::class.java)
 
   override fun buscarPorId(id: String, callback: FirestoreCallback<Usuario>) {
-    db
-      .collection(COLECCION_USUARIOS)
-      .document(id)
-      .get()
-      .addOnSuccessListener { document ->
-        val usuarioEntity = document.toObject(UsuarioEntity::class.java)
-        usuarioEntity?.let { usuario ->
-          detalleUsuarioRepository.buscarPorId(
-            usuario.idDetalleUsuario,
-            object : FirestoreCallback<DetalleUsuario> {
-              override fun onSuccess(result: DetalleUsuario) {
-                callback.onSuccess(fromEntity(usuario, result))
-              }
+    println("Buscando usuario con id: $id")
+    api.getUser(id).enqueue(object : Callback<Usuario> {
+      override fun onResponse(call: Call<Usuario>, response: Response<Usuario>) {
+        if (response.isSuccessful) {
+          val data = response.body()
+          Timber.d("Data received: $data")
+          callback.onSuccess(data!!)
+        } else {
+          Timber.e("Error: ${response.errorBody()}")
+          callback.onError(Throwable("Error recuperando Usuario"))
+        }
+      }
 
-              override fun onError(exception: Throwable) {
-                callback.onError(exception)
-              }
-            },
-          )
-        } ?: callback.onError(EntityNotFoundException("The user $id was not found in Firebase"))
+      override fun onFailure(call: Call<Usuario>, t: Throwable) {
+        Timber.e(t)
+        callback.onError(t)
       }
-      .addOnFailureListener { e ->
-        Timber.w("Error recuperando usuario")
-        callback.onError(e)
-      }
+    })
+//    db
+//      .collection(COLECCION_USUARIOS)
+//      .document(id)
+//      .get()
+//      .addOnSuccessListener { document ->
+//        val usuarioEntity = document.toObject(UsuarioEntity::class.java)
+//        usuarioEntity?.let { usuario ->
+//          detalleUsuarioRepository.buscarPorId(
+//            usuario.idDetalleUsuario,
+//            object : FirestoreCallback<DetalleUsuario> {
+//              override fun onSuccess(result: DetalleUsuario) {
+//                callback.onSuccess(fromEntity(usuario, result))
+//              }
+//
+//              override fun onError(exception: Throwable) {
+//                callback.onError(exception)
+//              }
+//            },
+//          )
+//        } ?: callback.onError(EntityNotFoundException("The user $id was not found in Firebase"))
+//      }
+//      .addOnFailureListener { e ->
+//        Timber.w("Error recuperando usuario")
+//        callback.onError(e)
+//      }
   }
 
   fun buscarPorIdSinDetalle(id: String, callback: FirestoreCallback<Usuario?>) {

@@ -11,11 +11,18 @@ import com.barapp.data.mappers.HorarioMapper.fromEntity
 import com.barapp.data.mappers.ReservaMapper.fromEntity
 import com.barapp.data.mappers.ReservaMapper.toReservaBDEntity
 import com.barapp.data.mappers.RestauranteMapper.fromEntity
+import com.barapp.data.retrofit.ReservationApiService
+import com.barapp.data.retrofit.RestaurantApiService
+import com.barapp.data.retrofit.RetrofitInstance
+import com.barapp.model.Restaurante
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.time.LocalDateTime
 import java.time.ZoneId
 import timber.log.Timber
@@ -26,6 +33,8 @@ class ReservaRepository private constructor() : IGenericRepository<Reserva> {
 
   // Coleccion
   private val COLECCION_RESERVAS = "reservas"
+
+  private val api = RetrofitInstance.createService(ReservationApiService::class.java)
 
   override fun buscarTodos(callback: FirestoreCallback<List<Reserva>>) {
     val listaReservas: MutableList<Reserva> = ArrayList()
@@ -81,35 +90,53 @@ class ReservaRepository private constructor() : IGenericRepository<Reserva> {
   }
 
   fun buscarTodosAsociadosAUsuario(idUsuario: String, callback: FirestoreCallback<List<Reserva>>) {
-    val listaReservas: MutableList<Reserva> = ArrayList()
-    db
-      .collection(COLECCION_RESERVAS)
-      .whereEqualTo("idUsuario", idUsuario)
-      .orderBy("timestamp", Query.Direction.ASCENDING)
-      .get()
-      .addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-          for (document in task.result) {
-            val reservaEntity = document.toObject(ReservaEntity::class.java)
-            val restauranteEntity = document.toObject(RestauranteEntity::class.java)
-            val horarioEntity = document.toObject(HorarioEntity::class.java)
-            // Tiene solo idUbicacion, calle y numero, el resto de campos son nulls
-            val ubicacion = document.toObject(Ubicacion::class.java)
-            val reserva =
-              fromEntity(
-                reservaEntity,
-                fromEntity(restauranteEntity, ubicacion, null),
-                fromEntity(horarioEntity),
-                null,
-              )
-            listaReservas.add(reserva)
-          }
-          callback.onSuccess(listaReservas)
+    println("Buscando reservas con id: $idUsuario")
+    api.getReservationsByUser(idUsuario).enqueue(object : Callback<List<Reserva>> {
+      override fun onResponse(call: Call<List<Reserva>>, response: Response<List<Reserva>>) {
+        if (response.isSuccessful) {
+          val data = response.body()
+          Timber.d("Data received: $data")
+          callback.onSuccess(data!!)
         } else {
-          Timber.d("Falló la busqueda de reservas")
-          callback.onError(task.exception!!)
+          Timber.e("Error: ${response.errorBody()}")
+          callback.onError(Throwable("Error recuperando Reservas"))
         }
       }
+
+      override fun onFailure(call: Call<List<Reserva>>, t: Throwable) {
+        Timber.e(t)
+        callback.onError(t)
+      }
+    })
+//    val listaReservas: MutableList<Reserva> = ArrayList()
+//    db
+//      .collection(COLECCION_RESERVAS)
+//      .whereEqualTo("idUsuario", idUsuario)
+//      .orderBy("timestamp", Query.Direction.ASCENDING)
+//      .get()
+//      .addOnCompleteListener { task ->
+//        if (task.isSuccessful) {
+//          for (document in task.result) {
+//            val reservaEntity = document.toObject(ReservaEntity::class.java)
+//            val restauranteEntity = document.toObject(RestauranteEntity::class.java)
+//            val horarioEntity = document.toObject(HorarioEntity::class.java)
+//            // Tiene solo idUbicacion, calle y numero, el resto de campos son nulls
+//            val ubicacion = document.toObject(Ubicacion::class.java)
+//            val reserva =
+//              fromEntity(
+//                reservaEntity,
+//                fromEntity(restauranteEntity, ubicacion, null),
+//                fromEntity(horarioEntity),
+//                null,
+//              )
+//            listaReservas.add(reserva)
+//          }
+//          callback.onSuccess(listaReservas)
+//        } else {
+//          Timber.d("Falló la busqueda de reservas")
+//          callback.onError(task.exception!!)
+//        }
+//      }
   }
 
   fun buscarReservasANotificar(
