@@ -1,5 +1,6 @@
-package com.barapp.util.retrofit
+package com.barapp.data.retrofit
 
+import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
 import retrofit2.Call
 import retrofit2.http.Body
@@ -32,4 +33,7 @@ interface UserApiService {
 
   @PATCH("/api/usuarios/{id}/foto")
   fun updatePhoto(@Path("id") id: String, @Body foto: String): Call<Void>
+
+  @GET("/api/usuarios/{id}/favoritos")
+    fun getFavoriteRestaurants(@Path("id") id: String): Call<List<Restaurante>>
 }

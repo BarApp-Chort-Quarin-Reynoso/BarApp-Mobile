@@ -1,18 +1,20 @@
-package com.barapp.util.retrofit
+package com.barapp.data.retrofit
 
+import android.annotation.SuppressLint
 import android.content.Context
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+@SuppressLint("StaticFieldLeak")
 object RetrofitInstance {
-  private const val BASE_URL = "http://172.28.175.28:8080/"
+  private const val BASE_URL = "http://172.21.24.173:8080/"
 
   private lateinit var context: Context
 
   fun initialize(context: Context) {
-    this.context = context
+    RetrofitInstance.context = context
   }
 
   private val client = OkHttpClient.Builder()

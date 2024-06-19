@@ -1,4 +1,4 @@
-package com.barapp.util.retrofit
+package com.barapp.data.retrofit
 
 import com.barapp.model.DetalleRestaurante
 import com.barapp.model.Opinion
@@ -21,7 +21,7 @@ interface RestaurantApiService {
   @GET("/api/restaurantes/detalle/{id}")
   fun getRestaurantDetailById(@Path("id") id: String): Call<DetalleRestaurante>
 
-  @POST("/api/restaurantes/{id}/opinar")
-  fun reviewRestaurant(@Path("id") id: String, @Body opinion: Opinion): Call<Restaurante>
+//  @POST("/api/restaurantes/{id}/opinar")
+//  fun reviewRestaurant(@Path("id") id: String, @Body opinion: Opinion): Call<Restaurante>
 
 }
