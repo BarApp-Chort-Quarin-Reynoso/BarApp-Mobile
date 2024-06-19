@@ -72,7 +72,7 @@ class NotificacionReservaManager(private val idUsuario: String) {
      * @param reserva Reserva acerca de la que se establece el recordatorio
      */
     fun crearAlarma(context: Context, reserva: Reserva) {
-      val dateTime = LocalDateTime.of(reserva.fecha, reserva.horario.hora).minusMinutes(
+      val dateTime = LocalDateTime.of(reserva.getFechaAsLocalDate(), reserva.horario.hora).minusMinutes(
         TIEMPO_ALARMA_MINUTOS.toLong()
       )
       if (dateTime.isBefore(LocalDateTime.now())) return

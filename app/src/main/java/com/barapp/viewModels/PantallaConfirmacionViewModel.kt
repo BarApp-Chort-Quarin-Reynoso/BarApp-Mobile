@@ -15,7 +15,7 @@ class PantallaConfirmacionViewModel : ViewModel() {
   lateinit var usuario: Usuario
 
   fun crearReserva(cantPersonas: Int, fechaReserva: LocalDate, horaReserva: Horario): Reserva {
-    val reserva = Reserva(cantPersonas, fechaReserva, barSeleccionado, horaReserva, usuario)
+    val reserva = Reserva(cantPersonas, fechaReserva.toString(), barSeleccionado, horaReserva, usuario)
 
     reservaRepository.guardar(reserva)
 

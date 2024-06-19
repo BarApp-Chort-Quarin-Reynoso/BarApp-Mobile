@@ -313,7 +313,7 @@ class PantallaCrearReservaViewModel : ViewModel() {
     val horaActualArgentina = LocalTime.now(zonaArgentina)
 
     result
-      .filter { reserva -> reserva.fecha.isEqual(this.fechaReserva) }
+      .filter { reserva -> reserva.getFechaAsLocalDate().isEqual(this.fechaReserva) }
       .forEach { reserva ->
         // Si la lista está vacía, poner el primer horario encontrado con aparición = 1
         if (listaHorarioAparicion.isEmpty()) {

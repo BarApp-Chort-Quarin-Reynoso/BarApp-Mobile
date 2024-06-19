@@ -43,7 +43,7 @@ class PantallaResumenReserva : Fragment() {
       if (activitySharedViewModel.reserva.cantidadPersonas == 1)
         getString(R.string.placeholder_persona, cantPersonas)
       else getString(R.string.placeholder_personas, cantPersonas)
-    binding.textViewFechaReserva.text = fechaAFormatoTexto(activitySharedViewModel.reserva.fecha)
+    binding.textViewFechaReserva.text = fechaAFormatoTexto(activitySharedViewModel.reserva.getFechaAsLocalDate())
     binding.textViewHoraReserva.text = activitySharedViewModel.reserva.horario.hora.toString()
 
     activitySharedViewModel.usuario.value!!.let {usuario ->
