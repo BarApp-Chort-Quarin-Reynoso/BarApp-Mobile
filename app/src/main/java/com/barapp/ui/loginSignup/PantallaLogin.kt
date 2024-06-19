@@ -19,8 +19,8 @@ import com.barapp.databinding.FragmentLoginBinding
 import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
 import com.barapp.ui.AuthActivity
-import com.barapp.util.retrofit.LoginService
-import com.barapp.util.retrofit.RetrofitInstance
+import com.barapp.data.retrofit.LoginService
+import com.barapp.data.retrofit.RetrofitInstance
 import com.barapp.viewModels.authViewModels.PantallaLoginViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
