@@ -11,10 +11,10 @@ object RestauranteMapper {
   @JvmStatic
   fun toEntity(restaurante: Restaurante): RestauranteEntity {
     return RestauranteEntity(
-      restaurante.id,
       restaurante.nombre,
       restaurante.puntuacion,
-      restaurante.foto,
+      restaurante.portada,
+      restaurante.correo,
       restaurante.logo,
       restaurante.idDetalleRestaurante,
     )
@@ -27,10 +27,11 @@ object RestauranteMapper {
     detalleRestaurante: DetalleRestaurante?,
   ): Restaurante {
     return Restaurante(
-      restauranteEntity.idRestaurante,
+      "",
       restauranteEntity.nombre,
       restauranteEntity.puntuacion,
-      restauranteEntity.foto,
+      restauranteEntity.portada,
+      restauranteEntity.correo,
       restauranteEntity.logo,
       ubicacion!!,
       restauranteEntity.idDetalleRestaurante,
@@ -44,7 +45,8 @@ object RestauranteMapper {
       restaurante.id,
       restaurante.nombre,
       restaurante.puntuacion,
-      restaurante.foto,
+      restaurante.portada,
+      restaurante.correo,
       restaurante.logo,
       restaurante.idDetalleRestaurante,
       restaurante.ubicacion.id,
@@ -67,7 +69,8 @@ object RestauranteMapper {
       restaurante.id,
       restaurante.nombre,
       restaurante.puntuacion,
-      restaurante.foto,
+      restaurante.portada,
+      restaurante.correo,
       restaurante.logo,
       restaurante.idDetalleRestaurante,
       restaurante.ubicacion.id,

@@ -8,7 +8,8 @@ class RestauranteUsuarioEntity(
   idRestaurante: String,
   nombre: String,
   puntuacion: Double,
-  foto: String,
+  portada: String,
+  correo: String,
   logo: String,
   idDetalleRestaurante: String,
   idUbicacion: String,
@@ -25,7 +26,8 @@ class RestauranteUsuarioEntity(
     idRestaurante,
     nombre,
     puntuacion,
-    foto,
+    portada,
+    correo,
     logo,
     idDetalleRestaurante,
     idUbicacion,
@@ -37,8 +39,8 @@ class RestauranteUsuarioEntity(
     nombreProvincia,
     nombrePais,
   ) {
-  var idRestauranteUsuario: String = idRestaurante + idUsuario
-  var fechaGuardado: Timestamp = Timestamp.now()
+  var idRestauranteUsuario: String = UUID.randomUUID().toString()
+  var fechaGuardado: String = Timestamp.now().toString()
 
   constructor() :
     this(
@@ -46,6 +48,7 @@ class RestauranteUsuarioEntity(
       "",
       -1.0,
       "",
+    "",
       "",
       "",
       "",

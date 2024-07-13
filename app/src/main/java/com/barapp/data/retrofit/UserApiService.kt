@@ -36,4 +36,6 @@ interface UserApiService {
 
   @GET("/api/usuarios/{id}/favoritos")
     fun getFavoriteRestaurants(@Path("id") id: String): Call<List<Restaurante>>
+  fun getFavoriteRestaurants(@Path("id") id: String): Call<List<Restaurante>>
+
 }
