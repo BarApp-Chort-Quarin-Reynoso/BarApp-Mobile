@@ -1,8 +1,7 @@
 package com.barapp.data.repositories
 
-import com.barapp.data.entities.RestauranteEntity
+import com.barapp.data.entities.RestauranteUsuarioEntity
 import com.barapp.model.Restaurante
-import com.barapp.model.Ubicacion
 import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.mappers.RestauranteMapper.fromEntity
 import com.barapp.data.mappers.RestauranteMapper.toRestauranteUsuarioEntity
@@ -15,11 +14,6 @@ import retrofit2.Response
 import timber.log.Timber
 
 class RestauranteFavoritoRepository private constructor() {
-  // Base de datos
-  private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-
-  // Coleccion
-  private val COLECCION_RESTAURANTES_FAVORITOS = "restaurantesFavoritos"
 
   private val api = RetrofitInstance.createService(UserApiService::class.java)
 
@@ -41,17 +35,18 @@ class RestauranteFavoritoRepository private constructor() {
       }
       .addOnFailureListener { e -> callback.onError(e) }
   }
+  private val userAPI = RetrofitInstance.createService(UserApiService::class.java)
 
   fun buscarFavoritosDelUsuario(idUsuario: String, callback: FirestoreCallback<List<Restaurante>>) {
     println("Buscando favoritos del usuario con id: $idUsuario")
-    api.getFavoriteRestaurants(idUsuario).enqueue(object : Callback<List<Restaurante>> {
+    userAPI.getFavoriteRestaurants(idUsuario).enqueue(object : Callback<List<Restaurante>> {
       override fun onResponse(call: Call<List<Restaurante>>, response: Response<List<Restaurante>>) {
         if (response.isSuccessful) {
           val data = response.body()
-          Timber.d("Data received: $data")
+          Timber.d("Restaurantes favoritos: $data")
           callback.onSuccess(data!!)
         } else {
-          Timber.e("Error: ${response.errorBody()}")
+          Timber.e("Error restaurantes favoritos: ${response.errorBody()}")
           callback.onError(Throwable("Error recuperando favoritos"))
         }
       }

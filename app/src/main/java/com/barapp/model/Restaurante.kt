@@ -6,54 +6,51 @@ class Restaurante(
   id: String,
   var nombre: String,
   var puntuacion: Double,
-  var foto: String,
+  var portada: String,
+  var correo: String,
   var logo: String,
   var ubicacion: Ubicacion,
   var idDetalleRestaurante: String,
   var detalleRestaurante: DetalleRestaurante?,
+  var idRestaurante: String = ""
 ) : BaseClass(id) {
 
-  constructor() : this(UUID.randomUUID().toString(), "", -1.0, "", "", Ubicacion(), "", null)
+  constructor() : this(UUID.randomUUID().toString(), "", -1.0, "", "", "", Ubicacion(), "", null)
 
   constructor(
     nombre: String,
     puntuacion: Double,
-    foto: String,
+    portada: String,
+    correo: String,
     logo: String,
     ubicacion: Ubicacion,
     detalleRestaurante: DetalleRestaurante,
+    idRestaurante: String = ""
   ) : this(
     UUID.randomUUID().toString(),
     nombre,
     puntuacion,
-    foto,
+    portada,
+    correo,
     logo,
     ubicacion,
     detalleRestaurante.id,
     detalleRestaurante,
+    idRestaurante
   )
 
   override fun toString(): String {
     return "Restaurante{" +
-      "id='" +
-      id +
-      '\'' +
-      ", nombre='" +
-      nombre +
-      '\'' +
-      ", puntuacion=" +
-      puntuacion +
-      ", foto='" +
-      foto +
-      '\'' +
-      ", logo='" +
-      logo +
-      '\'' +
-      ", detalleRestaurante=" +
-      detalleRestaurante +
-      ", ubicacion=" +
-      ubicacion +
-      '}'
+            "id='" + id + '\'' +
+            ", nombre='" + nombre + '\'' +
+            ", puntuacion=" + puntuacion +
+            ", portada='" + portada + '\'' +
+            ", correo='" + correo + '\'' +
+            ", logo='" + logo + '\'' +
+            ", detalleRestaurante=" + detalleRestaurante +
+            ", ubicacion=" + ubicacion +
+            ", idRestaurante='" + idRestaurante + '\'' +
+            '}'
   }
 
   fun copy(detalleRestaurante: DetalleRestaurante): Restaurante {
@@ -61,11 +58,13 @@ class Restaurante(
       id,
       nombre,
       puntuacion,
-      foto,
+      portada,
+      correo,
       logo,
       ubicacion,
       idDetalleRestaurante,
       detalleRestaurante,
+        idRestaurante
     )
   }
 }

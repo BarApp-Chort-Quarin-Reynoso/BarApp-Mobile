@@ -144,7 +144,7 @@ class PantallaBar : Fragment() {
       .apply(RequestOptions.circleCropTransform())
       .into(binding.imageViewLogo)
     Glide.with(requireContext())
-      .load(viewModel.restaurante.foto)
+      .load(viewModel.restaurante.portada)
       .apply(RequestOptions.centerCropTransform())
       .listener(onImageLoadedRequestListener())
       .into(binding.imageViewFoto)
@@ -313,7 +313,7 @@ class PantallaBar : Fragment() {
 
     // Copiar el bar y el detalle para crear la reserva
     barAReservarViewModel.barSeleccionado = viewModel.restaurante
-    barAReservarViewModel.detalleBarSeleccionado = viewModel.detalleRestaurante.value!!
+    barAReservarViewModel.detalleBarSeleccionado = viewModel.restaurante.detalleRestaurante!!
 
     NavHostFragment.findNavController(this)
       .navigate(R.id.action_pantallaBar_to_pantallaCrearReserva, null, null, extras)

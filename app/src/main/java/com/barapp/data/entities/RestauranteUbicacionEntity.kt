@@ -6,7 +6,8 @@ open class RestauranteUbicacionEntity(
   var idRestaurante: String,
   var nombre: String,
   var puntuacion: Double,
-  var foto: String,
+  var portada: String,
+  var correo: String,
   var logo: String,
   var idDetalleRestaurante: String,
   var idUbicacion: String,
@@ -19,9 +20,9 @@ open class RestauranteUbicacionEntity(
   var nombrePais: String,
 ) {
   constructor() :
-    this(UUID.randomUUID().toString(), "", -1.0, "", "", "", "", "", -1, -1.0, -1.0, "", "", "")
+    this(UUID.randomUUID().toString(), "", -1.0, "", "", "", "", "", "", -1, -1.0, -1.0, "", "", "")
 
   override fun toString(): String {
-    return "RestauranteUbicacionEntity(idRestaurante='$idRestaurante', nombre='$nombre', puntuacion=$puntuacion, foto='$foto', logo='$logo', idDetalleRestaurante='$idDetalleRestaurante', idUbicacion='$idUbicacion', calle='$calle', numero=$numero, latitud=$latitud, longitud=$longitud, nombreCiudad='$nombreCiudad', nombreProvincia='$nombreProvincia', nombrePais='$nombrePais')"
+    return "RestauranteUbicacionEntity(idRestaurante='$idRestaurante', nombre='$nombre', puntuacion=$puntuacion, portada='$portada', correo='$correo', logo='$logo', idDetalleRestaurante='$idDetalleRestaurante', idUbicacion='$idUbicacion', calle='$calle', numero=$numero, latitud=$latitud, longitud=$longitud, nombreCiudad='$nombreCiudad', nombreProvincia='$nombreProvincia', nombrePais='$nombrePais')"
   }
 }
