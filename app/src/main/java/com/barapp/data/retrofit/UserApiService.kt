@@ -1,10 +1,10 @@
 package com.barapp.data.retrofit
 
+import com.barapp.model.DetalleUsuario
 import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -18,6 +18,9 @@ interface UserApiService {
 
   @GET("/api/usuarios/{id}")
   fun getUser(@Path("id") id: String): Call<Usuario>
+
+  @GET("/api/usuarios/detalle/{id}")
+  fun getUserDetailById(@Path("id") id: String): Call<DetalleUsuario>
 
   @POST("/api/usuarios")
   fun createUser(@Body usuario: Usuario): Call<Usuario>
