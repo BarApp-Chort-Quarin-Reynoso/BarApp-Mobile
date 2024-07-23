@@ -12,6 +12,7 @@ import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.repositories.DetalleUsuarioRepository
 import com.barapp.data.repositories.RestauranteVistoRecientementeRepository
 import com.barapp.data.repositories.UsuarioRepository
+import com.barapp.model.DetalleUsuario
 import java.util.*
 import timber.log.Timber
 
@@ -46,6 +47,7 @@ class MainActivityViewModel : ViewModel() {
         override fun onSuccess(result: Usuario) {
           Timber.d(result.toString())
           _usuario.postValue(result)
+          buscarYGuardarDetalleUsuarioPorId(result.idDetalleUsuario)
         }
 
         override fun onError(exception: Throwable) {
@@ -54,6 +56,22 @@ class MainActivityViewModel : ViewModel() {
       },
     )
   }
+
+    fun buscarYGuardarDetalleUsuarioPorId(idUsuario: String) {
+        detalleUsuarioRepository.buscarPorId(
+        idUsuario,
+        object : FirestoreCallback<DetalleUsuario> {
+            override fun onSuccess(result: DetalleUsuario) {
+            Timber.d(result.toString())
+              usuario.value!!.detalleUsuario = result
+            }
+
+            override fun onError(exception: Throwable) {
+            Timber.e(exception)
+            }
+        },
+        )
+    }
 
   fun guardarRestauranteVistoRecientemente(restaurante: Restaurante) {
     restauranteVistoRecientementeRepository.guardar(restaurante, usuario.value!!.id)
