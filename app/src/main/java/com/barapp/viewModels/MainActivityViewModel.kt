@@ -55,15 +55,6 @@ class MainActivityViewModel : ViewModel() {
     )
   }
 
-  private fun eliminarExceso(listaRestaurante: LinkedList<Restaurante>): LinkedList<Restaurante> {
-    while (listaRestaurante.size > 5) {
-      restauranteVistoRecientementeRepository.borrar(listaRestaurante.last, usuario.value!!.id)
-      listaRestaurante.removeLast()
-    }
-
-    return listaRestaurante
-  }
-
   fun guardarRestauranteVistoRecientemente(restaurante: Restaurante) {
     restauranteVistoRecientementeRepository.guardar(restaurante, usuario.value!!.id)
   }

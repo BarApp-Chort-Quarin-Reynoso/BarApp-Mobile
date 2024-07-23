@@ -5,6 +5,7 @@ import com.barapp.data.entities.RestauranteUbicacionEntity
 import com.barapp.data.entities.RestauranteUsuarioEntity
 import com.barapp.model.DetalleRestaurante
 import com.barapp.model.Restaurante
+import com.barapp.model.RestauranteUsuario
 import com.barapp.model.Ubicacion
 
 object RestauranteMapper {
@@ -36,6 +37,22 @@ object RestauranteMapper {
       ubicacion!!,
       restauranteEntity.idDetalleRestaurante,
       detalleRestaurante,
+    )
+  }
+
+  @JvmStatic
+  fun toRestauranteUsuario(restaurante: Restaurante): RestauranteUsuario {
+    return RestauranteUsuario(
+      restaurante.id,
+      restaurante.nombre,
+      restaurante.puntuacion,
+      restaurante.portada,
+      restaurante.correo,
+      restaurante.logo,
+      restaurante.ubicacion,
+      restaurante.idDetalleRestaurante,
+      restaurante.detalleRestaurante,
+      restaurante.id,
     )
   }
 
