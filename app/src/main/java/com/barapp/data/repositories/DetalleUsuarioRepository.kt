@@ -1,36 +1,44 @@
 package com.barapp.data.repositories
 
-import com.barapp.data.entities.DetalleUsuarioEntity
 import com.barapp.model.DetalleUsuario
 import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.utils.IGenericRepository
-import com.barapp.data.mappers.DetalleUsuarioMapper.fromEntity
 import com.barapp.data.mappers.DetalleUsuarioMapper.toEntity
-import com.google.android.gms.tasks.Task
+import com.barapp.data.retrofit.RetrofitInstance
+import com.barapp.data.retrofit.UserApiService
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class DetalleUsuarioRepository private constructor() : IGenericRepository<DetalleUsuario> {
-  // Base de datos
   private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-  // Coleccion
   private val COLECCION_DETALLES_USUARIOS = "detallesUsuarios"
 
+  private val api = RetrofitInstance.createService(UserApiService::class.java)
+
   override fun buscarPorId(id: String, callback: FirestoreCallback<DetalleUsuario>) {
-    db
-      .collection(COLECCION_DETALLES_USUARIOS)
-      .document(id)
-      .get()
-      .addOnSuccessListener { documentSnapshot ->
-        val detalleUsuarioEntity = documentSnapshot.toObject(DetalleUsuarioEntity::class.java)
-        Timber.d(detalleUsuarioEntity.toString())
-        callback.onSuccess(fromEntity(detalleUsuarioEntity!!))
+    println("Buscando detalle usuario con id: $id")
+
+    api.getUserDetailById(id).enqueue(object : Callback<DetalleUsuario> {
+      override fun onResponse(call: Call<DetalleUsuario>, response: Response<DetalleUsuario>) {
+        if (response.isSuccessful) {
+          val data = response.body()
+          Timber.d("Data received: $data")
+          callback.onSuccess(data!!)
+        } else {
+          Timber.e("Error: ${response.errorBody()}")
+          callback.onError(Throwable("Error recuperando DetalleUsuario"))
+        }
       }
-      .addOnFailureListener { e ->
-        Timber.w("Error recuperando ciudad")
-        callback.onError(e)
+
+      override fun onFailure(call: Call<DetalleUsuario>, t: Throwable) {
+        Timber.e(t)
+        callback.onError(t)
       }
+    })
   }
 
   override fun buscarTodos(callback: FirestoreCallback<List<DetalleUsuario>>) {}
@@ -49,17 +57,21 @@ class DetalleUsuarioRepository private constructor() : IGenericRepository<Detall
   }
 
   fun actualizarFavoritos(entidad: DetalleUsuario) {
-    db
-      .collection(COLECCION_DETALLES_USUARIOS)
-      .document(entidad.id)
-      .update("idRestaurantesFavoritos", ArrayList(entidad.idsRestaurantesFavoritos))
-      .addOnCompleteListener { task: Task<Void?> ->
-        if (task.isSuccessful) {
-          Timber.d("Se ha actualizado la lista favoritos")
+    println("Actualizando favoritos del usuario con id: ${entidad.id}" + " con favoritos: ${entidad.idsRestaurantesFavoritos}")
+    api.updateFavoriteRestaurants(entidad.id, entidad.idsRestaurantesFavoritos).enqueue(object : Callback<DetalleUsuario> {
+      override fun onResponse(call: Call<DetalleUsuario>, response: Response<DetalleUsuario>) {
+        if (response.isSuccessful) {
+          val data = response.body()
+          Timber.d("Data received: $data")
         } else {
-          Timber.d("Hubo un error actualizando la lista favoritos")
+          Timber.e("Error: ${response.errorBody()}")
         }
       }
+
+      override fun onFailure(call: Call<DetalleUsuario>, t: Throwable) {
+        Timber.e(t)
+      }
+    })
   }
 
   fun actualizarBusquedasRecientes(entidad: DetalleUsuario) {
