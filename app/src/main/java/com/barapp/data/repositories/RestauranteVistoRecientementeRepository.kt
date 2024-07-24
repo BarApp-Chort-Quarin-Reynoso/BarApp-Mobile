@@ -20,7 +20,7 @@ class RestauranteVistoRecientementeRepository private constructor() {
     idUsuario: String,
     callback: FirestoreCallback<LinkedList<Restaurante>>,
   ) {
-    println("Buscando vistos recientemente del usuario con id: $idUsuario")
+    Timber.d("Buscando vistos recientemente del usuario con id: $idUsuario")
     userAPI.getRecentlySeenRestaurants(idUsuario).enqueue(object : Callback<List<Restaurante>> {
       override fun onResponse(call: Call<List<Restaurante>>, response: Response<List<Restaurante>>) {
         if (response.isSuccessful) {
@@ -43,7 +43,7 @@ class RestauranteVistoRecientementeRepository private constructor() {
   fun guardar(entidad: Restaurante, idUsuario: String) {
     val restauranteVistoRecientementeEntity = toRestauranteUsuario(entidad)
     restauranteVistoRecientementeEntity.idUsuario = idUsuario
-    println("Guardando restaurante visto recientemente: " + restauranteVistoRecientementeEntity.idRestauranteUsuario + " idUsuario: " + idUsuario)
+    Timber.d("Guardando restaurante visto recientemente: " + restauranteVistoRecientementeEntity.idRestauranteUsuario + " idUsuario: " + idUsuario)
     restaurantAPI.addSeenRecentlyRestaurant(restauranteVistoRecientementeEntity.idRestauranteUsuario, restauranteVistoRecientementeEntity).enqueue(object : Callback<Restaurante> {
       override fun onResponse(call: Call<Restaurante>, response: Response<Restaurante>) {
         if (response.isSuccessful) {

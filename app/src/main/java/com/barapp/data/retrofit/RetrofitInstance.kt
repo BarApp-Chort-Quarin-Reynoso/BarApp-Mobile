@@ -6,6 +6,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import timber.log.Timber
 
 @SuppressLint("StaticFieldLeak")
 object RetrofitInstance {
@@ -24,7 +25,7 @@ object RetrofitInstance {
       val sharedPref = context.getSharedPreferences("MyApp", Context.MODE_PRIVATE)
       val jsessionId = sharedPref.getString("JSESSIONID", "")
 
-      println("JSESSIONID: $jsessionId")
+      Timber.d("JSESSIONID: $jsessionId")
 
       val request = original.newBuilder()
         .header("Cookie", "JSESSIONID=$jsessionId")

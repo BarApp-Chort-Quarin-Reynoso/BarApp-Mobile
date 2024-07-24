@@ -14,7 +14,6 @@ class RestauranteUsuario(
     idDetalleRestaurante: String,
     detalleRestaurante: DetalleRestaurante?,
     idRestaurante: String,
-    //idUsuario: String,
 ) : Restaurante(
     id,
     nombre,
@@ -26,7 +25,6 @@ class RestauranteUsuario(
     idDetalleRestaurante,
     detalleRestaurante,
     idRestaurante,
-    //idUsuario,
 ) {
     var idRestauranteUsuario: String = UUID.randomUUID().toString()
     var fechaGuardado: String = Timestamp.now().toString()
@@ -42,6 +40,5 @@ class RestauranteUsuario(
         "",
         null,
         "",
-        //"",
     )
 }

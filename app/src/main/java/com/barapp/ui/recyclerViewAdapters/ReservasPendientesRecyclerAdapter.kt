@@ -63,8 +63,6 @@ class ReservasPendientesRecyclerAdapter(
 
   override fun onBindViewHolder(reservaHolder: ReservasPendientesViewHolder, position: Int) {
     val reserva = reservas[position]
-//    val ubicacion =
-//      (reserva.restaurante.ubicacion.calle + " " + reserva.restaurante.ubicacion.numero)
     val personaPluralOSingular = if (reserva.cantidadPersonas == 1) " persona" else " personas"
     val datosReserva =
       (reserva.cantidadPersonas.toString() +
@@ -76,14 +74,13 @@ class ReservasPendientesRecyclerAdapter(
         " | " +
         reserva.horario.hora.toString())
     reservaHolder.titulo.text = reserva.restaurante.nombre
-//    reservaHolder.ubicacion.text = ubicacion
     reservaHolder.datosReserva.text = datosReserva
     Glide.with(reservaHolder.root.context)
       .load(reserva.restaurante.logo)
       .apply(RequestOptions.circleCropTransform())
       .into(reservaHolder.imagenLogoRestaurante)
     Glide.with(reservaHolder.root.context)
-      .load(reserva.restaurante.foto) // .apply(RequestOptions.centerCropTransform())
+      .load(reserva.restaurante.portada)
       .apply(
         RequestOptions.bitmapTransform(
           MultiTransformation(
