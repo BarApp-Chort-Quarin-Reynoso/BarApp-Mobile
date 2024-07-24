@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DiffUtil.DiffResult
 import androidx.recyclerview.widget.RecyclerView
 import com.barapp.R
+import com.barapp.data.mappers.RestauranteMapper.toRestauranteUsuario
 import com.barapp.databinding.ItemRecyclerViewHorizontalBinding
 import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
@@ -65,7 +66,7 @@ class HorizontalRecyclerViewAdapter(
       .apply(RequestOptions.circleCropTransform())
       .into(holder.logoRestaurante)
     Glide.with(holder.root.context)
-      .load(restaurante.foto)
+      .load(restaurante.portada)
       .apply(
         RequestOptions.bitmapTransform(
           MultiTransformation(
@@ -76,9 +77,10 @@ class HorizontalRecyclerViewAdapter(
       )
       .into(holder.fotoRestaurante)
 
-    // Si el detalle usuario asociado al usuario contiene el id restaurante poner el corazon lleno
     if (
       usuario.detalleUsuario!!.idsRestaurantesFavoritos.contains(listaRestaurantes[position].id)
+      ||
+      usuario.detalleUsuario!!.idsRestaurantesFavoritos.contains(listaRestaurantes[position].idRestaurante)
     ) {
       holder.botonFavorito.setIconResource(R.drawable.icon_filled_favorite_24)
       holder.botonFavorito.isChecked = true
@@ -88,11 +90,9 @@ class HorizontalRecyclerViewAdapter(
     }
     holder.botonFavorito.setOnClickListener {
       if (holder.botonFavorito.isChecked) {
-        // Logica de agregar favorito
         holder.botonFavorito.setIconResource(R.drawable.icon_filled_favorite_24)
         hacerFavorito(listaRestaurantes[position])
       } else {
-        // Logica de remover favorito
         holder.botonFavorito.setIconResource(R.drawable.icon_outlined_favorite_24)
         eliminarFavorito(listaRestaurantes[position])
       }
@@ -157,15 +157,17 @@ class HorizontalRecyclerViewAdapter(
   }
 
   private fun hacerFavorito(restaurante: Restaurante) {
-    usuario.detalleUsuario!!.idsRestaurantesFavoritos.add(restaurante.id)
+    val restauranteFavorito = toRestauranteUsuario(restaurante)
+    restauranteFavorito.idUsuario = usuario.id
+    usuario.detalleUsuario!!.idsRestaurantesFavoritos.add(restauranteFavorito.idRestaurante)
     detalleUsuarioRepository.actualizarFavoritos(usuario.detalleUsuario!!)
-    restauranteFavoritoRepository.guardar(restaurante, usuario.id)
+    restauranteFavoritoRepository.guardar(restauranteFavorito, usuario.id)
   }
 
   private fun eliminarFavorito(restaurante: Restaurante) {
-    usuario.detalleUsuario!!.idsRestaurantesFavoritos.remove(restaurante.id)
+    usuario.detalleUsuario!!.idsRestaurantesFavoritos.remove(restaurante.idRestaurante)
     detalleUsuarioRepository.actualizarFavoritos(usuario.detalleUsuario!!)
-    restauranteFavoritoRepository.borrar(restaurante, usuario.id)
+    restauranteFavoritoRepository.borrar(restaurante)
   }
 
   override fun getItemCount(): Int {

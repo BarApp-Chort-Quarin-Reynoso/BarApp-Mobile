@@ -42,8 +42,10 @@ object RestauranteMapper {
 
   @JvmStatic
   fun toRestauranteUsuario(restaurante: Restaurante): RestauranteUsuario {
+    val idAReemplazar = restaurante.idRestaurante.ifEmpty { restaurante.id }
+
     return RestauranteUsuario(
-      restaurante.id,
+      idAReemplazar,
       restaurante.nombre,
       restaurante.puntuacion,
       restaurante.portada,
@@ -52,7 +54,7 @@ object RestauranteMapper {
       restaurante.ubicacion,
       restaurante.idDetalleRestaurante,
       restaurante.detalleRestaurante,
-      restaurante.id,
+      idAReemplazar,
     )
   }
 
