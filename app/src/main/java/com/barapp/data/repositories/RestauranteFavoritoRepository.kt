@@ -1,13 +1,11 @@
 package com.barapp.data.repositories
 
-import com.barapp.data.entities.RestauranteUsuarioEntity
 import com.barapp.model.Restaurante
 import com.barapp.data.utils.FirestoreCallback
-import com.barapp.data.mappers.RestauranteMapper.fromEntity
-import com.barapp.data.mappers.RestauranteMapper.toRestauranteUsuarioEntity
+import com.barapp.data.retrofit.RestaurantApiService
 import com.barapp.data.retrofit.RetrofitInstance
 import com.barapp.data.retrofit.UserApiService
-import com.google.firebase.firestore.FirebaseFirestore
+import com.barapp.model.RestauranteUsuario
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,27 +13,8 @@ import timber.log.Timber
 
 class RestauranteFavoritoRepository private constructor() {
 
-  private val api = RetrofitInstance.createService(UserApiService::class.java)
-
-  /**
-   * El metodo busca un restaurante en la coleccion de restaurantes favoritos segun el id compuesto
-   *
-   * @param idCompuesto se compone de el restaurante.getId()+idUsuario
-   * @param callback
-   */
-  fun buscarPorId(idCompuesto: String, callback: FirestoreCallback<Restaurante>) {
-    db
-      .collection(COLECCION_RESTAURANTES_FAVORITOS)
-      .document(idCompuesto)
-      .get()
-      .addOnSuccessListener { documentSnapshot ->
-        val restauranteEntity = documentSnapshot.toObject(RestauranteEntity::class.java)
-        val ubicacionRestaurante = documentSnapshot.toObject(Ubicacion::class.java)
-        callback.onSuccess(fromEntity(restauranteEntity!!, ubicacionRestaurante, null))
-      }
-      .addOnFailureListener { e -> callback.onError(e) }
-  }
   private val userAPI = RetrofitInstance.createService(UserApiService::class.java)
+  private val restaurantAPI = RetrofitInstance.createService(RestaurantApiService::class.java)
 
   fun buscarFavoritosDelUsuario(idUsuario: String, callback: FirestoreCallback<List<Restaurante>>) {
     println("Buscando favoritos del usuario con id: $idUsuario")
@@ -56,52 +35,42 @@ class RestauranteFavoritoRepository private constructor() {
         callback.onError(t)
       }
     })
-//    val listaRestaurantesFavoritos = mutableListOf<Restaurante>()
-//    db
-//      .collection(COLECCION_RESTAURANTES_FAVORITOS)
-//      .whereEqualTo("idUsuario", idUsuario)
-//      .get()
-//      .addOnCompleteListener { task ->
-//        if (task.isSuccessful) {
-//          for (documentSnapshot in task.result) {
-//            val restauranteEntity = documentSnapshot.toObject(RestauranteEntity::class.java)
-//            val ubicacionRestaurante = documentSnapshot.toObject(Ubicacion::class.java)
-//            listaRestaurantesFavoritos.add(
-//              fromEntity(restauranteEntity, ubicacionRestaurante, null)
-//            )
-//          }
-//          callback.onSuccess(listaRestaurantesFavoritos)
-//        } else {
-//          Timber.w("Error recuperando Restaurantes favoritos")
-//          callback.onError(task.exception!!)
-//        }
-//      }
   }
 
-  fun guardar(entidad: Restaurante, idUsuario: String) {
-    val restauranteFavoritoEntity = toRestauranteUsuarioEntity(entidad, idUsuario)
-    db
-      .collection(COLECCION_RESTAURANTES_FAVORITOS)
-      .document(restauranteFavoritoEntity.idRestauranteUsuario)
-      .set(restauranteFavoritoEntity)
-      .addOnSuccessListener { Timber.d("Restaurante favorito guardado con exito") }
-      .addOnFailureListener { e -> Timber.e(e, "Error guardado restaurante favorito") }
-  }
-
-  fun actualizar(entidad: Restaurante) {}
-
-  fun borrar(entidad: Restaurante, idUsuario: String) {
-    db
-      .collection(COLECCION_RESTAURANTES_FAVORITOS)
-      .document(entidad.id + idUsuario)
-      .delete()
-      .addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-          Timber.d("Restaurante favorito eliminado con éxito")
+  fun guardar(entidad: RestauranteUsuario, idUsuario: String) {
+    println("Guardando restaurante favorito: " + entidad.idRestauranteUsuario + " idUsuario: " + idUsuario)
+    restaurantAPI.addFavoriteRestaurant(entidad.idRestauranteUsuario, entidad).enqueue(object : Callback<Restaurante> {
+      override fun onResponse(call: Call<Restaurante>, response: Response<Restaurante>) {
+        if (response.isSuccessful) {
+          val data = response.body()
+          Timber.d("Restaurante favorito guardado: $data")
         } else {
-          Timber.e(task.exception)
+          val errorBodyString = response.errorBody()?.string()
+          Timber.e("Error guardando restaurante favorito: $errorBodyString")
         }
       }
+
+      override fun onFailure(call: Call<Restaurante>, t: Throwable) {
+        Timber.e(t)
+      }
+    })
+  }
+
+  fun borrar(entidad: Restaurante) {
+    println("Borrando restaurante favorito: " + entidad.id)
+    restaurantAPI.deleteFavoriteRestaurant(entidad.id).enqueue(object : Callback<Void> {
+      override fun onResponse(call: Call<Void>, response: Response<Void>) {
+        if (response.isSuccessful) {
+          Timber.d("Restaurante favorito eliminado con éxito")
+        } else {
+          Timber.e(response.errorBody().toString())
+        }
+      }
+
+      override fun onFailure(call: Call<Void>, t: Throwable) {
+        Timber.e(t)
+      }
+    })
   }
 
   companion object {

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.barapp.data.mappers.RestauranteMapper.toRestauranteUsuario
 import com.barapp.model.DetalleRestaurante
 import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
@@ -37,7 +38,7 @@ class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) :
   private fun buscarDetalleRestaurante() {
     _loading.value = true
 
-    println("Buscando detalle restaurante con id: $restaurante")
+    println("Buscando detalle restaurante del restaurante: $restaurante")
 
     detalleRestauranteRepo.buscarPorId(
       restaurante.idDetalleRestaurante,
@@ -61,15 +62,17 @@ class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) :
   }
 
   fun hacerFavorito() {
-    usuario.detalleUsuario!!.idsRestaurantesFavoritos.add(restaurante.id)
+    val restauranteFavorito = toRestauranteUsuario(restaurante)
+    restauranteFavorito.idUsuario = usuario.id
+    usuario.detalleUsuario!!.idsRestaurantesFavoritos.add(restauranteFavorito.idRestaurante)
     detalleUsuarioRepository.actualizarFavoritos(usuario.detalleUsuario!!)
-    restauranteFavoritoRepository.guardar(restaurante, usuario.id)
+    restauranteFavoritoRepository.guardar(restauranteFavorito, usuario.id)
   }
 
   fun eliminarFavorito() {
-    usuario.detalleUsuario!!.idsRestaurantesFavoritos.remove(restaurante.id)
+    usuario.detalleUsuario!!.idsRestaurantesFavoritos.remove(restaurante.idRestaurante)
     detalleUsuarioRepository.actualizarFavoritos(usuario.detalleUsuario!!)
-    restauranteFavoritoRepository.borrar(restaurante, usuario.id)
+    restauranteFavoritoRepository.borrar(restaurante)
   }
 
   fun esFavorito(): Boolean {
