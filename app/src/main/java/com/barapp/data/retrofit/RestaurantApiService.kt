@@ -22,6 +22,11 @@ interface RestaurantApiService {
   @GET("/api/restaurantes/detalle/{id}")
   fun getRestaurantDetailById(@Path("id") id: String): Call<DetalleRestaurante>
 
+  @POST("/api/restaurantes/{id}/favoritos")
+  fun addFavoriteRestaurant(@Path("id") id: String, @Body restaurante: RestauranteUsuario): Call<Restaurante>
+
+  @DELETE("/api/restaurantes/{id}/favoritos")
+  fun deleteFavoriteRestaurant(@Path("id") id: String): Call<Void>
 
   @POST("/api/restaurantes/{id}/vistos-recientemente")
   fun addSeenRecentlyRestaurant(@Path("id") id: String, @Body restaurante: RestauranteUsuario): Call<Restaurante>
