@@ -1,6 +1,5 @@
 package com.barapp.viewModels
 
-import android.content.Context
 import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,10 +8,6 @@ import com.barapp.model.Restaurante
 import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.repositories.RestauranteRepository
 import com.barapp.util.Maps.Companion.calcularDistanciasABares
-import com.barapp.util.retrofit.RetrofitInstance
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.Locale
 import java.util.stream.Collectors
 import timber.log.Timber
@@ -55,35 +50,6 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
           }
         }
       )
-
-
-//      val queryParams = mapOf("nombre" to textoBusqueda)
-
-//    restauranteRepository.buscarTodos
-//      RetrofitInstance.restaurantApiService.getAllRestaurants(emptyMap()).enqueue(object : Callback<List<Restaurante>> {
-//        override fun onResponse(call: Call<List<Restaurante>>, response: Response<List<Restaurante>>) {
-//          if (response.isSuccessful) {
-//            val data = response.body()
-//            Timber.d("Data received: $data")
-//
-//            // Filter the list of restaurants based on the textoBusqueda string
-//            val filteredData = data?.filter { restaurante ->
-//              restaurante.nombre.uppercase(Locale.getDefault()).contains(textoBusqueda.uppercase(Locale.getDefault()))
-//            }
-//
-//            // Post the filtered list to _listaRestaurantes
-//            _listaRestaurantes.postValue(filteredData!!)
-//          } else {
-//            // Handle the error
-//            Timber.e("Error: ${response.errorBody()}")
-//          }
-//        }
-//
-//        override fun onFailure(call: Call<List<Restaurante>>, t: Throwable) {
-//          // Handle the failure
-//          Timber.e(t, "Failure")
-//        }
-//      })
   }
 
   fun calcularDistancias() {
@@ -120,8 +86,7 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
   }
 
   fun applyFilters() {
-    // log "ApplyFilters"
-    System.out.println("ApplyFilters")
+    Timber.d("ApplyFilters")
 
     val listaRestaurantesCompleta = listaRestaurantesCompleta.value
     if (listaRestaurantesCompleta != null) {
@@ -134,7 +99,7 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
   }
 
   fun resetFilters() {
-    System.out.println("RestFilters")
+    Timber.d("RestFilters")
 
     val listaRestaurantesCompleta = listaRestaurantesCompleta.value
     if (listaRestaurantesCompleta != null) {

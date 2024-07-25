@@ -2,7 +2,7 @@ package com.barapp.model
 
 import java.util.UUID
 
-class Restaurante(
+open class Restaurante(
   id: String,
   var nombre: String,
   var puntuacion: Double,

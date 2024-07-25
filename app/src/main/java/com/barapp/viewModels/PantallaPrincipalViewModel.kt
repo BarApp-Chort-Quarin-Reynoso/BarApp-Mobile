@@ -109,7 +109,7 @@ class PantallaPrincipalViewModel(
       object : FirestoreCallback<LinkedList<Restaurante>> {
         override fun onSuccess(result: LinkedList<Restaurante>) {
           _loadingVistosRecientemente.value = false
-          _listaRestaurantesVistosRecientemente.postValue(eliminarExceso(result))
+          _listaRestaurantesVistosRecientemente.postValue(result)
         }
 
         override fun onError(exception: Throwable) {
@@ -118,14 +118,6 @@ class PantallaPrincipalViewModel(
         }
       },
     )
-  }
-
-  private fun eliminarExceso(listaRestaurante: LinkedList<Restaurante>): LinkedList<Restaurante> {
-    while (listaRestaurante.size > 5) {
-      restauranteVistoRecientementeRepository.borrar(listaRestaurante.last, usuario!!.id)
-      listaRestaurante.removeLast()
-    }
-    return listaRestaurante
   }
 
   /**

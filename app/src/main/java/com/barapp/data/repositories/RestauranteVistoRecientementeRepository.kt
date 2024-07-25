@@ -1,98 +1,63 @@
 package com.barapp.data.repositories
 
-import com.barapp.data.entities.RestauranteEntity
 import com.barapp.model.Restaurante
-import com.barapp.model.Ubicacion
 import com.barapp.data.utils.FirestoreCallback
-import com.barapp.data.mappers.RestauranteMapper.fromEntity
-import com.barapp.data.mappers.RestauranteMapper.toRestauranteUsuarioEntity
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
+import com.barapp.data.mappers.RestauranteMapper.toRestauranteUsuario
+import com.barapp.data.retrofit.RestaurantApiService
+import com.barapp.data.retrofit.RetrofitInstance
+import com.barapp.data.retrofit.UserApiService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.LinkedList
 import timber.log.Timber
 
 class RestauranteVistoRecientementeRepository private constructor() {
-  // Base de datos
-  private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-
-  // Coleccion
-  private val COLECCION_RESTAURANTES_VISTOS_RECIENTEMENTE = "restaurantesVistosRecientemente"
-
-  /**
-   * El metodo busca un restaurante en la coleccion de restaurantes vistos recientemente segun el id
-   * compuesto
-   *
-   * @param idCompuesto se compone de el restaurante.getId()+idUsuario
-   * @param callback
-   */
-  fun buscarPorId(idCompuesto: String, callback: FirestoreCallback<Restaurante>) {
-    db
-      .collection(COLECCION_RESTAURANTES_VISTOS_RECIENTEMENTE)
-      .document(idCompuesto)
-      .get()
-      .addOnSuccessListener { documentSnapshot: DocumentSnapshot ->
-        val restauranteEntity = documentSnapshot.toObject(RestauranteEntity::class.java)
-        val ubicacionRestaurante = documentSnapshot.toObject(Ubicacion::class.java)
-        callback.onSuccess(fromEntity(restauranteEntity!!, ubicacionRestaurante, null))
-      }
-      .addOnFailureListener { e: Exception? -> callback.onError(e!!) }
-  }
+  private val userAPI = RetrofitInstance.createService(UserApiService::class.java)
+  private val restaurantAPI = RetrofitInstance.createService(RestaurantApiService::class.java)
 
   fun buscarVistosRecientementeDelUsuario(
     idUsuario: String,
     callback: FirestoreCallback<LinkedList<Restaurante>>,
   ) {
-    val listaRestaurantesVistosRecientemente = LinkedList<Restaurante>()
-    db
-      .collection(COLECCION_RESTAURANTES_VISTOS_RECIENTEMENTE)
-      .whereEqualTo("idUsuario", idUsuario)
-      .orderBy("fechaGuardado", Query.Direction.DESCENDING)
-      .get()
-      .addOnCompleteListener { task: Task<QuerySnapshot> ->
-        if (task.isSuccessful) {
-          for (documentSnapshot in task.result) {
-            val restauranteEntity = documentSnapshot.toObject(RestauranteEntity::class.java)
-            val ubicacionRestaurante = documentSnapshot.toObject(Ubicacion::class.java)
-            listaRestaurantesVistosRecientemente.add(
-              fromEntity(restauranteEntity, ubicacionRestaurante, null)
-            )
-          }
-          callback.onSuccess(listaRestaurantesVistosRecientemente)
+    Timber.d("Buscando vistos recientemente del usuario con id: $idUsuario")
+    userAPI.getRecentlySeenRestaurants(idUsuario).enqueue(object : Callback<List<Restaurante>> {
+      override fun onResponse(call: Call<List<Restaurante>>, response: Response<List<Restaurante>>) {
+        if (response.isSuccessful) {
+          val data = response.body()
+          Timber.d("Restaurantes vistos recientemente: $data")
+          callback.onSuccess(LinkedList(data!!))
         } else {
-          Timber.e("Error recuperando restaurantes vistos recientemente")
-          Timber.e(task.exception)
-          callback.onError(task.exception!!)
+          Timber.e("Error restaurantes vistos recientemente: ${response.errorBody()}")
+          callback.onError(Throwable("Error recuperando vistos recientemente"))
         }
       }
+
+      override fun onFailure(call: Call<List<Restaurante>>, t: Throwable) {
+        Timber.e(t)
+        callback.onError(t)
+      }
+    })
   }
 
   fun guardar(entidad: Restaurante, idUsuario: String) {
-    val restauranteVistoRecientementeEntity = toRestauranteUsuarioEntity(entidad, idUsuario)
-    db
-      .collection(COLECCION_RESTAURANTES_VISTOS_RECIENTEMENTE)
-      .document(restauranteVistoRecientementeEntity.idRestauranteUsuario)
-      .set(restauranteVistoRecientementeEntity)
-      .addOnSuccessListener { Timber.d("Restaurante visto recientemente guardado con exito") }
-      .addOnFailureListener { e: Exception? ->
-        Timber.e(e, "Error guardado restaurante visto recientemente")
-      }
-  }
-
-  fun borrar(entidad: Restaurante, idUsuario: String) {
-    db
-      .collection(COLECCION_RESTAURANTES_VISTOS_RECIENTEMENTE)
-      .document(entidad.id + idUsuario)
-      .delete()
-      .addOnCompleteListener { task: Task<Void?> ->
-        if (task.isSuccessful) {
-          Timber.d("Restaurante visto recientemente eliminado con éxito")
+    val restauranteVistoRecientementeEntity = toRestauranteUsuario(entidad)
+    restauranteVistoRecientementeEntity.idUsuario = idUsuario
+    Timber.d("Guardando restaurante visto recientemente: " + restauranteVistoRecientementeEntity.idRestauranteUsuario + " idUsuario: " + idUsuario)
+    restaurantAPI.addSeenRecentlyRestaurant(restauranteVistoRecientementeEntity.idRestauranteUsuario, restauranteVistoRecientementeEntity).enqueue(object : Callback<Restaurante> {
+      override fun onResponse(call: Call<Restaurante>, response: Response<Restaurante>) {
+        if (response.isSuccessful) {
+          val data = response.body()
+          Timber.d("Restaurante visto recientemente guardado: $data")
         } else {
-          Timber.e(task.exception)
+          Timber.e("Error guardando restaurante visto recientemente: ${response.errorBody()}")
         }
       }
+
+      override fun onFailure(call: Call<Restaurante>, t: Throwable) {
+        Timber.e(t)
+      }
+    })
   }
 
   companion object {
