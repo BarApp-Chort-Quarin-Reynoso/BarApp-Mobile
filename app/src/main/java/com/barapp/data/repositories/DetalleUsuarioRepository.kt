@@ -20,7 +20,7 @@ class DetalleUsuarioRepository private constructor() : IGenericRepository<Detall
   private val api = RetrofitInstance.createService(UserApiService::class.java)
 
   override fun buscarPorId(id: String, callback: FirestoreCallback<DetalleUsuario>) {
-    println("Buscando detalle usuario con id: $id")
+    Timber.d("Buscando detalle usuario con id: $id")
 
     api.getUserDetailById(id).enqueue(object : Callback<DetalleUsuario> {
       override fun onResponse(call: Call<DetalleUsuario>, response: Response<DetalleUsuario>) {
@@ -57,7 +57,7 @@ class DetalleUsuarioRepository private constructor() : IGenericRepository<Detall
   }
 
   fun actualizarFavoritos(entidad: DetalleUsuario) {
-    println("Actualizando favoritos del usuario con id: ${entidad.id}" + " con favoritos: ${entidad.idsRestaurantesFavoritos}")
+    Timber.d("Actualizando favoritos del usuario con id: ${entidad.id}" + " con favoritos: ${entidad.idsRestaurantesFavoritos}")
     api.updateFavoriteRestaurants(entidad.id, entidad.idsRestaurantesFavoritos).enqueue(object : Callback<DetalleUsuario> {
       override fun onResponse(call: Call<DetalleUsuario>, response: Response<DetalleUsuario>) {
         if (response.isSuccessful) {
