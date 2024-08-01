@@ -6,6 +6,16 @@ plugins {
     id 'kotlin-kapt' // Add this line
 }
 
+def localPropertiesFile = rootProject.file("local.properties")
+def localProperties = new Properties()
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { stream ->
+        localProperties.load(stream)
+    }
+} else {
+    throw new FileNotFoundException("local.properties file not found. Please create it in the project root directory (/BarApp-Mobile).")
+}
+
 android {
     compileSdk 34
 
@@ -15,7 +25,7 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
+        buildConfigField "String", "BASE_URL", "\"${localProperties['BASE_URL']}\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -36,6 +46,7 @@ android {
     buildFeatures {
         viewBinding true
         dataBinding true
+        buildConfig true
     }
     namespace 'com.barapp'
 
