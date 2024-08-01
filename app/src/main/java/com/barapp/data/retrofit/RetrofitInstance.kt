@@ -2,6 +2,7 @@ package com.barapp.data.retrofit
 
 import android.annotation.SuppressLint
 import android.content.Context
+import com.barapp.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -10,9 +11,8 @@ import timber.log.Timber
 
 @SuppressLint("StaticFieldLeak")
 object RetrofitInstance {
-  private const val BASE_URL = "http://172.21.24.173:8080/"
-
   private lateinit var context: Context
+  private var baseUrl: String = BuildConfig.BASE_URL
 
   fun initialize(context: Context) {
     RetrofitInstance.context = context
@@ -38,8 +38,9 @@ object RetrofitInstance {
 
   private val retrofit: Retrofit by lazy {
     Retrofit.Builder()
-      .baseUrl(BASE_URL)
+      .baseUrl(baseUrl)
       .client(client)
+      .addConverterFactory(StringConverterFactory())
       .addConverterFactory(GsonConverterFactory.create())
       .build()
   }
