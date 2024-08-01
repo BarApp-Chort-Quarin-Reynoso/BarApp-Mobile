@@ -345,7 +345,6 @@ class PantallaBar : Fragment() {
         dataSource: DataSource?,
         isFirstResource: Boolean,
       ): Boolean {
-        Timber.e("F")
         this@PantallaBar.startPostponedEnterTransition()
         return false
       }

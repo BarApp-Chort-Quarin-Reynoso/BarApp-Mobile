@@ -12,6 +12,7 @@ import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.repositories.DetalleRestauranteRepository
 import com.barapp.data.repositories.DetalleUsuarioRepository
 import com.barapp.data.repositories.RestauranteFavoritoRepository
+import timber.log.Timber
 
 class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) : ViewModel() {
 
@@ -38,7 +39,7 @@ class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) :
   private fun buscarDetalleRestaurante() {
     _loading.value = true
 
-    println("Buscando detalle restaurante del restaurante: $restaurante")
+    Timber.d("Buscando detalle restaurante del restaurante: $restaurante")
 
     detalleRestauranteRepo.buscarPorId(
       restaurante.idDetalleRestaurante,
