@@ -17,7 +17,7 @@ class RestauranteFavoritoRepository private constructor() {
   private val restaurantAPI = RetrofitInstance.createService(RestaurantApiService::class.java)
 
   fun buscarFavoritosDelUsuario(idUsuario: String, callback: FirestoreCallback<List<Restaurante>>) {
-    println("Buscando favoritos del usuario con id: $idUsuario")
+    Timber.d("Buscando favoritos del usuario con id: $idUsuario")
     userAPI.getFavoriteRestaurants(idUsuario).enqueue(object : Callback<List<Restaurante>> {
       override fun onResponse(call: Call<List<Restaurante>>, response: Response<List<Restaurante>>) {
         if (response.isSuccessful) {
@@ -38,7 +38,7 @@ class RestauranteFavoritoRepository private constructor() {
   }
 
   fun guardar(entidad: RestauranteUsuario, idUsuario: String) {
-    println("Guardando restaurante favorito: " + entidad.idRestauranteUsuario + " idUsuario: " + idUsuario)
+    Timber.d("Guardando restaurante favorito: " + entidad.idRestauranteUsuario + " idUsuario: " + idUsuario)
     restaurantAPI.addFavoriteRestaurant(entidad.idRestauranteUsuario, entidad).enqueue(object : Callback<Restaurante> {
       override fun onResponse(call: Call<Restaurante>, response: Response<Restaurante>) {
         if (response.isSuccessful) {
@@ -57,7 +57,7 @@ class RestauranteFavoritoRepository private constructor() {
   }
 
   fun borrar(entidad: Restaurante) {
-    println("Borrando restaurante favorito: " + entidad.id)
+    Timber.d("Borrando restaurante favorito: " + entidad.id)
     restaurantAPI.deleteFavoriteRestaurant(entidad.id).enqueue(object : Callback<Void> {
       override fun onResponse(call: Call<Void>, response: Response<Void>) {
         if (response.isSuccessful) {

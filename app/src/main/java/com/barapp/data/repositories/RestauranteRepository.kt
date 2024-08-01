@@ -20,7 +20,7 @@ class RestauranteRepository private constructor() : IGenericRepository<Restauran
       override fun onResponse(call: Call<Restaurante>, response: Response<Restaurante>) {
         if (response.isSuccessful) {
           val data = response.body()
-          Timber.d("Data received: $data")
+          Timber.d("Restaurante recibido: $data")
           callback.onSuccess(data!!)
         } else {
           Timber.e("Error: ${response.errorBody()}")
@@ -40,7 +40,7 @@ class RestauranteRepository private constructor() : IGenericRepository<Restauran
       override fun onResponse(call: Call<List<Restaurante>>, response: Response<List<Restaurante>>) {
         if (response.isSuccessful) {
           val data = response.body()
-          Timber.d("Data received: $data")
+          Timber.d("Restaurantes recibidos: $data")
           callback.onSuccess(data!!)
         } else {
           Timber.e("Error: ${response.errorBody()}")
@@ -82,10 +82,10 @@ class RestauranteRepository private constructor() : IGenericRepository<Restauran
       override fun onResponse(call: Call<List<Restaurante>>, response: Response<List<Restaurante>>) {
         if (response.isSuccessful) {
           val data = response.body()
-          Timber.d("Data received: $data")
+          Timber.d("Restaurantes destacados: $data")
           callback.onSuccess(data!!)
         } else {
-          Timber.e("Error: ${response.errorBody()}")
+          Timber.e("Error restaurantes destacados: ${response.errorBody()}")
           callback.onError(Throwable("Error recuperando Restaurantes"))
         }
       }
