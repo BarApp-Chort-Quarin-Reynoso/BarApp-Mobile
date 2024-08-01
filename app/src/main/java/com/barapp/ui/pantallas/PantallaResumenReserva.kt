@@ -1,14 +1,15 @@
 package com.barapp.ui.pantallas
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.barapp.R
+import com.barapp.data.repositories.ReservaRepository
 import com.barapp.databinding.FragmentPantallaResumenReservaBinding
 import com.barapp.viewModels.MainActivityViewModel
 import java.time.LocalDate
@@ -18,6 +19,7 @@ class PantallaResumenReserva : Fragment() {
   private lateinit var binding: FragmentPantallaResumenReservaBinding
 
   private val activitySharedViewModel: MainActivityViewModel by activityViewModels()
+  private val reservaRepository = ReservaRepository.instance
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -44,7 +46,7 @@ class PantallaResumenReserva : Fragment() {
         getString(R.string.placeholder_persona, cantPersonas)
       else getString(R.string.placeholder_personas, cantPersonas)
     binding.textViewFechaReserva.text = fechaAFormatoTexto(activitySharedViewModel.reserva.getFechaAsLocalDate())
-    binding.textViewHoraReserva.text = activitySharedViewModel.reserva.horario.hora.toString()
+    binding.textViewHoraReserva.text = activitySharedViewModel.reserva.horario.horario
 
     activitySharedViewModel.usuario.value!!.let {usuario ->
       binding.textViewNombre.text =
@@ -69,8 +71,19 @@ class PantallaResumenReserva : Fragment() {
   }
 
   private fun cancelarReserva() {
-
-    Toast.makeText(this.context, "Cancelar reserva no implementado", Toast.LENGTH_SHORT).show()
+    AlertDialog.Builder(requireContext())
+      .setTitle("Cancelar REserva")
+      .setMessage("¿Estás seguro de que deseas cancelar la reserva?")
+      .setPositiveButton("Si") { dialog, _ ->
+        reservaRepository.cancelarReserva(activitySharedViewModel.reserva)
+        dialog.dismiss()
+        NavHostFragment.findNavController(this).popBackStack()
+      }
+      .setNegativeButton("No") { dialog, _ ->
+        dialog.dismiss()
+      }
+      .create()
+      .show()
   }
 
   /**

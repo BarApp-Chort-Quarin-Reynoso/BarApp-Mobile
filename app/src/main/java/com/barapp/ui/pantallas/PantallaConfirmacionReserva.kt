@@ -51,7 +51,7 @@ class PantallaConfirmacionReserva : Fragment() {
 
     binding.textViewCantidadPersonas.text = sharedViewModel.textoCantidadPersonas
     binding.textViewFechaReserva.text = sharedViewModel.textoFechaReserva
-    binding.textViewHoraReserva.text = sharedViewModel.horaReserva.hora.toString()
+    binding.textViewHoraReserva.text = sharedViewModel.horaReserva.horario
 
     // Voy a buscar en las shared preferences el id que tiene el usuario de la sesion actual
     val idUsuario =

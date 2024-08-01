@@ -10,18 +10,18 @@ import java.util.UUID
 
 class Reserva(
   id: String,
-  var cancelada: Boolean,
+  var estado: String,
   var cantidadPersonas: Int,
   var fecha: String,
   var restaurante: Restaurante,
   var horario: Horario,
-  var idUsuario: String,
   var usuario: Usuario?,
 ) : BaseClass(id) {
   constructor() :
-    this(UUID.randomUUID().toString(), false, -1, LocalDate.MAX.toString(), Restaurante(), Horario(), "", null)
+    this(UUID.randomUUID().toString(), "PENDIENTE", -1, LocalDate.MAX.toString(), Restaurante(), Horario(), null)
 
   constructor(
+    estado: String,
     cantidadPersonas: Int,
     fecha: String,
     restaurante: Restaurante,
@@ -29,12 +29,11 @@ class Reserva(
     usuario: Usuario,
   ) : this(
     UUID.randomUUID().toString(),
-    false,
+    estado,
     cantidadPersonas,
     fecha,
     restaurante,
     horario,
-    usuario.id,
     usuario,
   )
 
@@ -43,8 +42,9 @@ class Reserva(
       "id='" +
       id +
       '\'' +
-      ", cancelada=" +
-      cancelada +
+      ", estado='" +
+      estado +
+      '\'' +
       ", cantidadPersonas=" +
       cantidadPersonas +
       ", fecha=" +
@@ -53,8 +53,6 @@ class Reserva(
       restaurante +
       ", horario=" +
       horario +
-      ", idUsuario='" +
-      idUsuario +
       '\'' +
       ", usuario=" +
       usuario +

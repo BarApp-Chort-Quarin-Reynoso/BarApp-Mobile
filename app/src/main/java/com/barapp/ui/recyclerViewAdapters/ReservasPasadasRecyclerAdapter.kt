@@ -64,9 +64,8 @@ class ReservasPasadasRecyclerAdapter(private val reservas: MutableList<Reserva>,
         "/" +
         reserva.getFechaAsLocalDate().monthValue +
         " | " +
-        reserva.horario.hora)
+        reserva.horario.horario)
     reservaHolder.titulo.text = reserva.restaurante.nombre
-//    reservaHolder.direccion.text = ubicacion
     reservaHolder.datosReserva.text = datosReserva
     Glide.with(reservaHolder.root.context)
       .load(reserva.restaurante.logo)

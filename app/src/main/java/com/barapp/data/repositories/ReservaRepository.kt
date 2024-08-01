@@ -90,7 +90,7 @@ class ReservaRepository private constructor() : IGenericRepository<Reserva> {
   }
 
   fun buscarTodosAsociadosAUsuario(idUsuario: String, callback: FirestoreCallback<List<Reserva>>) {
-    println("Buscando reservas con id: $idUsuario")
+    Timber.d("Buscando reservas con id: $idUsuario")
     api.getReservationsByUser(idUsuario).enqueue(object : Callback<List<Reserva>> {
       override fun onResponse(call: Call<List<Reserva>>, response: Response<List<Reserva>>) {
         if (response.isSuccessful) {
@@ -108,35 +108,6 @@ class ReservaRepository private constructor() : IGenericRepository<Reserva> {
         callback.onError(t)
       }
     })
-//    val listaReservas: MutableList<Reserva> = ArrayList()
-//    db
-//      .collection(COLECCION_RESERVAS)
-//      .whereEqualTo("idUsuario", idUsuario)
-//      .orderBy("timestamp", Query.Direction.ASCENDING)
-//      .get()
-//      .addOnCompleteListener { task ->
-//        if (task.isSuccessful) {
-//          for (document in task.result) {
-//            val reservaEntity = document.toObject(ReservaEntity::class.java)
-//            val restauranteEntity = document.toObject(RestauranteEntity::class.java)
-//            val horarioEntity = document.toObject(HorarioEntity::class.java)
-//            // Tiene solo idUbicacion, calle y numero, el resto de campos son nulls
-//            val ubicacion = document.toObject(Ubicacion::class.java)
-//            val reserva =
-//              fromEntity(
-//                reservaEntity,
-//                fromEntity(restauranteEntity, ubicacion, null),
-//                fromEntity(horarioEntity),
-//                null,
-//              )
-//            listaReservas.add(reserva)
-//          }
-//          callback.onSuccess(listaReservas)
-//        } else {
-//          Timber.d("Falló la busqueda de reservas")
-//          callback.onError(task.exception!!)
-//        }
-//      }
   }
 
   fun buscarReservasANotificar(
@@ -186,12 +157,37 @@ class ReservaRepository private constructor() : IGenericRepository<Reserva> {
   }
 
   override fun guardar(entidad: Reserva) {
-    db
-      .collection(COLECCION_RESERVAS)
-      .document(entidad.id)
-      .set(toReservaBDEntity(entidad))
-      .addOnSuccessListener { Timber.d("Reserva successfully written!") }
-      .addOnFailureListener { e: Exception? -> Timber.w(e, "Error writing reserva") }
+    Timber.d("Guardando reserva: $entidad")
+    api.createReservation(entidad.id, entidad).enqueue(object : Callback<String> {
+      override fun onResponse(call: Call<String>, response: Response<String>) {
+        if (response.isSuccessful) {
+          Timber.d("Reserva creada exitosamente")
+        } else {
+          Timber.e("Error creando reserva: ${response.errorBody()}")
+        }
+      }
+
+      override fun onFailure(call: Call<String>, t: Throwable) {
+        Timber.e(t)
+      }
+    })
+  }
+
+  fun cancelarReserva(reserva: Reserva) {
+    Timber.d("Cancelando reserva por parte del usuario: $reserva")
+    api.updateReservation(reserva.id, "CANCELADA_USUARIO").enqueue(object : Callback<Reserva> {
+      override fun onResponse(call: Call<Reserva>, response: Response<Reserva>) {
+        if (response.isSuccessful) {
+          Timber.d("Reserva cancelada exitosamente")
+        } else {
+          Timber.e("Error: ${response.errorBody()}")
+        }
+      }
+
+      override fun onFailure(call: Call<Reserva>, t: Throwable) {
+        Timber.e(t)
+      }
+    })
   }
 
   override fun actualizar(entidad: Reserva) {}

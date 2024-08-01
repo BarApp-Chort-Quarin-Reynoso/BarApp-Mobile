@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.barapp.R
 import com.barapp.databinding.FragmentPantallaMisReservasBinding
@@ -17,10 +18,10 @@ import com.barapp.ui.recyclerViewAdapters.ReservasPendientesRecyclerAdapter
 import com.barapp.util.Interpolator.Companion.emphasizedInterpolator
 import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.PantallaMisReservasViewModel
+import com.barapp.viewModels.sharedViewModels.ReservaSharedViewModel
 import com.faltenreich.skeletonlayout.Skeleton
 import com.faltenreich.skeletonlayout.applySkeleton
 import com.google.android.material.transition.MaterialFadeThrough
-import timber.log.Timber
 
 interface OnReservaClicked {
   fun onReservaClicked()
@@ -33,6 +34,7 @@ class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItem
   private lateinit var binding: FragmentPantallaMisReservasBinding
   private val viewModelMisReservas: PantallaMisReservasViewModel by viewModels()
   private val activityViewModel: MainActivityViewModel by activityViewModels()
+  private val reservaSharedViewModel: ReservaSharedViewModel by navGraphViewModels(R.id.pantallaMisReservas)
 
   private val reservasPasadasAdapter = ReservasPasadasRecyclerAdapter(ArrayList(), this)
   private val reservasPendientesAdapter = ReservasPendientesRecyclerAdapter(ArrayList(), this)
@@ -134,11 +136,7 @@ class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItem
   }
 
   override fun onOpinarButtonClick(position: Int) {
-    Timber.d("Opinar button clicked at position $position")
-    // Aquí puedes obtener el item en la posición y pasar datos a la nueva pantalla si es necesario
-//    val item = miAdapter.getItemAt(position)
-//    val action = PantallaNavegacionPrincipalDirections.actionPantallaNavegacionPrincipalToPantallaOpiniones(item.id)
-//    findNavController().navigate(action)
+    reservaSharedViewModel.reserva = viewModelMisReservas.reservasPasadas.value!![position]
     NavHostFragment.findNavController(this)
       .navigate(R.id.action_pantallaMisReservas_to_pantallaCrearOpinion)
   }

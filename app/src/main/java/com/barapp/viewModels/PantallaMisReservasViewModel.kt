@@ -91,7 +91,7 @@ class PantallaMisReservasViewModel : ViewModel() {
     if (reserva.getFechaAsLocalDate().isBefore(diaActualArgentina)) {
       result = true
     } else if (reserva.getFechaAsLocalDate().isEqual(diaActualArgentina)) {
-      if (reserva.horario.hora.isBefore(horaActualArgentina.minusMinutes(15))) {
+      if (reserva.horario.getHorarioAsLocalTime().isBefore(horaActualArgentina.minusMinutes(15))) {
         result = true
       }
     }

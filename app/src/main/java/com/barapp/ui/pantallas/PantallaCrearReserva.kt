@@ -79,7 +79,7 @@ class PantallaCrearReserva : Fragment() {
     super.onViewCreated(view, savedInstanceState)
 
     // Se copia el detalle restaurante para determinar los horarios disponibles
-    viewModel.detalleBarSeleccionado = sharedViewModelBarAReservar.detalleBarSeleccionado
+    viewModel.barSeleccionado = sharedViewModelBarAReservar.barSeleccionado
 
     // Se copia el id usuario para quitar los horarios ya reservados
     viewModel.idUsuario = activitySharedViewModel.usuario.value!!.id
@@ -126,7 +126,7 @@ class PantallaCrearReserva : Fragment() {
 
     // Horarios
     limpiarDatosViejosHorarios()
-    viewModel.restablecerChipGroup(sharedViewModelProximaPantalla.listaHorariosDeshabilitados)
+    viewModel.restablecerHorariosComoEstaban()
     chequearChipAntesSeleccionado(sharedViewModelProximaPantalla.indexChipSeleccionado)
 
     // Se realizó toda la lógica, ahora ya no viene de pantalla confirmacion reserva
@@ -332,8 +332,8 @@ class PantallaCrearReserva : Fragment() {
     var index = indexHastaElMomento
 
     for (horario in listaHorarios) {
-      if (noEsDeMadrugada(horario.hora)) {
-        val chip = crearChip(horario.hora.toString(), index)
+      if (noEsDeMadrugada(horario.getHorarioAsLocalTime())) {
+        val chip = crearChip(horario.horario.substring(0,5), index)
         if (viewModel.comprobarSiEsHorarioHabilitado(horario)) {
           chip.isEnabled = false
         } else {
@@ -419,7 +419,5 @@ class PantallaCrearReserva : Fragment() {
     sharedViewModelProximaPantalla.barSeleccionado = sharedViewModelBarAReservar.barSeleccionado
 
     sharedViewModelProximaPantalla.indexChipSeleccionado = viewModel.indexChipSeleccionado
-    sharedViewModelProximaPantalla.listaHorariosDeshabilitados =
-      viewModel.listaHorariosADeshabilitar
   }
 }

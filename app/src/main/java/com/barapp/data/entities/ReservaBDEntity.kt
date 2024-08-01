@@ -5,7 +5,7 @@ import java.util.UUID
 
 class ReservaBDEntity(
   var idReserva: String,
-  var cancelada: Boolean,
+  var estado: String,
   var cantidadPersonas: Int,
   var fecha: String,
   var idUsuario: String,
@@ -26,7 +26,7 @@ class ReservaBDEntity(
   constructor() :
     this(
       UUID.randomUUID().toString(),
-      false,
+      "PENDIENTE",
       -1,
       "",
       "",
@@ -46,6 +46,6 @@ class ReservaBDEntity(
     )
 
   override fun toString(): String {
-    return "ReservaBDEntity(id='$idReserva', cancelada=$cancelada, cantidadPersonas=$cantidadPersonas, fecha='$fecha', idUsuario='$idUsuario', idRestaurante='$idRestaurante', nombre='$nombre', puntuacion=$puntuacion, foto='$foto', logo='$logo', idDetalleRestaurante='$idDetalleRestaurante', idUbicacion='$idUbicacion', calle='$calle', numero=$numero, idHorario='$idHorario', hora='$hora', tipoComida='$tipoComida', timestamp=$timestamp)"
+    return "ReservaBDEntity(id='$idReserva', estado=$estado, cantidadPersonas=$cantidadPersonas, fecha='$fecha', idUsuario='$idUsuario', idRestaurante='$idRestaurante', nombre='$nombre', puntuacion=$puntuacion, foto='$foto', logo='$logo', idDetalleRestaurante='$idDetalleRestaurante', idUbicacion='$idUbicacion', calle='$calle', numero=$numero, idHorario='$idHorario', hora='$hora', tipoComida='$tipoComida', timestamp=$timestamp)"
   }
 }

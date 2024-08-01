@@ -4,13 +4,13 @@ import java.util.UUID
 
 class HorarioEntity(
   var idHorario: String,
-  var hora: String,
+  var horario: String,
   var tipoComida: String
 ) {
   constructor() : this(UUID.randomUUID().toString(), "", "")
 
   override fun toString(): String {
-    return "HorarioEntity(id='$idHorario', hora='$hora', tipoComida='$tipoComida')"
+    return "HorarioEntity(id='$idHorario', hora='$horario', tipoComida='$tipoComida')"
   }
 }
 

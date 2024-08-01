@@ -17,5 +17,4 @@ class CrearReservaSharedViewModel : ViewModel() {
 
   var vieneDePantallaConfirmacionReserva = false
   var indexChipSeleccionado = 0
-  lateinit var listaHorariosDeshabilitados: ArrayList<Horario>
 }
