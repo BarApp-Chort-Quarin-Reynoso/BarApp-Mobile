@@ -31,7 +31,7 @@ class DetalleRestauranteRepository private constructor() : IGenericRepository<De
   private val api = RetrofitInstance.createService(RestaurantApiService::class.java)
 
   override fun buscarPorId(id: String, callback: FirestoreCallback<DetalleRestaurante>) {
-
+    Timber.d("Buscando detalle restaurante con id: $id")
     api.getRestaurantDetailById(id).enqueue(object : Callback<DetalleRestaurante> {
       override fun onResponse(call: Call<DetalleRestaurante>, response: Response<DetalleRestaurante>) {
         if (response.isSuccessful) {
