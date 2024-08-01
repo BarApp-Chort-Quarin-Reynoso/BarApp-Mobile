@@ -39,6 +39,7 @@ object DetalleRestauranteMapper {
       detalleRestauranteEntity.capacidadPorHorario,
       ArrayList(horarios),
       ArrayList(opiniones),
+      HashMap(),
     )
   }
 }

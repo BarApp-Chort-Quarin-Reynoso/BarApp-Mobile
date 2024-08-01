@@ -5,6 +5,7 @@ import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.utils.IGenericRepository
 import com.barapp.data.retrofit.RestaurantApiService
 import com.barapp.data.retrofit.RetrofitInstance
+import com.barapp.model.Horario
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,6 +49,27 @@ class RestauranteRepository private constructor() : IGenericRepository<Restauran
       }
 
       override fun onFailure(call: Call<List<Restaurante>>, t: Throwable) {
+        Timber.e(t)
+        callback.onError(t)
+      }
+    })
+  }
+
+  fun buscarHorariosPorCorreo(correo: String, mesAnio: String, callback: FirestoreCallback<Map<String, List<Horario>>>) {
+    Timber.d("Buscando horarios para restaurante con correo: $correo")
+    api.getRestaurantHours(correo, mesAnio).enqueue(object : Callback<Map<String, List<Horario>>> {
+      override fun onResponse(call: Call<Map<String, List<Horario>>>, response: Response<Map<String, List<Horario>>>) {
+        if (response.isSuccessful) {
+          val data = response.body()
+          Timber.d("Horarios restaurante: $data")
+          callback.onSuccess(data!!)
+        } else {
+          Timber.e("Error horarios restaurante: ${response.errorBody()}")
+          callback.onError(Throwable("Error recuperando Horarios"))
+        }
+      }
+
+      override fun onFailure(call: Call<Map<String, List<Horario>>>, t: Throwable) {
         Timber.e(t)
         callback.onError(t)
       }
