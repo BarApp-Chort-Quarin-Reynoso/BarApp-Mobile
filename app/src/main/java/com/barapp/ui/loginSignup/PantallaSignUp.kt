@@ -79,7 +79,7 @@ class PantallaSignUp : Fragment() {
     val usuario = Usuario()
     usuario.nombre = nombre.editText!!.text.toString()
     usuario.apellido = apellido.editText!!.text.toString()
-    usuario.foto = "https://firebasestorage.googleapis.com/v0/b/barapp-b1bc0.appspot.com/o/images%2Fusuarios%2Fdefault-400x400.jpg?alt=media&token=1f93f14d-c435-496d-97b1-06457913ed1d"
+    usuario.foto = "https://firebasestorage.googleapis.com/v0/b/barapp-b1bc0.appspot.com/o/images%2Fusuarios%2Fprofile_pecture_default.jpg?alt=media&token=11784857-f2c7-4b60-b332-e5580678c3d3"
     usuario.idDetalleUsuario = detalleUsuario.id
     usuario.detalleUsuario = detalleUsuario
 
