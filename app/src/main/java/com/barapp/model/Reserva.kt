@@ -3,6 +3,7 @@ package com.barapp.barapp.model
 import com.barapp.model.BaseClass
 import com.barapp.model.Horario
 import com.barapp.model.Restaurante
+import com.barapp.model.TipoComida
 import com.barapp.model.Usuario
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -15,10 +16,11 @@ class Reserva(
   var fecha: String,
   var restaurante: Restaurante,
   var horario: Horario,
+  var tipoComida: TipoComida,
   var usuario: Usuario?,
 ) : BaseClass(id) {
   constructor() :
-    this(UUID.randomUUID().toString(), "PENDIENTE", -1, LocalDate.MAX.toString(), Restaurante(), Horario(), null)
+    this(UUID.randomUUID().toString(), "PENDIENTE", -1, LocalDate.MAX.toString(), Restaurante(), Horario(), TipoComida.NINGUNO, null)
 
   constructor(
     estado: String,
@@ -26,6 +28,7 @@ class Reserva(
     fecha: String,
     restaurante: Restaurante,
     horario: Horario,
+    tipoComida: TipoComida,
     usuario: Usuario,
   ) : this(
     UUID.randomUUID().toString(),
@@ -34,6 +37,7 @@ class Reserva(
     fecha,
     restaurante,
     horario,
+    tipoComida,
     usuario,
   )
 
@@ -53,6 +57,8 @@ class Reserva(
       restaurante +
       ", horario=" +
       horario +
+      ", tipoComida=" +
+      tipoComida +
       '\'' +
       ", usuario=" +
       usuario +
