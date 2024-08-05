@@ -7,7 +7,6 @@ import com.barapp.barapp.model.Reserva
 import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
 import com.google.firebase.Timestamp
-import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
 
@@ -37,6 +36,7 @@ object ReservaMapper {
       reservaEntity.fecha,
       restaurante,
       horario,
+      horario.tipoComida,
       usuario!!,
     )
   }
