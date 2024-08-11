@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:transitionName="transition_pantalla_buscar">
+    android:transitionName="transition_pantalla_buscar"
+    android:background="?android:colorBackground">
 
     <TextView
         android:id="@+id/labelBuscandoEn"

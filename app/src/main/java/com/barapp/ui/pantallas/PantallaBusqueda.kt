@@ -14,9 +14,11 @@ import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
+import androidx.transition.TransitionInflater
 import com.barapp.R
 import com.barapp.databinding.FragmentPantallaBusquedaBinding
 import com.barapp.model.Usuario
+import com.barapp.util.Interpolator
 import com.barapp.util.Interpolator.Companion.emphasizedInterpolator
 import com.barapp.viewModels.MainActivityViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -30,22 +32,7 @@ class PantallaBusqueda : Fragment() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    sharedElementEnterTransition =
-      MaterialContainerTransform()
-        .setDuration(
-          resources.getInteger(R.integer.fragment_transition_enter_long_duration).toLong()
-        )
-        .setInterpolator(emphasizedInterpolator())
-    sharedElementReturnTransition =
-      MaterialContainerTransform()
-        .setDuration(
-          resources.getInteger(R.integer.fragment_transition_exit_long_duration).toLong()
-        )
-        .setInterpolator(emphasizedInterpolator())
-    exitTransition =
-      MaterialSharedAxis(MaterialSharedAxis.X, true).setInterpolator(emphasizedInterpolator())
-    reenterTransition =
-      MaterialSharedAxis(MaterialSharedAxis.X, false).setInterpolator(emphasizedInterpolator())
+    sharedElementEnterTransition = MaterialContainerTransform()
   }
 
   override fun onCreateView(

@@ -61,16 +61,7 @@ class PantallaCrearReserva : Fragment() {
     binding = FragmentPantallaCrearReservaBinding.inflate(inflater, container, false)
 
     // Se setea la transicion
-    sharedElementEnterTransition =
-      MaterialContainerTransform().apply {
-        duration = resources.getInteger(R.integer.fragment_transition_enter_long_duration).toLong()
-        interpolator = Interpolator.emphasizedInterpolator()
-      }
-    sharedElementReturnTransition =
-      MaterialContainerTransform().apply {
-        duration = resources.getInteger(R.integer.fragment_transition_exit_long_duration).toLong()
-        interpolator = Interpolator.emphasizedInterpolator()
-      }
+    sharedElementEnterTransition = MaterialContainerTransform()
 
     return binding.root
   }
