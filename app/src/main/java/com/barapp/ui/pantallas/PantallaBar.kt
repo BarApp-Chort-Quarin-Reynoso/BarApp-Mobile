@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navGraphViewModels
+import androidx.transition.TransitionInflater
 import com.barapp.R
 import com.barapp.databinding.FragmentPantallaBarBinding
 import com.barapp.databinding.OpinionLayoutBinding
@@ -85,16 +86,7 @@ class PantallaBar : Fragment() {
     binding.root.transitionName = arguments?.getString("transition_name")
 
     // Se setean las transiciones desde restaurante, tanto de entrada como de retorno
-    sharedElementEnterTransition =
-      MaterialContainerTransform().apply {
-        duration = resources.getInteger(R.integer.fragment_transition_enter_long_duration).toLong()
-        interpolator = Interpolator.emphasizedInterpolator()
-      }
-    sharedElementReturnTransition =
-      MaterialContainerTransform().apply {
-        duration = resources.getInteger(R.integer.fragment_transition_exit_long_duration).toLong()
-        interpolator = Interpolator.emphasizedInterpolator()
-      }
+    sharedElementEnterTransition = MaterialContainerTransform()
 
     exitTransition = null
 
@@ -322,7 +314,7 @@ class PantallaBar : Fragment() {
   /**
    * Este metodo se utiliza para crear un [RequestListener], el cual es utilizado como listener de
    * la carga de fotos en [Glide]. En este caso, el listener inicia la transicion pospuesta
-   * previamente, tanto si la carca es exitosa como en caso contrario
+   * previamente, tanto si la carga es exitosa como en caso contrario
    *
    * @author Federico Quarin
    */

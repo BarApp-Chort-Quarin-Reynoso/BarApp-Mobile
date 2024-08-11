@@ -45,33 +45,32 @@ class MainActivityViewModel : ViewModel() {
       idUsuario,
       object : FirestoreCallback<Usuario> {
         override fun onSuccess(result: Usuario) {
-          Timber.d(result.toString())
-          _usuario.postValue(result)
-          buscarYGuardarDetalleUsuarioPorId(result.idDetalleUsuario)
+          val usuarioTemp = result
+          Timber.d(usuarioTemp.toString())
+          detalleUsuarioRepository.buscarPorId(
+            usuarioTemp.idDetalleUsuario,
+            object : FirestoreCallback<DetalleUsuario> {
+              override fun onSuccess(result: DetalleUsuario) {
+                Timber.d(result.toString())
+                usuarioTemp.detalleUsuario = result
+                _usuario.postValue(usuarioTemp)
+              }
+
+              override fun onError(exception: Throwable) {
+                _error.postValue(exception)
+                Timber.e(exception)
+              }
+            },
+          )
         }
 
         override fun onError(exception: Throwable) {
+          _error.postValue(exception)
           Timber.e(exception)
         }
       },
     )
   }
-
-    fun buscarYGuardarDetalleUsuarioPorId(idUsuario: String) {
-        detalleUsuarioRepository.buscarPorId(
-        idUsuario,
-        object : FirestoreCallback<DetalleUsuario> {
-            override fun onSuccess(result: DetalleUsuario) {
-            Timber.d(result.toString())
-              usuario.value!!.detalleUsuario = result
-            }
-
-            override fun onError(exception: Throwable) {
-            Timber.e(exception)
-            }
-        },
-        )
-    }
 
   fun guardarRestauranteVistoRecientemente(restaurante: Restaurante) {
     restauranteVistoRecientementeRepository.guardar(restaurante, usuario.value!!.id)
