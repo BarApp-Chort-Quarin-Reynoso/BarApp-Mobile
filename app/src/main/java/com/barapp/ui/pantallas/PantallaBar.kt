@@ -149,10 +149,12 @@ class PantallaBar : Fragment() {
       binding.textViewDescripcion.text = detalle.descripcion
 
       val url = Uri.parse(detalle.menu)
-      if (URLUtil.isValidUrl(url.toString())) {
+      if (detalle.menu.isNotEmpty() && URLUtil.isValidUrl(url.toString())) {
         binding.botonMenu.isEnabled = true
         botonMenuHabilitado = true
         if (toolbarEsVisible) mostrarBotonesToolbar()
+      } else {
+        binding.botonMenu.isEnabled = false
       }
 
       when (detalle.opiniones.size) {
@@ -252,11 +254,11 @@ class PantallaBar : Fragment() {
   }
 
   private fun mostrarMenu() {
-    // Toast.makeText(this.context, "Menu aun no implementado", Toast.LENGTH_SHORT).show()
-
     viewModel.detalleRestaurante.value?.let {
-      val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it.menu))
-      startActivity(browserIntent)
+      if (it.menu.isNotEmpty()) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it.menu))
+        startActivity(browserIntent)
+      }
     }
   }
 
