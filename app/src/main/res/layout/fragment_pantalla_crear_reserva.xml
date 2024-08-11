@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="false"
+    android:transitionName="transition_pantalla_reservar"
     android:background="?android:colorBackground">
 
 <LinearLayout
