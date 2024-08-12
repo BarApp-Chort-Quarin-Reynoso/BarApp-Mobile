@@ -1,6 +1,5 @@
 package com.barapp.model
 
-import com.barapp.model.BaseClass
 import java.util.LinkedList
 import java.util.UUID
 
@@ -17,10 +16,6 @@ class DetalleUsuario(
     mail: String,
     telefono: String,
   ) : this(UUID.randomUUID().toString(), mail, telefono, LinkedList(), HashSet())
-
-  fun agregarFavorito(idRestaurante: String) {
-    idsRestaurantesFavoritos.add(idRestaurante)
-  }
 
   fun agregarBusquedaReciente(textoBusqueda: String) {
     if (busquedasRecientes.contains(textoBusqueda)) {

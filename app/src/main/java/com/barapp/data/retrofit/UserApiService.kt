@@ -11,6 +11,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
+import java.util.LinkedList
 
 interface UserApiService {
   @GET("/api/usuarios")
@@ -31,8 +32,8 @@ interface UserApiService {
   @PATCH("/api/usuarios/detalle/{id}/restaurantes-favoritos")
   fun updateFavoriteRestaurants(@Path("id") id: String, @Body idRestaurantesFavoritos: HashSet<String>): Call<DetalleUsuario>
 
-  @PATCH("/api/usuarios/{id}/busquedas-recientes")
-  fun updateRecentSearches(@Path("id") id: String, @Body busqueda: String): Call<Usuario>
+  @PATCH("/api/usuarios/detalle/{id}/busquedas-recientes")
+  fun updateRecentSearches(@Path("id") id: String, @Body busquedasRecientes: LinkedList<String>): Call<Void>
 
   @PATCH("/api/usuarios/{id}/foto")
   fun updatePhoto(@Path("id") id: String, @Body foto: String): Call<Void>

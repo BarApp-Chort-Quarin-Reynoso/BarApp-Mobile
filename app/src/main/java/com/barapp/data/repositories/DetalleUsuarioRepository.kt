@@ -75,17 +75,20 @@ class DetalleUsuarioRepository private constructor() : IGenericRepository<Detall
   }
 
   fun actualizarBusquedasRecientes(entidad: DetalleUsuario) {
-    db
-      .collection(COLECCION_DETALLES_USUARIOS)
-      .document(entidad.id)
-      .update("busquedasRecientes", ArrayList(entidad.busquedasRecientes))
-      .addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-          Timber.d("Se ha actualizado la lista de busquedas recientes")
+    Timber.d("Actualizando busquedas recientes del usuario con id: ${entidad.id}" + " con busquedas recientes: ${entidad.busquedasRecientes}")
+    api.updateRecentSearches(entidad.id, entidad.busquedasRecientes).enqueue(object : Callback<Void> {
+      override fun onResponse(call: Call<Void>, response: Response<Void>) {
+        if (response.isSuccessful) {
+          Timber.d("Busquedas recientes actualizadas!")
         } else {
-          Timber.d("Hubo un error actualizando la lista de busquedas recientes")
+          Timber.e("Error al actualizar busquedas recientes")
         }
       }
+
+      override fun onFailure(call: Call<Void>, t: Throwable) {
+        Timber.e(t)
+      }
+    })
   }
 
   override fun borrar(entidad: DetalleUsuario) {}
