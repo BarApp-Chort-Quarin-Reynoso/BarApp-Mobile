@@ -1,31 +1,17 @@
 package com.barapp.data.repositories
 
-import com.barapp.data.entities.UsuarioEntity
-import com.barapp.data.mappers.UsuarioMapper.fromEntity
-import com.barapp.data.mappers.UsuarioMapper.toEntity
-import com.barapp.data.utils.EntityNotFoundException
 import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.utils.IGenericRepository
 import com.barapp.model.Usuario
 import com.barapp.data.retrofit.RetrofitInstance
 import com.barapp.data.retrofit.UserApiService
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
 class UsuarioRepository private constructor() : IGenericRepository<Usuario> {
-  // Base de datos
-  private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-
-  // Coleccion
-  private val COLECCION_USUARIOS = "usuarios"
-
   private val api = RetrofitInstance.createService(UserApiService::class.java)
 
   override fun buscarPorId(id: String, callback: FirestoreCallback<Usuario>) {
@@ -49,51 +35,29 @@ class UsuarioRepository private constructor() : IGenericRepository<Usuario> {
     })
   }
 
-  fun buscarPorIdSinDetalle(id: String, callback: FirestoreCallback<Usuario?>) {
-    db
-      .collection(COLECCION_USUARIOS)
-      .document(id)
-      .get()
-      .addOnSuccessListener { documentSnapshot: DocumentSnapshot ->
-        val usuarioEntity = documentSnapshot.toObject(UsuarioEntity::class.java)
-        usuarioEntity?.let { usuario ->
-          callback.onSuccess(fromEntity(usuario, null))
-        } ?: callback.onError(EntityNotFoundException("El usuario $id no fue hallado"))
-      }
-      .addOnFailureListener { e: Exception ->
-        Timber.w("Error recuperando usuario")
-        callback.onError(e)
-      }
-  }
-
-  override fun buscarTodos(callback: FirestoreCallback<List<Usuario>>) {
-    val listaUsuarios: MutableList<Usuario> = ArrayList()
-    db.collection(COLECCION_USUARIOS).get().addOnCompleteListener { task ->
-      if (task.isSuccessful) {
-        for (documentSnapshot in task.result) {
-          val usuarioEntity = documentSnapshot.toObject(UsuarioEntity::class.java)
-          listaUsuarios.add(fromEntity(usuarioEntity, null))
-        }
-        callback.onSuccess(listaUsuarios)
-      } else {
-        callback.onError(task.exception!!)
-      }
-    }
-  }
+  override fun buscarTodos(callback: FirestoreCallback<List<Usuario>>) {}
 
   override fun guardar(entidad: Usuario) {
-    db
-      .collection(COLECCION_USUARIOS)
-      .document(entidad.id)
-      .set(toEntity(entidad))
-      .addOnSuccessListener { aVoid: Void? -> Timber.d("DocumentSnapshot successfully written!") }
-      .addOnFailureListener { e: Exception? -> Timber.w(e, "Error writing document") }
+    Timber.d("Guardando usuario: $entidad")
+    api.createUser(entidad.id, entidad).enqueue(object : Callback<String> {
+      override fun onResponse(call: Call<String>, response: Response<String>) {
+        if (response.isSuccessful) {
+          Timber.d("Usuario creado exitosamente")
+        } else {
+          Timber.e("Error creando usuario: ${response.errorBody()}")
+        }
+      }
+
+      override fun onFailure(call: Call<String>, t: Throwable) {
+        Timber.e(t)
+      }
+    })
   }
 
   fun actualizarFoto(user: Usuario) {
-
-    api.updatePhoto(user.id, user.foto).enqueue(object : retrofit2.Callback<Void> {
-        override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {
+    Timber.d("Actualizando foto de usuario")
+    api.updatePhoto(user.id, user.foto).enqueue(object : Callback<Void> {
+        override fun onResponse(call: Call<Void>, response: Response<Void>) {
           if (response.isSuccessful) {
             Timber.d("Foto de usuario actualizada!")
           } else {
@@ -101,16 +65,10 @@ class UsuarioRepository private constructor() : IGenericRepository<Usuario> {
           }
         }
 
-        override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
+        override fun onFailure(call: Call<Void>, t: Throwable) {
           Timber.e(t)
         }
       })
-//    db
-//      .collection(COLECCION_USUARIOS)
-//      .document(entidad.id)
-//      .update("foto", entidad.foto)
-//      .addOnSuccessListener { aVoid: Void? -> Timber.d("DocumentSnapshot successfully written!") }
-//      .addOnFailureListener { e: Exception? -> Timber.w(e, "Error writing document") }
   }
 
   override fun actualizar(entidad: Usuario) {}
@@ -122,18 +80,27 @@ class UsuarioRepository private constructor() : IGenericRepository<Usuario> {
     constrasenia: String,
     callback: FirestoreCallback<String>,
   ) {
-    FirebaseAuth.getInstance()
-      .createUserWithEmailAndPassword(email, constrasenia)
-      .addOnCompleteListener { task: Task<AuthResult> ->
-        if (task.isSuccessful) {
-          callback.onSuccess(task.result.user!!.uid)
+    Timber.d("Creando usuario en Firebase Auth: $email - $constrasenia")
+    api.registerUser(email, constrasenia).enqueue(object : Callback<String> {
+      override fun onResponse(call: Call<String>, response: Response<String>) {
+        if (response.isSuccessful) {
+          Timber.d("Usuario creado exitosamente")
+          callback.onSuccess(response.body()!!)
         } else {
-          callback.onError(task.exception!!)
+          Timber.e("Error creando usuario: ${response.errorBody()}")
+          callback.onError(Throwable("Error creando usuario"))
         }
       }
+
+      override fun onFailure(call: Call<String>, t: Throwable) {
+        Timber.e(t)
+        callback.onError(t)
+      }
+    })
   }
 
   fun signInUsuarioEnFirebase(email: String, contrasenia: String, callback: FirestoreCallback<String>) {
+    Timber.d("Iniciando sesión en Firebase Auth: $email - $contrasenia")
     FirebaseAuth.getInstance()
       .signInWithEmailAndPassword(email, contrasenia)
       .addOnSuccessListener { result ->

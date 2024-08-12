@@ -3,20 +3,14 @@ package com.barapp.data.repositories
 import com.barapp.model.DetalleUsuario
 import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.utils.IGenericRepository
-import com.barapp.data.mappers.DetalleUsuarioMapper.toEntity
 import com.barapp.data.retrofit.RetrofitInstance
 import com.barapp.data.retrofit.UserApiService
-import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class DetalleUsuarioRepository private constructor() : IGenericRepository<DetalleUsuario> {
-  private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-
-  private val COLECCION_DETALLES_USUARIOS = "detallesUsuarios"
-
   private val api = RetrofitInstance.createService(UserApiService::class.java)
 
   override fun buscarPorId(id: String, callback: FirestoreCallback<DetalleUsuario>) {
@@ -44,12 +38,20 @@ class DetalleUsuarioRepository private constructor() : IGenericRepository<Detall
   override fun buscarTodos(callback: FirestoreCallback<List<DetalleUsuario>>) {}
 
   override fun guardar(entidad: DetalleUsuario) {
-    db
-      .collection(COLECCION_DETALLES_USUARIOS)
-      .document(entidad.id)
-      .set(toEntity(entidad))
-      .addOnSuccessListener { Timber.d("DetalleUsuario successfully written!") }
-      .addOnFailureListener { e -> Timber.w(e, "Error writing detalleUsuario") }
+    Timber.d("Guardando detalle usuario: $entidad")
+    api.createUserDetail(entidad.id, entidad).enqueue(object : Callback<String> {
+      override fun onResponse(call: Call<String>, response: Response<String>) {
+        if (response.isSuccessful) {
+          Timber.d("DetalleUsuario creado exitosamente")
+        } else {
+          Timber.e("Error creando detalle usuario: ${response.errorBody()}")
+        }
+      }
+
+      override fun onFailure(call: Call<String>, t: Throwable) {
+        Timber.e(t)
+      }
+    })
   }
 
   override fun actualizar(entidad: DetalleUsuario) {

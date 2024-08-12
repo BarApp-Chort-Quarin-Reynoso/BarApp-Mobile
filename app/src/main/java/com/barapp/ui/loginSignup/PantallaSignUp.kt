@@ -9,9 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import com.barapp.R
 import com.barapp.databinding.FragmentSignupBinding
 import com.barapp.model.DetalleUsuario
@@ -39,7 +39,6 @@ class PantallaSignUp : Fragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?,
   ): View {
-    // Inflate the layout for this fragment
     binding = FragmentSignupBinding.inflate(inflater, container, false)
     return binding.root
   }
@@ -47,7 +46,6 @@ class PantallaSignUp : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    // Componentes
     nombre = binding.txtViewNombre
     apellido = binding.txtViewApellido
     email = binding.txtViewEmail
@@ -87,6 +85,7 @@ class PantallaSignUp : Fragment() {
       email.editText!!.text.toString(),
       contrasenia.editText!!.text.toString(),
       usuario)
+    NavHostFragment.findNavController(this).popBackStack()
   }
 
   private fun validarDatos(): Boolean {

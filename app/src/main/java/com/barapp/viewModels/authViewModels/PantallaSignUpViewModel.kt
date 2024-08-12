@@ -21,6 +21,7 @@ class PantallaSignUpViewModel: ViewModel() {
   val error: LiveData<Throwable> = _error
 
   private fun guardarUsuario(usuario: Usuario) {
+    usuario.detalleUsuario!!.id = usuario.idDetalleUsuario
     detalleUsuarioRepository.guardar(usuario.detalleUsuario!!)
     usuarioRepository.guardar(usuario)
   }
@@ -30,7 +31,6 @@ class PantallaSignUpViewModel: ViewModel() {
       override fun onSuccess(result: String) {
         usuario.id = result
         guardarUsuario(usuario)
-        _idUsuario.value = result
       }
 
       override fun onError(exception: Throwable) {
