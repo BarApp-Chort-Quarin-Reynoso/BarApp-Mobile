@@ -50,10 +50,6 @@ open class Restaurante(
             ", puntuacion=" + puntuacion +
             ", portada='" + portada + '\'' +
             ", correo='" + correo + '\'' +
-            ", logo='" + logo + '\'' +
-            ", detalleRestaurante=" + detalleRestaurante +
-            ", ubicacion=" + ubicacion +
-            ", idRestaurante='" + idRestaurante + '\'' +
             '}'
   }
 
@@ -69,7 +65,7 @@ open class Restaurante(
       ubicacion,
       idDetalleRestaurante,
       detalleRestaurante,
-        idRestaurante
+      idRestaurante
     )
   }
 }

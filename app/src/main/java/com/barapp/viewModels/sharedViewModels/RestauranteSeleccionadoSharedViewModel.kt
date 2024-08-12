@@ -4,6 +4,11 @@ import androidx.lifecycle.ViewModel
 import com.barapp.model.Restaurante
 
 class RestauranteSeleccionadoSharedViewModel : ViewModel() {
-  lateinit var restaurante: Restaurante
+  var restaurante: Restaurante? = null
   var distancia: Int? = null
+
+  fun cleanSelected() {
+    restaurante = null
+    distancia = null
+  }
 }

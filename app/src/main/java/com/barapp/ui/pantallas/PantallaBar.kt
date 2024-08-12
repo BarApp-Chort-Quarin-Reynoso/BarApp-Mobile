@@ -60,7 +60,7 @@ class PantallaBar : Fragment() {
 
   private val viewModel: PantallaBarViewModel by viewModels {
     PantallaBarViewModel.Factory(
-      barSeleccionadoViewModel.restaurante,
+      barSeleccionadoViewModel.restaurante!!,
       mainActivityViewModel.usuario.value!!,
     )
   }
@@ -117,7 +117,7 @@ class PantallaBar : Fragment() {
         ViewModelProvider(backStackEntry)[RestauranteSeleccionadoSharedViewModel::class.java]
     }
 
-    mainActivityViewModel.guardarRestauranteVistoRecientemente(barSeleccionadoViewModel.restaurante)
+    mainActivityViewModel.guardarRestauranteVistoRecientemente(barSeleccionadoViewModel.restaurante!!)
 
     ubicacionViewModel.ubicacionRestaurante = viewModel.restaurante.ubicacion
     ubicacionViewModel.nombreRestaurante = viewModel.restaurante.nombre
@@ -146,7 +146,7 @@ class PantallaBar : Fragment() {
       binding.textViewDistancia.text = getString(R.string.cardview_texto_distancia, it)
     } ?: run { binding.textViewDistancia.visibility = View.INVISIBLE }
 
-    barSeleccionadoViewModel.restaurante.estado.let {
+    barSeleccionadoViewModel.restaurante?.estado.let {
       binding.fabReservar.isEnabled = it == EstadoRestaurante.HABILITADO
 
       if (it == EstadoRestaurante.PAUSADO) {
