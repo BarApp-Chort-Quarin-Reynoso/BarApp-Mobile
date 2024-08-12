@@ -36,4 +36,7 @@ interface RestaurantApiService {
 
   @POST("/api/restaurantes/{id}/vistos-recientemente")
   fun addSeenRecentlyRestaurant(@Path("id") id: String, @Body restaurante: RestauranteUsuario): Call<Restaurante>
+
+  @GET("/api/restaurantes/cercanos")
+  fun getRestaurantsByArea(@Query("neLat") neLat: String, @Query("neLon") neLon: String, @Query("swLat") swLat: String, @Query("swLon") swLon: String, ): Call<List<Restaurante>>
 }

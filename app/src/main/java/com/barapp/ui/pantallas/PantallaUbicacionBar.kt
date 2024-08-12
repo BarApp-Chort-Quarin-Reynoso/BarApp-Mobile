@@ -12,8 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -25,6 +23,7 @@ import com.barapp.databinding.FragmentPantallaUbicacionBarBinding
 import com.barapp.util.Dialogs
 import com.barapp.util.Interpolator
 import com.barapp.util.Maps
+import com.barapp.util.MarkerUtils
 import com.barapp.viewModels.sharedViewModels.UbicacionBarSharedViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -68,7 +67,7 @@ class PantallaUbicacionBar : Fragment() {
   private val requestPermissionLauncher =
     registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
       if (isGranted) {
-        actualizarMapa()
+        initMapa()
       } else {
         volverAtras()
       }
@@ -160,7 +159,7 @@ class PantallaUbicacionBar : Fragment() {
       return
     }
 
-    actualizarMapa()
+    initMapa()
   }
 
   /**
@@ -183,7 +182,7 @@ class PantallaUbicacionBar : Fragment() {
    * @author Federico Quarin
    */
   @SuppressLint("MissingPermission")
-  private fun actualizarMapa() {
+  private fun initMapa() {
     map!!.run {
       if (Maps.tienePermisosLocalizacion(requireContext())) {
         Timber.e("Se esta actualizando mapa")
@@ -200,7 +199,7 @@ class PantallaUbicacionBar : Fragment() {
           .into(
             object : CustomTarget<Bitmap>(logoSize, logoSize) {
               override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                val marker = construirMarcador(resource, markerSize, logoSize)
+                val marker = MarkerUtils.construirMarcador(resource, requireContext())
 
                 this@run.addMarker(
                   MarkerOptions()
@@ -223,7 +222,6 @@ class PantallaUbicacionBar : Fragment() {
             }
           )
 
-        Timber.e("Arranca busqueda localizacion")
         fusedLocationClient
           .getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY, null)
           .addOnSuccessListener { location ->
@@ -264,54 +262,9 @@ class PantallaUbicacionBar : Fragment() {
                   )
                 )
               }
-
-            Timber.e("Termina busqueda localizacion")
           }
       }
     }
-  }
-
-  /**
-   * Toma el [Bitmap] logo y lo coloca en la posicion adecuada, sobre el del marcador.
-   *
-   * @param logo el bitmap del logo. Debe ser de tamaño 128x128
-   * @param markerSize el tamaño deseado del marcador
-   * @return un bitmap con el marcador y el logo en su interior
-   */
-  private fun construirMarcador(logo: Bitmap, markerSize: Int, logoSize: Int): Bitmap {
-    val marker =
-      ContextCompat.getDrawable(requireContext(), R.drawable.icon_color_marker)!!
-        .toBitmap(markerSize, markerSize, Bitmap.Config.ARGB_8888)
-
-    val bordeHorizontal = (markerSize - logoSize) / 2 + 2
-
-    val bmOverlay = Bitmap.createBitmap(marker.width, marker.height, marker.config)
-    val canvas = Canvas(bmOverlay)
-
-    canvas.drawBitmap(
-      logo,
-      null,
-      Rect(
-        bordeHorizontal,
-        9 * markerSize / 128,
-        bordeHorizontal + logoSize,
-        9 * markerSize / 128 + logoSize,
-      ),
-      null,
-    )
-
-    val paint = Paint()
-    paint.colorFilter =
-      PorterDuffColorFilter(
-        resources.getColor(R.color.md_theme_light_primary, null),
-        PorterDuff.Mode.SRC_IN,
-      )
-    canvas.drawBitmap(marker, Matrix(), paint)
-
-    marker.recycle()
-    logo.recycle()
-
-    return bmOverlay
   }
 
   /**

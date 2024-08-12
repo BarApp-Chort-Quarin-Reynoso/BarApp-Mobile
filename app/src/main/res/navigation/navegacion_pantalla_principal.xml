@@ -29,7 +29,7 @@
         app:popUpToInclusive="false" />
     <fragment
         android:id="@+id/pantallaUbicacionBares"
-        android:name="com.barapp.ui.pantallas.PantallaUbicacionBares"
+        android:name="com.barapp.ui.pantallas.PantallaBaresCercanos"
         android:label="fragment_pantalla_ubicacion_bares"
         tools:layout="@layout/fragment_pantalla_ubicacion_bares" />
     <action

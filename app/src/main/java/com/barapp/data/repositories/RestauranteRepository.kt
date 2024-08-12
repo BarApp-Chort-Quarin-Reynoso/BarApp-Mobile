@@ -6,6 +6,7 @@ import com.barapp.data.utils.IGenericRepository
 import com.barapp.data.retrofit.RestaurantApiService
 import com.barapp.data.retrofit.RetrofitInstance
 import com.barapp.model.HorarioConCapacidadDisponible
+import com.google.android.gms.maps.model.LatLng
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,14 +32,17 @@ class RestauranteRepository private constructor() : IGenericRepository<Restauran
       override fun onFailure(call: Call<Restaurante>, t: Throwable) {
         Timber.e(t)
         callback.onError(t)
-        }
-      })
+      }
+    })
   }
 
   override fun buscarTodos(callback: FirestoreCallback<List<Restaurante>>) {
     Timber.d("Buscando todos los restaurantes")
     api.getAllRestaurants().enqueue(object : Callback<List<Restaurante>> {
-      override fun onResponse(call: Call<List<Restaurante>>, response: Response<List<Restaurante>>) {
+      override fun onResponse(
+        call: Call<List<Restaurante>>,
+        response: Response<List<Restaurante>>
+      ) {
         if (response.isSuccessful) {
           val data = response.body()
           Timber.d("Restaurantes recibidos: $data")
@@ -79,7 +83,10 @@ class RestauranteRepository private constructor() : IGenericRepository<Restauran
 
   fun buscarDestacados(callback: FirestoreCallback<List<Restaurante>>) {
     api.getFeaturedRestaurants().enqueue(object : Callback<List<Restaurante>> {
-      override fun onResponse(call: Call<List<Restaurante>>, response: Response<List<Restaurante>>) {
+      override fun onResponse(
+        call: Call<List<Restaurante>>,
+        response: Response<List<Restaurante>>
+      ) {
         if (response.isSuccessful) {
           val data = response.body()
           Timber.d("Restaurantes destacados: $data")
@@ -103,7 +110,38 @@ class RestauranteRepository private constructor() : IGenericRepository<Restauran
 
   override fun borrar(entidad: Restaurante) {}
 
+  fun getRestaurantesPorArea(
+    northeast: LatLng,
+    southwest: LatLng,
+    callback: FirestoreCallback<List<Restaurante>>
+  ) {
+    api.getRestaurantsByArea(
+      northeast.latitude.toString(),
+      northeast.longitude.toString(),
+      southwest.latitude.toString(),
+      southwest.longitude.toString()
+    ).enqueue(object : Callback<List<Restaurante>> {
+      override fun onResponse(
+        call: Call<List<Restaurante>>,
+        response: Response<List<Restaurante>>
+      ) {
+        if (response.isSuccessful) {
+          callback.onSuccess(response.body() ?: ArrayList())
+        } else {
+          Timber.e("Error buscando restaurantes por area: ${response.errorBody()}")
+          callback.onError(Throwable("Error recuperando Restaurantes"))
+        }
+      }
+
+      override fun onFailure(call: Call<List<Restaurante>>, t: Throwable) {
+        Timber.e(t)
+        callback.onError(t)
+      }
+    })
+  }
+
   companion object {
-    @JvmStatic val instance = RestauranteRepository()
+    @JvmStatic
+    val instance = RestauranteRepository()
   }
 }
