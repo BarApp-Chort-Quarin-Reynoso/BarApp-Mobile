@@ -13,7 +13,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    android:transitionName="transition_pantalla_reservar"
     tools:context="com.barapp.ui.pantallas.PantallaCrearReserva">
 
     <com.google.android.material.appbar.AppBarLayout
