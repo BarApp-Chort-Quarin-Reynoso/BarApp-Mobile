@@ -145,7 +145,7 @@ class PantallaSignUp : Fragment() {
     return if (TextUtils.isEmpty(editableContrasenia)) {
       contrasenia.error = getString(R.string.error_campo_obligatorio)
       false
-    } else if (editableContrasenia.toString().length < 5) {
+    } else if (editableContrasenia.toString().length < 6) {
       contrasenia.error = getString(R.string.error_campo_por_debajo_valor, 6)
       false
     } else if (!editableContrasenia.toString().matches(".*\\d.*".toRegex())) {
