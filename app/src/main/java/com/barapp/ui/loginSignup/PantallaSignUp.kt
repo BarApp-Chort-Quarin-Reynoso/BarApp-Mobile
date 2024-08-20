@@ -34,6 +34,8 @@ class PantallaSignUp : Fragment() {
   private lateinit var confirmarContrasenia: TextInputLayout
   private lateinit var botonCrearCuenta: Button
 
+  private lateinit var prefixTelefono: String
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -54,6 +56,8 @@ class PantallaSignUp : Fragment() {
     confirmarContrasenia = binding.txtViewConfirmeContrasenia
     botonCrearCuenta = binding.botonCrearCuentaSignup
 
+    prefixTelefono = telefono.prefixText.toString()
+
     setearTextChangedListeners()
     botonCrearCuenta.setOnClickListener {
       if (validarDatos()) {
@@ -72,8 +76,9 @@ class PantallaSignUp : Fragment() {
   }
 
   private fun crearUsuarioEnFirebase() {
+    val telefonoUsuario = prefixTelefono + telefono.editText!!.text.toString()
     val detalleUsuario =
-      DetalleUsuario(email.editText!!.text.toString(), telefono.editText!!.text.toString())
+      DetalleUsuario(email.editText!!.text.toString(), telefonoUsuario)
     val usuario = Usuario()
     usuario.nombre = nombre.editText!!.text.toString()
     usuario.apellido = apellido.editText!!.text.toString()
