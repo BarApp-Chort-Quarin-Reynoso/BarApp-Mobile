@@ -77,7 +77,8 @@ class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) :
   }
 
   fun esFavorito(): Boolean {
-    return usuario.detalleUsuario!!.idsRestaurantesFavoritos.contains(restaurante.id)
+    return (usuario.detalleUsuario!!.idsRestaurantesFavoritos.contains(restaurante.id) ||
+        usuario.detalleUsuario!!.idsRestaurantesFavoritos.contains(restaurante.idRestaurante))
   }
 
   class Factory(private val restaurante: Restaurante, private val usuario: Usuario) :
