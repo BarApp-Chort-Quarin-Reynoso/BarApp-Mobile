@@ -1,11 +1,12 @@
 package com.barapp.data.entities
 
+import com.barapp.model.EstadoReserva
 import com.google.firebase.Timestamp
 import java.util.UUID
 
 class ReservaBDEntity(
   var idReserva: String,
-  var estado: String,
+  var estado: EstadoReserva,
   var cantidadPersonas: Int,
   var fecha: String,
   var idUsuario: String,
@@ -26,7 +27,7 @@ class ReservaBDEntity(
   constructor() :
     this(
       UUID.randomUUID().toString(),
-      "PENDIENTE",
+      EstadoReserva.PENDIENTE,
       -1,
       "",
       "",

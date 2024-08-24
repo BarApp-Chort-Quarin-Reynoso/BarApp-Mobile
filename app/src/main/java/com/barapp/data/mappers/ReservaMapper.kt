@@ -36,7 +36,6 @@ object ReservaMapper {
       reservaEntity.fecha,
       restaurante,
       horario,
-      horario.tipoComida,
       usuario!!,
     )
   }
