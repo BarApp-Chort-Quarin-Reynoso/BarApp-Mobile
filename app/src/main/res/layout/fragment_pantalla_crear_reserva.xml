@@ -196,6 +196,17 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/labelSeleccionarFecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/pantalla_reservar_texto_ayuda_horarios_deshabilitados"
+        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+        android:textSize="15sp"
+        android:textStyle="italic" />
+
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chipGroup"
         android:layout_width="match_parent"

@@ -46,7 +46,7 @@ class PantallaResumenReserva : Fragment() {
         getString(R.string.placeholder_persona, cantPersonas)
       else getString(R.string.placeholder_personas, cantPersonas)
     binding.textViewFechaReserva.text = fechaAFormatoTexto(activitySharedViewModel.reserva.getFechaAsLocalDate())
-    binding.textViewHoraReserva.text = activitySharedViewModel.reserva.horario.horario
+    binding.textViewHoraReserva.text = activitySharedViewModel.reserva.horario.horario.substring(0, 5)
 
     activitySharedViewModel.usuario.value!!.let {usuario ->
       binding.textViewNombre.text =
@@ -72,7 +72,7 @@ class PantallaResumenReserva : Fragment() {
 
   private fun cancelarReserva() {
     AlertDialog.Builder(requireContext())
-      .setTitle("Cancelar REserva")
+      .setTitle("Cancelar Reserva")
       .setMessage("¿Estás seguro de que deseas cancelar la reserva?")
       .setPositiveButton("Si") { dialog, _ ->
         reservaRepository.cancelarReserva(activitySharedViewModel.reserva)

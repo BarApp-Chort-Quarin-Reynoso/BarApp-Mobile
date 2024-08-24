@@ -6,6 +6,7 @@ import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.repositories.RestauranteRepository
 import com.barapp.model.DetalleRestaurante
 import com.barapp.model.Horario
+import com.barapp.model.HorarioConCapacidadDisponible
 import com.barapp.model.Restaurante
 import com.barapp.model.TipoComida
 import com.google.android.material.chip.Chip
@@ -62,32 +63,36 @@ class PantallaCrearReservaViewModel : ViewModel() {
   private val _habilitarCardDatePicker: MutableLiveData<Boolean> = MutableLiveData()
   val habilitarCardDatePicker: LiveData<Boolean> = _habilitarCardDatePicker
 
-  private val _horariosDesayuno: MutableLiveData<List<Horario>> = MutableLiveData()
-  val horariosDesayuno: LiveData<List<Horario>> = _horariosDesayuno
+  private val _horariosDesayuno: MutableLiveData<Map<List<String>, Int>> = MutableLiveData()
+  val horariosDesayuno: LiveData<Map<List<String>, Int>> = _horariosDesayuno
 
-  private val _horariosAlmuerzo: MutableLiveData<List<Horario>> = MutableLiveData()
-  val horariosAlmuerzo: LiveData<List<Horario>> = _horariosAlmuerzo
+  private val _horariosAlmuerzo: MutableLiveData<Map<List<String>, Int>> = MutableLiveData()
+  val horariosAlmuerzo: LiveData<Map<List<String>, Int>> = _horariosAlmuerzo
 
-  private val _horariosMerienda: MutableLiveData<List<Horario>> = MutableLiveData()
-  val horariosMerienda: LiveData<List<Horario>> = _horariosMerienda
+  private val _horariosMerienda: MutableLiveData<Map<List<String>, Int>> = MutableLiveData()
+  val horariosMerienda: LiveData<Map<List<String>, Int>> = _horariosMerienda
 
-  private val _horariosCena: MutableLiveData<List<Horario>> = MutableLiveData()
-  val horariosCena: LiveData<List<Horario>> = _horariosCena
+  private val _horariosCena: MutableLiveData<Map<List<String>, Int>> = MutableLiveData()
+  val horariosCena: LiveData<Map<List<String>, Int>> = _horariosCena
 
   private val _habilitarDialogTodosDeshabilitados: MutableLiveData<Boolean> = MutableLiveData()
   val habilitarDialogTodosDeshabilitados: LiveData<Boolean> = _habilitarDialogTodosDeshabilitados
 
-  private val _horariosDiaSeleccionado: MutableLiveData<List<Horario>> = MutableLiveData()
-  val horariosDiaSeleccionado: LiveData<List<Horario>> = _horariosDiaSeleccionado
+  private val _horariosDiaSeleccionado: MutableLiveData<List<HorarioConCapacidadDisponible>> = MutableLiveData()
+  val horariosDiaSeleccionado: LiveData<List<HorarioConCapacidadDisponible>> = _horariosDiaSeleccionado
+
+  private val _claredChipGroup: MutableLiveData<Boolean> = MutableLiveData()
+  val clearedChipGroup: LiveData<Boolean> = _claredChipGroup
 
   init {
     _habilitarBotonAgregarPersona.value = true
     _habilitarBotonQuitarPersona.value = true
-    _horariosDesayuno.value = ArrayList()
-    _horariosAlmuerzo.value = ArrayList()
-    _horariosMerienda.value = ArrayList()
-    _horariosCena.value = ArrayList()
+    _horariosDesayuno.value = HashMap()
+    _horariosAlmuerzo.value = HashMap()
+    _horariosMerienda.value = HashMap()
+    _horariosCena.value = HashMap()
     _horariosDiaSeleccionado.value = ArrayList()
+    _claredChipGroup.value = false
   }
 
   /**
@@ -97,16 +102,14 @@ class PantallaCrearReservaViewModel : ViewModel() {
    * @author Julio Chort
    */
   fun agregarPersona() {
-
     cantidadPersonas++
+    _textoCantidadPersonas.value = ("$cantidadPersonas personas")
+    _habilitarBotonAgregarPersona.value != (cantidadPersonas == obtenerMaximoPersonas())
+    actualizarEstadoChips()
+  }
 
-    if (cantidadPersonas == 15) {
-      _textoCantidadPersonas.value = ("15 personas")
-      _habilitarBotonAgregarPersona.value = false
-    } else {
-      _textoCantidadPersonas.value = ("$cantidadPersonas personas")
-      _habilitarBotonQuitarPersona.value = true
-    }
+  private fun obtenerMaximoPersonas(): Int {
+      return 30
   }
 
   /**
@@ -118,14 +121,9 @@ class PantallaCrearReservaViewModel : ViewModel() {
   fun quitarPersona() {
 
     cantidadPersonas--
-
-    if (cantidadPersonas == 1) {
-      _textoCantidadPersonas.value = ("1 persona")
-      _habilitarBotonQuitarPersona.value = false
-    } else {
-      _textoCantidadPersonas.value = ("$cantidadPersonas personas")
-      _habilitarBotonAgregarPersona.value = true
-    }
+    _textoCantidadPersonas.value = if (cantidadPersonas == 1) "1 persona" else "$cantidadPersonas personas"
+    _habilitarBotonQuitarPersona.value = (cantidadPersonas > 1)
+    actualizarEstadoChips()
   }
 
   /**
@@ -224,38 +222,6 @@ class PantallaCrearReservaViewModel : ViewModel() {
   }
 
   /**
-   * Se crean 4 [ArrayList] de tipo [Horario] para los 4 [TipoComida] existentes. Luego se recorren
-   * los horarios del [DetalleRestaurante] por [TipoComida] y se añade el horario a la lista
-   * correspondiente. Por último se copian esas listas a las variables [MutableLiveData] generadas.
-   *
-   * @author Julio Chort
-   */
-  private fun mostrarHorariosDisponiblesParaEsaFecha() {
-    val listaDesayuno = ArrayList<Horario>()
-    val listaAlmuerzo = ArrayList<Horario>()
-    val listaMerienda = ArrayList<Horario>()
-    val listaCena = ArrayList<Horario>()
-
-    for (horario in horariosDiaSeleccionado.value!!) {
-
-      when (horario.tipoComida) {
-        TipoComida.DESAYUNO -> listaDesayuno.add(horario)
-        TipoComida.ALMUERZO -> listaAlmuerzo.add(horario)
-        TipoComida.MERIENDA -> listaMerienda.add(horario)
-        TipoComida.CENA -> listaCena.add(horario)
-        else -> return
-      }
-    }
-
-    _horariosDesayuno.value = listaDesayuno
-    _horariosAlmuerzo.value = listaAlmuerzo
-    _horariosMerienda.value = listaMerienda
-    _horariosCena.value = listaCena
-
-    comprobarSiSeMuestraDialogTodosInhabilitados()
-  }
-
-  /**
    * Si el [Chip] fue pulsado puede ser que sea para seleccionarlo o deseleccionarlo. En el primer
    * caso, se convierte en el [ultimoChipSeleccionado] y el [MutableLiveData] para hablitar el botón
    * crearReserva pasa a valor True. En el segundo caso, el [MutableLiveData] toma el valor
@@ -278,27 +244,27 @@ class PantallaCrearReservaViewModel : ViewModel() {
    */
   fun pasarChipSeleccionadoAHorario() {
 
-    for (horario in horariosDiaSeleccionado.value!!) {
-
-      if (horario.horario.substring(0,5) == ultimaHoraSeleccionadaTexto) {
-        horaReserva = horario
+    for (horarioConCapacidad in horariosDiaSeleccionado.value!!) {
+      for (horario in horarioConCapacidad.horarios) {
+        if (horario.substring(0, 5) == ultimaHoraSeleccionadaTexto) {
+          horaReserva = Horario(horario, horarioConCapacidad.tipoComida)
+        }
       }
     }
   }
 
   private fun buscarHorarios(correo: String, mesAnio: String, diaSeleccionado: String) {
-    restauranteRepo.buscarHorariosPorCorreo(correo, mesAnio, object : FirestoreCallback<Map<String,List<Horario>>> {
-      override fun onSuccess(result: Map<String,List<Horario>>) {
-        val horarios = result[diaSeleccionado]
-        Timber.d("Horarios: $horarios")
+    restauranteRepo.buscarHorariosPorCorreo(correo, mesAnio, object : FirestoreCallback<Map<String, Map<String, HorarioConCapacidadDisponible>>> {
+      override fun onSuccess(result: Map<String, Map<String, HorarioConCapacidadDisponible>>) {
+      val horarios = result[diaSeleccionado]?.values?.toList()
+      Timber.d("Horarios: $horarios")
         if (horarios.isNullOrEmpty()) {
           comprobarSiSeMuestraDialogTodosInhabilitados()
         }
-        else {
-          _horariosDiaSeleccionado.postValue(horarios!!)
-          mostrarHorariosDisponiblesEnListado(horarios)
+          else {
+            _horariosDiaSeleccionado.postValue(horarios!!)
+            mostrarHorariosDisponiblesEnListado(horarios)
         }
-
       }
 
       override fun onError(exception: Throwable) {
@@ -307,56 +273,54 @@ class PantallaCrearReservaViewModel : ViewModel() {
     })
   }
 
-  private fun mostrarHorariosDisponiblesEnListado(horarios: List<Horario>) {
-    val listaDesayuno = ArrayList<Horario>()
-    val listaAlmuerzo = ArrayList<Horario>()
-    val listaMerienda = ArrayList<Horario>()
-    val listaCena = ArrayList<Horario>()
+  private fun cantidadMaximaPersoans(horario: HorarioConCapacidadDisponible): Int {
+    var cantidadPersonasMaxima = 1
+    for (mesa in horario.mesas) {
+      if (mesa.cantidadDePersonasPorMesa > cantidadPersonasMaxima) {
+        cantidadPersonasMaxima = mesa.cantidadDePersonasPorMesa
+      }
+    }
+    return cantidadPersonasMaxima
+  }
 
+  private fun mostrarHorariosDisponiblesEnListado(horarios: List<HorarioConCapacidadDisponible>) {
     for (horario in horarios) {
-
-      when (horario.tipoComida) {
-        TipoComida.DESAYUNO -> listaDesayuno.add(horario)
-        TipoComida.ALMUERZO -> listaAlmuerzo.add(horario)
-        TipoComida.MERIENDA -> listaMerienda.add(horario)
-        TipoComida.CENA -> listaCena.add(horario)
+      val cantidadMaximaPersonas = cantidadMaximaPersoans(horario)
+      val tipoComidaHorario = horario.tipoComida
+      when (tipoComidaHorario) {
+        TipoComida.DESAYUNO -> _horariosDesayuno.value = mapOf(horario.horarios to cantidadMaximaPersonas)
+        TipoComida.ALMUERZO -> _horariosAlmuerzo.value =  mapOf(horario.horarios to cantidadMaximaPersonas)
+        TipoComida.MERIENDA -> _horariosMerienda.value =  mapOf(horario.horarios to cantidadMaximaPersonas)
+        TipoComida.CENA -> _horariosCena.value =  mapOf(horario.horarios to cantidadMaximaPersonas)
         else -> return
       }
     }
 
-    _horariosDesayuno.value = listaDesayuno
-    _horariosAlmuerzo.value = listaAlmuerzo
-    _horariosMerienda.value = listaMerienda
-    _horariosCena.value = listaCena
-
-    Timber.d("Horarios desayuno: $listaDesayuno")
-    Timber.d("Horarios almuerzo: $listaAlmuerzo")
-    Timber.d("Horarios merienda: $listaMerienda")
-    Timber.d("Horarios cena: $listaCena")
+    Timber.d("Horarios desayuno: ${_horariosDesayuno.value}")
+    Timber.d("Horarios almuerzo: ${_horariosAlmuerzo.value}")
+    Timber.d("Horarios merienda: ${_horariosMerienda.value}")
+    Timber.d("Horarios cena: ${_horariosCena.value}")
   }
 
-  /**
-   * Retorna la posición del [Horario] en la [listaHorariosAparicion]. En caso de no encontrarse en
-   * la lista, devuelve el valor -1.
-   *
-   * @author Julio Chort
-   */
-  private fun posicionHorarioDentroDeLista(
-    horarioReserva: Horario,
-    listaHorariosAparicion: ArrayList<Pair<Horario, Int>>,
-  ): Int {
-    var result = -1
-    var index = 0
-
-    while ((index in 0 until listaHorariosAparicion.size) && (result == -1)) {
-      if (listaHorariosAparicion[index].first.horario == horarioReserva.horario) {
-        result = index
+  private fun actualizarEstadoChips() {
+    val horarios = _horariosDiaSeleccionado.value ?: return
+    _claredChipGroup.value = true
+    for (horario in horarios) {
+      val cantidadMaximaPersonas = cantidadMaximaPersoans(horario)
+      val tipoComidaHorario = horario.tipoComida
+      when (tipoComidaHorario) {
+        TipoComida.DESAYUNO -> _horariosDesayuno.value = mapOf(horario.horarios to cantidadMaximaPersonas)
+        TipoComida.ALMUERZO -> _horariosAlmuerzo.value = mapOf(horario.horarios to cantidadMaximaPersonas)
+        TipoComida.MERIENDA -> _horariosMerienda.value = mapOf(horario.horarios to cantidadMaximaPersonas)
+        TipoComida.CENA -> _horariosCena.value = mapOf(horario.horarios to cantidadMaximaPersonas)
+        else -> return
       }
-
-      index++
     }
 
-    return result
+  }
+
+  fun chipGroupCleared() {
+    _claredChipGroup.value = false
   }
 
   /**
@@ -365,8 +329,8 @@ class PantallaCrearReservaViewModel : ViewModel() {
    *
    * @author Julio Chort
    */
-  fun comprobarSiEsHorarioHabilitado(horario: Horario): Boolean {
-    return false
+  fun esHorarioHabilitado(maxPersonas: Int): Boolean {
+    return this.cantidadPersonas <= maxPersonas
   }
 
   /**

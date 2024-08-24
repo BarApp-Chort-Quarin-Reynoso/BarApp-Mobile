@@ -190,11 +190,12 @@
     <string name="pantalla_reservar_titulo_cena">Cena</string>
 
     <string name="pantalla_reservar_titulo_nombre_restaurante">[Nombre_Restaurante]</string>
-    <string name="pantalla_reservar_texto_cantidad_personas_inicial">3 personas</string>
+    <string name="pantalla_reservar_texto_cantidad_personas_inicial">1 persona</string>
     <string name="pantalla_reservar_texto_fecha_reserva">[Seleccione una fecha]</string>
 
     <string name="pantalla_reservar_titulo_calendario">Seleccione un día para la reserva</string>
 
+    <string name="pantalla_reservar_texto_ayuda_horarios_deshabilitados">Los horarios se visualizarán deshabilitados en función del tamaño de grupo seleccionado.</string>
     <string name="pantalla_reservar_titulo_dialog">No existen horarios disponibles</string>
     <string name="pantalla_reservar_texto_dialog">No existen horarios disponibles para la fecha seleccionada. Por favor, seleccione una nueva fecha y vuelva a intentarlo.</string>
 
