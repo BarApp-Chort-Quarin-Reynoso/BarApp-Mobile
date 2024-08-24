@@ -13,6 +13,7 @@ object RestauranteMapper {
   fun toEntity(restaurante: Restaurante): RestauranteEntity {
     return RestauranteEntity(
       restaurante.nombre,
+      restaurante.estado,
       restaurante.puntuacion,
       restaurante.portada,
       restaurante.correo,
@@ -30,6 +31,7 @@ object RestauranteMapper {
     return Restaurante(
       "",
       restauranteEntity.nombre,
+      restauranteEntity.estado,
       restauranteEntity.puntuacion,
       restauranteEntity.portada,
       restauranteEntity.correo,
@@ -47,6 +49,7 @@ object RestauranteMapper {
     return RestauranteUsuario(
       idAReemplazar,
       restaurante.nombre,
+      restaurante.estado,
       restaurante.puntuacion,
       restaurante.portada,
       restaurante.correo,
@@ -63,6 +66,7 @@ object RestauranteMapper {
     return RestauranteUbicacionEntity(
       restaurante.id,
       restaurante.nombre,
+      restaurante.estado,
       restaurante.puntuacion,
       restaurante.portada,
       restaurante.correo,
@@ -87,6 +91,7 @@ object RestauranteMapper {
     return RestauranteUsuarioEntity(
       restaurante.id,
       restaurante.nombre,
+      restaurante.estado,
       restaurante.puntuacion,
       restaurante.portada,
       restaurante.correo,

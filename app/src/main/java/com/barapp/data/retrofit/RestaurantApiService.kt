@@ -1,7 +1,7 @@
 package com.barapp.data.retrofit
 
 import com.barapp.model.DetalleRestaurante
-import com.barapp.model.Horario
+import com.barapp.model.HorarioConCapacidadDisponible
 import com.barapp.model.Restaurante
 import com.barapp.model.RestauranteUsuario
 import retrofit2.Call
@@ -11,11 +11,13 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
-import retrofit2.http.QueryMap
 
 interface RestaurantApiService {
   @GET("/api/restaurantes")
-  fun getAllRestaurants(@QueryMap options: Map<String, String>?): Call<List<Restaurante>>
+  fun getAllRestaurants(): Call<List<Restaurante>>
+
+  @GET("/api/restaurantes/destacados")
+  fun getFeaturedRestaurants(): Call<List<Restaurante>>
 
   @GET("/api/restaurantes/{id}")
   fun getRestaurantById(@Path("id") id: String): Call<Restaurante>
@@ -24,7 +26,7 @@ interface RestaurantApiService {
   fun getRestaurantDetailById(@Path("id") id: String): Call<DetalleRestaurante>
 
   @GET("/api/restaurantes/{correo}/horarios")
-  fun getRestaurantHours(@Path("correo") correo: String, @Query("mesAnio") mesAnio: String): Call<Map<String, List<Horario>>>
+  fun getRestaurantHours(@Path("correo") correo: String, @Query("mesAnio") mesAnio: String): Call<Map<String, Map<String, HorarioConCapacidadDisponible>>>
 
   @POST("/api/restaurantes/{id}/favoritos")
   fun addFavoriteRestaurant(@Path("id") id: String, @Body restaurante: RestauranteUsuario): Call<Restaurante>

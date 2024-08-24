@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -32,6 +31,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/imagen_restaurante_default" />
+
+            <TextView
+                android:id="@+id/txtViewPaused"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/md_theme_light_surface"
+                android:padding="8dp"
+                android:visibility="gone"
+                android:text="@string/cardview_texto_reservas_pausadas"
+                android:textColor="@android:color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/imageViewFoto"
+                app:layout_constraintEnd_toEndOf="@+id/imageViewFoto"
+                app:layout_constraintStart_toStartOf="@+id/imageViewFoto"
+                app:layout_constraintTop_toTopOf="@+id/imageViewFoto" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/botonFavorito"
@@ -130,7 +144,6 @@
                 app:tint="#FFC107" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

@@ -6,6 +6,7 @@ import java.util.UUID
 class RestauranteUsuario(
     id: String,
     nombre: String,
+    estado: EstadoRestaurante,
     puntuacion: Double,
     portada: String,
     correo: String,
@@ -17,6 +18,7 @@ class RestauranteUsuario(
 ) : Restaurante(
     id,
     nombre,
+    estado,
     puntuacion,
     portada,
     correo,
@@ -32,6 +34,7 @@ class RestauranteUsuario(
 
     constructor() : this(UUID.randomUUID().toString(),
         "",
+        EstadoRestaurante.ESPERANDO_HABILITACION,
         -1.0,
         "",
         "",
