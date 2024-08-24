@@ -6,6 +6,7 @@ import com.barapp.barapp.model.Reserva
 import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
 import com.barapp.data.repositories.ReservaRepository
+import com.barapp.model.EstadoReserva
 import java.time.LocalDate
 
 class PantallaConfirmacionViewModel : ViewModel() {
@@ -15,7 +16,7 @@ class PantallaConfirmacionViewModel : ViewModel() {
   lateinit var usuario: Usuario
 
   fun crearReserva(cantPersonas: Int, fechaReserva: LocalDate, horaReserva: Horario): Reserva {
-    val reserva = Reserva("PENDIENTE", cantPersonas, fechaReserva.toString(), barSeleccionado, horaReserva, horaReserva.tipoComida, usuario)
+    val reserva = Reserva(EstadoReserva.PENDIENTE, cantPersonas, fechaReserva.toString(), barSeleccionado, horaReserva, usuario)
 
     reservaRepository.guardar(reserva)
 

@@ -20,6 +20,7 @@ import androidx.transition.TransitionInflater
 import com.barapp.R
 import com.barapp.databinding.FragmentPantallaBarBinding
 import com.barapp.databinding.OpinionLayoutBinding
+import com.barapp.model.EstadoRestaurante
 import com.barapp.model.Opinion
 import com.barapp.util.Interpolator
 import com.barapp.viewModels.sharedViewModels.BarAReservarSharedViewModel
@@ -144,6 +145,18 @@ class PantallaBar : Fragment() {
     barSeleccionadoViewModel.distancia?.let {
       binding.textViewDistancia.text = getString(R.string.cardview_texto_distancia, it)
     } ?: run { binding.textViewDistancia.visibility = View.INVISIBLE }
+
+    barSeleccionadoViewModel.restaurante.estado.let {
+      binding.fabReservar.isEnabled = it == EstadoRestaurante.HABILITADO
+
+      if (it == EstadoRestaurante.PAUSADO) {
+        binding.txtViewPaused.visibility = View.VISIBLE
+        binding.imageViewFoto.alpha = 0.5f
+      } else {
+        binding.txtViewPaused.visibility = View.GONE
+        binding.imageViewFoto.alpha = 1.0f
+      }
+    }
 
     viewModel.detalleRestaurante.observe(viewLifecycleOwner) { detalle ->
       binding.textViewDescripcion.text = detalle.descripcion

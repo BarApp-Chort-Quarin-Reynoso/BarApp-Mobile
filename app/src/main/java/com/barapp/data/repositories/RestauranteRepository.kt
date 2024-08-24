@@ -5,7 +5,7 @@ import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.utils.IGenericRepository
 import com.barapp.data.retrofit.RestaurantApiService
 import com.barapp.data.retrofit.RetrofitInstance
-import com.barapp.model.Horario
+import com.barapp.model.HorarioConCapacidadDisponible
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,7 +36,8 @@ class RestauranteRepository private constructor() : IGenericRepository<Restauran
   }
 
   override fun buscarTodos(callback: FirestoreCallback<List<Restaurante>>) {
-    api.getAllRestaurants(emptyMap()).enqueue(object : Callback<List<Restaurante>> {
+    Timber.d("Buscando todos los restaurantes")
+    api.getAllRestaurants().enqueue(object : Callback<List<Restaurante>> {
       override fun onResponse(call: Call<List<Restaurante>>, response: Response<List<Restaurante>>) {
         if (response.isSuccessful) {
           val data = response.body()
@@ -55,10 +56,10 @@ class RestauranteRepository private constructor() : IGenericRepository<Restauran
     })
   }
 
-  fun buscarHorariosPorCorreo(correo: String, mesAnio: String, callback: FirestoreCallback<Map<String, List<Horario>>>) {
+  fun buscarHorariosPorCorreo(correo: String, mesAnio: String, callback: FirestoreCallback<Map<String, Map<String, HorarioConCapacidadDisponible>>>) {
     Timber.d("Buscando horarios para restaurante con correo: $correo")
-    api.getRestaurantHours(correo, mesAnio).enqueue(object : Callback<Map<String, List<Horario>>> {
-      override fun onResponse(call: Call<Map<String, List<Horario>>>, response: Response<Map<String, List<Horario>>>) {
+    api.getRestaurantHours(correo, mesAnio).enqueue(object : Callback<Map<String, Map<String, HorarioConCapacidadDisponible>>> {
+        override fun onResponse(call: Call<Map<String, Map<String, HorarioConCapacidadDisponible>>>, response: Response<Map<String, Map<String, HorarioConCapacidadDisponible>>>) {
         if (response.isSuccessful) {
           val data = response.body()
           Timber.d("Horarios restaurante: $data")
@@ -69,7 +70,7 @@ class RestauranteRepository private constructor() : IGenericRepository<Restauran
         }
       }
 
-      override fun onFailure(call: Call<Map<String, List<Horario>>>, t: Throwable) {
+      override fun onFailure(call: Call<Map<String, Map<String, HorarioConCapacidadDisponible>>>, t: Throwable) {
         Timber.e(t)
         callback.onError(t)
       }
@@ -77,8 +78,7 @@ class RestauranteRepository private constructor() : IGenericRepository<Restauran
   }
 
   fun buscarDestacados(callback: FirestoreCallback<List<Restaurante>>) {
-    val queryParams = mapOf("puntuacion" to "desc", "limit" to "6")
-    api.getAllRestaurants(queryParams).enqueue(object : Callback<List<Restaurante>> {
+    api.getFeaturedRestaurants().enqueue(object : Callback<List<Restaurante>> {
       override fun onResponse(call: Call<List<Restaurante>>, response: Response<List<Restaurante>>) {
         if (response.isSuccessful) {
           val data = response.body()

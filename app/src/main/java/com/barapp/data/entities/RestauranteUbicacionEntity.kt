@@ -1,10 +1,12 @@
 package com.barapp.data.entities
 
+import com.barapp.model.EstadoRestaurante
 import java.util.UUID
 
 open class RestauranteUbicacionEntity(
   var idRestaurante: String,
   var nombre: String,
+  var estado: EstadoRestaurante,
   var puntuacion: Double,
   var portada: String,
   var correo: String,
@@ -20,9 +22,9 @@ open class RestauranteUbicacionEntity(
   var nombrePais: String,
 ) {
   constructor() :
-    this(UUID.randomUUID().toString(), "", -1.0, "", "", "", "", "", "", -1, -1.0, -1.0, "", "", "")
+    this(UUID.randomUUID().toString(), "", EstadoRestaurante.ESPERANDO_HABILITACION, -1.0, "", "", "", "", "", "", -1, -1.0, -1.0, "", "", "")
 
   override fun toString(): String {
-    return "RestauranteUbicacionEntity(idRestaurante='$idRestaurante', nombre='$nombre', puntuacion=$puntuacion, portada='$portada', correo='$correo', logo='$logo', idDetalleRestaurante='$idDetalleRestaurante', idUbicacion='$idUbicacion', calle='$calle', numero=$numero, latitud=$latitud, longitud=$longitud, nombreCiudad='$nombreCiudad', nombreProvincia='$nombreProvincia', nombrePais='$nombrePais')"
+    return "RestauranteUbicacionEntity(idRestaurante='$idRestaurante', nombre='$nombre', estado='$estado', puntuacion=$puntuacion, portada='$portada', correo='$correo', logo='$logo', idDetalleRestaurante='$idDetalleRestaurante', idUbicacion='$idUbicacion', calle='$calle', numero=$numero, latitud=$latitud, longitud=$longitud, nombreCiudad='$nombreCiudad', nombreProvincia='$nombreProvincia', nombrePais='$nombrePais')"
   }
 }

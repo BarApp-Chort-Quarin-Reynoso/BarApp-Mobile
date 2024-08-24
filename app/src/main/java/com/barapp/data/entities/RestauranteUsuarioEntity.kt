@@ -1,12 +1,13 @@
 package com.barapp.data.entities
 
-import com.barapp.data.entities.RestauranteUbicacionEntity
+import com.barapp.model.EstadoRestaurante
 import com.google.firebase.Timestamp
 import java.util.UUID
 
 class RestauranteUsuarioEntity(
   idRestaurante: String,
   nombre: String,
+  estado: EstadoRestaurante,
   puntuacion: Double,
   portada: String,
   correo: String,
@@ -25,6 +26,7 @@ class RestauranteUsuarioEntity(
   RestauranteUbicacionEntity(
     idRestaurante,
     nombre,
+    estado,
     puntuacion,
     portada,
     correo,
@@ -46,6 +48,7 @@ class RestauranteUsuarioEntity(
     this(
       UUID.randomUUID().toString(),
       "",
+      EstadoRestaurante.ESPERANDO_HABILITACION,
       -1.0,
       "",
     "",

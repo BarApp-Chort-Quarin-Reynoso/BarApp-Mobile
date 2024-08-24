@@ -16,6 +16,7 @@ import com.barapp.model.Usuario
 import com.barapp.ui.recyclerViewAdapters.HorizontalRecyclerViewAdapter.RestaurantesViewHolder
 import com.barapp.data.repositories.DetalleUsuarioRepository
 import com.barapp.data.repositories.RestauranteFavoritoRepository
+import com.barapp.model.EstadoRestaurante
 import com.barapp.util.diffCallbacks.RestauranteDiffCallback
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
@@ -76,6 +77,16 @@ class HorizontalRecyclerViewAdapter(
         )
       )
       .into(holder.fotoRestaurante)
+
+    listaRestaurantes[position].estado.let {
+      if (it == EstadoRestaurante.PAUSADO) {
+        holder.textoPausado.visibility = View.VISIBLE
+        holder.fotoRestaurante.alpha = 0.5f
+      } else {
+        holder.textoPausado.visibility = View.GONE
+        holder.fotoRestaurante.alpha = 1f
+      }
+    }
 
     if (
       usuario.detalleUsuario!!.idsRestaurantesFavoritos.contains(listaRestaurantes[position].id)
@@ -183,6 +194,7 @@ class HorizontalRecyclerViewAdapter(
     val ubicacionRestaurante: TextView
     val distanciaRestaurante: TextView
     val puntuacionRestaurante: TextView
+    val textoPausado: TextView
     val logoRestaurante: ImageView
     val fotoRestaurante: ImageView
     val botonFavorito: MaterialButton
@@ -197,6 +209,7 @@ class HorizontalRecyclerViewAdapter(
       ubicacionRestaurante = binding.txtViewUbicacionRestaurante
       distanciaRestaurante = binding.txtViewDistanciaRestaurante
       puntuacionRestaurante = binding.txtViewPuntuacionRestaurante
+      textoPausado = binding.txtViewPaused
       logoRestaurante = binding.imageViewLogo
       fotoRestaurante = binding.imageViewFoto
       botonFavorito = binding.botonFavorito

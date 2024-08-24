@@ -100,6 +100,7 @@
     <!-- Globales de cardViews -->
     <string name="cardview_texto_distancia">a %1$d mts</string>
     <string name="cardview_texto_direccion">%1$s %2$d</string>
+    <string name="cardview_texto_reservas_pausadas">Reservas pausadas por el momento</string>
 
     <!-- Pantalla LogIn -->
     <string name="pantalla_login_iniciar_sesion">Iniciar Sesión</string>

@@ -5,6 +5,7 @@ import java.util.UUID
 open class Restaurante(
   id: String,
   var nombre: String,
+  var estado: EstadoRestaurante,
   var puntuacion: Double,
   var portada: String,
   var correo: String,
@@ -15,10 +16,11 @@ open class Restaurante(
   var idRestaurante: String = ""
 ) : BaseClass(id) {
 
-  constructor() : this(UUID.randomUUID().toString(), "", -1.0, "", "", "", Ubicacion(), "", null)
+  constructor() : this(UUID.randomUUID().toString(), "", EstadoRestaurante.ESPERANDO_HABILITACION, -1.0, "", "", "", Ubicacion(), "", null)
 
   constructor(
     nombre: String,
+    estado: EstadoRestaurante,
     puntuacion: Double,
     portada: String,
     correo: String,
@@ -29,6 +31,7 @@ open class Restaurante(
   ) : this(
     UUID.randomUUID().toString(),
     nombre,
+    estado,
     puntuacion,
     portada,
     correo,
@@ -43,6 +46,7 @@ open class Restaurante(
     return "Restaurante{" +
             "id='" + id + '\'' +
             ", nombre='" + nombre + '\'' +
+            ", estado=" + estado +
             ", puntuacion=" + puntuacion +
             ", portada='" + portada + '\'' +
             ", correo='" + correo + '\'' +
@@ -57,6 +61,7 @@ open class Restaurante(
     return Restaurante(
       id,
       nombre,
+      estado,
       puntuacion,
       portada,
       correo,

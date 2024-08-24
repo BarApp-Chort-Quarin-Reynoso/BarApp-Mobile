@@ -33,6 +33,21 @@
                 app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
                 app:srcCompat="@drawable/imagen_restaurante_default" />
 
+            <TextView
+                android:id="@+id/txtViewPaused"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/md_theme_light_surface"
+                android:padding="8dp"
+                android:visibility="gone"
+                android:text="@string/cardview_texto_reservas_pausadas"
+                android:textColor="@android:color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/imageViewFoto"
+                app:layout_constraintEnd_toEndOf="@+id/imageViewFoto"
+                app:layout_constraintStart_toStartOf="@+id/imageViewFoto"
+                app:layout_constraintTop_toTopOf="@+id/imageViewFoto" />
+
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
