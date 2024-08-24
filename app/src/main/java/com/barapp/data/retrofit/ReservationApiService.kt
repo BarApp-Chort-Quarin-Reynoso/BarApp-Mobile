@@ -1,6 +1,7 @@
 package com.barapp.data.retrofit
 
 import com.barapp.barapp.model.Reserva
+import com.barapp.model.EstadoReserva
 import com.barapp.model.Opinion
 import retrofit2.Call
 import retrofit2.http.Body
@@ -28,5 +29,5 @@ interface ReservationApiService {
     fun createReservation(@Path("id") id: String, @Body reserva: Reserva): Call<String>
 
     @PATCH("/api/reservas/{id}/estado")
-    fun updateReservation(@Path("id") id: String, @Query("estado") estado: String): Call<Reserva>
+    fun updateReservation(@Path("id") id: String, @Query("estado") estado: EstadoReserva): Call<Reserva>
 }

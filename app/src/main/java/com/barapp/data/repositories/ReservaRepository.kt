@@ -14,6 +14,7 @@ import com.barapp.data.mappers.RestauranteMapper.fromEntity
 import com.barapp.data.retrofit.ReservationApiService
 import com.barapp.data.retrofit.RestaurantApiService
 import com.barapp.data.retrofit.RetrofitInstance
+import com.barapp.model.EstadoReserva
 import com.barapp.model.Restaurante
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
@@ -175,7 +176,7 @@ class ReservaRepository private constructor() : IGenericRepository<Reserva> {
 
   fun cancelarReserva(reserva: Reserva) {
     Timber.d("Cancelando reserva por parte del usuario: $reserva")
-    api.updateReservation(reserva.id, "CANCELADA_USUARIO").enqueue(object : Callback<Reserva> {
+    api.updateReservation(reserva.id, EstadoReserva.CANCELADA_USUARIO).enqueue(object : Callback<Reserva> {
       override fun onResponse(call: Call<Reserva>, response: Response<Reserva>) {
         if (response.isSuccessful) {
           Timber.d("Reserva cancelada exitosamente")
