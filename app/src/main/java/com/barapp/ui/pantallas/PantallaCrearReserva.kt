@@ -26,6 +26,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialContainerTransform
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 /**
  * Esta clase es un [Fragment] que se utiliza para que el usuario pueda crear la reserva en el
@@ -38,8 +39,6 @@ import java.time.LocalTime
  * @author Julio Chort
  */
 class PantallaCrearReserva : Fragment() {
-
-  // private var indexChipGroup : Int = 0
 
   private lateinit var binding: FragmentPantallaCrearReservaBinding
 
@@ -212,6 +211,12 @@ class PantallaCrearReserva : Fragment() {
         // mostrar un dialog si eso pasara
         viewModel.todosChipsInhabilitadosDesayuno = true
 
+        // Si se limpió el ChipGroup, se eliminan todos los elementos anteriores y se resetea la bandera
+        if (viewModel.clearedChipGroup.value!!) {
+          binding.chipGroup.removeAllViews()
+          viewModel.chipGroupCleared()
+        }
+
         // Se crea un título para el tipo comida y se asigna el ancho como "MATCH_PARENT"
         // para que ocupe la totalidad  del renglón
         agregarTituloAlChipGroup(getString(R.string.pantalla_reservar_titulo_desayuno))
@@ -234,6 +239,11 @@ class PantallaCrearReserva : Fragment() {
         indexChipGroupAlmuerzo = 0
         viewModel.todosChipsInhabilitadosAlmuerzo = true
 
+        if (viewModel.clearedChipGroup.value!!) {
+          binding.chipGroup.removeAllViews()
+          viewModel.chipGroupCleared()
+        }
+
         agregarTituloAlChipGroup(getString(R.string.pantalla_reservar_titulo_almuerzo))
         indexChipGroupAlmuerzo++
 
@@ -252,6 +262,11 @@ class PantallaCrearReserva : Fragment() {
       if (listaHorarios.isNotEmpty()) {
         indexChipGroupMerienda = 0
         viewModel.todosChipsInhabilitadosMerienda = true
+
+        if (viewModel.clearedChipGroup.value!!) {
+          binding.chipGroup.removeAllViews()
+          viewModel.chipGroupCleared()
+        }
 
         agregarTituloAlChipGroup(getString(R.string.pantalla_reservar_titulo_merienda))
         indexChipGroupMerienda++
@@ -272,6 +287,11 @@ class PantallaCrearReserva : Fragment() {
       if (listaHorarios.isNotEmpty()) {
         indexChipGroupCena = 0
         viewModel.todosChipsInhabilitadosCena = true
+
+        if (viewModel.clearedChipGroup.value!!) {
+          binding.chipGroup.removeAllViews()
+          viewModel.chipGroupCleared()
+        }
 
         agregarTituloAlChipGroup(getString(R.string.pantalla_reservar_titulo_cena))
         indexChipGroupCena++
@@ -316,22 +336,24 @@ class PantallaCrearReserva : Fragment() {
 
   /** @author Julio Chort */
   private fun agregarChipsAlChipGroup(
-    listaHorarios: List<Horario>,
+    mapHorariosMaxPersonas: Map<List<String>, Int>,
     indexHastaElMomento: Int,
     tipoComida: String,
   ): Int {
     var index = indexHastaElMomento
 
-    for (horario in listaHorarios) {
-      if (noEsDeMadrugada(horario.getHorarioAsLocalTime())) {
-        val chip = crearChip(horario.horario.substring(0,5), index)
-        if (viewModel.comprobarSiEsHorarioHabilitado(horario)) {
-          chip.isEnabled = false
-        } else {
-          deshabilitarBanderaChipsInhabilitados(tipoComida)
+    for ((listaHorarios, maxPersonas) in mapHorariosMaxPersonas) {
+      for (horario in listaHorarios) {
+        if (noEsDeMadrugada(horario)) {
+          val chip = crearChip(horario.substring(0, 5), index)
+          if (!viewModel.esHorarioHabilitado(maxPersonas)) {
+            chip.isEnabled = false
+          } else {
+            deshabilitarBanderaChipsInhabilitados(tipoComida)
+          }
+          binding.chipGroup.addView(chip)
+          index++
         }
-        binding.chipGroup.addView(chip)
-        index++
       }
     }
 
@@ -349,8 +371,10 @@ class PantallaCrearReserva : Fragment() {
   }
 
   /** @author Julio Chort */
-  private fun noEsDeMadrugada(hora: LocalTime): Boolean {
-    return !hora.isBefore(LocalTime.of(5, 0))
+  private fun noEsDeMadrugada(hora: String): Boolean {
+    val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+    val localTime = LocalTime.parse(hora, formatter)
+    return !localTime.isBefore(LocalTime.of(5, 0))
   }
 
   /** @author Julio Chort */
