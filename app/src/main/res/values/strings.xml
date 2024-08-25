@@ -157,8 +157,13 @@
     <!-- Rational permission request dialog -->
     <string name="permission_request_dialog_supporting_text">Se necesita acceder a la ubicacionEntity de su dispositivo para acceder a esta funcionalidad. ¿Desea otorgar este permiso?</string>
 
-    <!-- Shared preferences -->
-    <string name="prefs_file">com.barapp.barapp.PREFERENCE_FILE_KEY</string>
+    <!-- Preferences -->
+    <string name="shared_pref_file">com.barapp.barapp.PREFERENCE_FILE_KEY</string>
+    <string name="persistent_pref_file">com.barapp.PERSISTENT_FILE_KEY</string>
+
+    <!-- Preference keys -->
+    <string name="prefkey_fcmtoken">fcmtoken</string>
+    <string name="prefkey_idusuario">idUsuario</string>
 
     <!-- Errores -->
     <string name="error_title">Error</string>
@@ -175,8 +180,9 @@
     <string name="error_buscando_detalle_restaurante">"Ocurrió un error al buscar la información del restaurante %1$s. Intente nuevamente en unos minutos."</string>
 
     <!-- Notification channel -->
-    <string name="notificacion_reserva_channel_name">"General"</string>
-    <string name="notificacion_reserva_channel_description">"Notificaciones generales de la aplicación"</string>
+    <string name="notificacion_channel_id_reserva">RESERVAS</string>
+    <string name="notificacion_channel_name_reserva">Reservas</string>
+    <string name="notificacion_channel_description_reserva">Notificaciones de reservas realizadas</string>
 
     <!-- Notification -->
     <string name="notificacion_reserva_title">"Reserva en %1$s"</string>
@@ -300,6 +306,5 @@
     <string name="pantalla_crear_opinion_label_calificacion_general">Calificación general</string>
     <string name="pantalla_crear_opinion_hint_comentario">Escriba su comentario aquí (opcional)</string>
     <string name="pantalla_crear_opinion_boton_enviar">Enviar opinión</string>
-
 
 </resources>

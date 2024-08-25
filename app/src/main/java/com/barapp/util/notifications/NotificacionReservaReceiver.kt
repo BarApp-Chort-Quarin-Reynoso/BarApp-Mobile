@@ -36,18 +36,25 @@ class NotificacionReservaReceiver : BroadcastReceiver() {
     val logo = convertCompressedByteArrayToBitmap(
       intent.getByteArrayExtra("logo")!!
     )
+
     if (restaurante == null) return
+
     val destino = Intent(context, MainActivity::class.java)
     destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
     val bundle = Bundle()
     bundle.putInt("origen", MainActivity.DESDE_NOTIFICACION)
+
+    val channelId = context.getString(R.string.notificacion_channel_id_reserva)
+
     val pendingIntent = NavDeepLinkBuilder(context)
       .setGraph(R.navigation.navegacion)
       .setDestination(R.id.pantallaNavegacionPrincipal)
       .setComponentName(MainActivity::class.java)
       .setArguments(bundle)
       .createPendingIntent()
-    val notification = NotificationCompat.Builder(context, NotificacionReservaManager.CHANNEL_ID)
+
+    val notification = NotificationCompat.Builder(context, channelId)
       .setContentTitle(context.getString(R.string.notificacion_reserva_title, restaurante))
       .setContentText(context.getString(R.string.notificacion_reserva_text, restaurante))
       .setSmallIcon(R.mipmap.ic_launcher_barrapp)

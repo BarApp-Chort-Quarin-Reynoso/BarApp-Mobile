@@ -13,7 +13,6 @@ import com.barapp.data.repositories.DetalleUsuarioRepository
 import com.barapp.data.repositories.RestauranteVistoRecientementeRepository
 import com.barapp.data.repositories.UsuarioRepository
 import com.barapp.model.DetalleUsuario
-import java.util.*
 import timber.log.Timber
 
 class MainActivityViewModel : ViewModel() {
@@ -34,12 +33,11 @@ class MainActivityViewModel : ViewModel() {
   val error: LiveData<Throwable> = _error
 
   /**
-   * Se encarga de buscar en el repositorio el usuario con el id determinado y de guardarlo como
-   * atributo para ternerlo disponible en el resto de la aplicación donde se lo necesite
+   * Busca el usuario y su detalle a partir de un idUsuario
    *
    * @author Valentin Reynoso
    */
-  fun buscarYGuardarUsuarioPorId(idUsuario: String) {
+  fun buscarUsuarioPorId(idUsuario: String) {
 
     usuarioRepository.buscarPorId(
       idUsuario,
@@ -70,6 +68,24 @@ class MainActivityViewModel : ViewModel() {
         }
       },
     )
+  }
+
+  fun guardarFcmToken(usuario: Usuario, fcmtoken: String?) {
+    if (fcmtoken != null && fcmtoken != "") {
+      if (!usuario.fcmTokens.contains(fcmtoken)) {
+        usuario.fcmTokens.add(fcmtoken)
+        usuarioRepository.actualizar(usuario)
+      }
+    } else {
+      Timber.e(Throwable("fcmtoken no puede ser null ni vacio"))
+    }
+  }
+
+  fun eliminarFcmToken(fcmtoken: String?) {
+    if (usuario.value != null && fcmtoken != null) {
+      usuario.value!!.fcmTokens.remove(fcmtoken)
+      usuarioRepository.actualizar(usuario.value!!)
+    }
   }
 
   fun guardarRestauranteVistoRecientemente(restaurante: Restaurante) {

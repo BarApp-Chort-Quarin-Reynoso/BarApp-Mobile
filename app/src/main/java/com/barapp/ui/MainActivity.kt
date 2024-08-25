@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,6 +13,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.NavHostFragment
 import com.barapp.R
@@ -50,28 +52,38 @@ class MainActivity :
         this.finish()
       } else {
         val idUsuario = it.data?.extras?.getString("idUsuario")
+        Timber.e("Id que llego del intent: %s", idUsuario)
 
         idUsuario?.let { id ->
           // Guardado de datos de sesion
           val prefs =
-            getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-          prefs.putString("idUsuario", id)
-          prefs.apply()
-        }
-        Timber.e("Id que llego del intent: %s", idUsuario)
+            getSharedPreferences(getString(R.string.shared_pref_file), Context.MODE_PRIVATE)
+          prefs.edit().putString("idUsuario", id).apply()
 
-        if (idUsuario != null) {
-          onLogedIn(idUsuario)
+          val fcmtoken =
+            getSharedPreferences(getString(R.string.persistent_pref_file), Context.MODE_PRIVATE)
+              .getString("fcmtoken", "")!!
+
+          onLogedIn(id, fcmtoken)
         }
       }
     }
 
-  private val requestPermissionLauncher =
+  private val requestLocationPermissionLauncher =
     registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
       if (isGranted) {
         obtenerUbicacion()
       }
     }
+
+  private val requestNotificationPermissionLauncher =
+    registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+      if (isGranted) {
+        initNotifications()
+      }
+    }
+
+  private lateinit var notificationManager: NotificacionReservaManager
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -90,13 +102,16 @@ class MainActivity :
 
   // Comprobar si tenemos guardado un id/una sesion activa
   private fun comprobarSesionActiva() {
-    val sharedPreferences = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE)
+    val sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_file), MODE_PRIVATE)
     val idUsuario = sharedPreferences.getString("idUsuario", null)
+    val fcmtoken =
+      getSharedPreferences(getString(R.string.persistent_pref_file), Context.MODE_PRIVATE)
+        .getString(getString(R.string.prefkey_fcmtoken), null)
 
     if (idUsuario == null) {
       iniciarAutenticacion()
     } else {
-      onLogedIn(idUsuario)
+      onLogedIn(idUsuario, fcmtoken)
     }
   }
 
@@ -106,18 +121,46 @@ class MainActivity :
     startAuthActivity.launch(intent)
   }
 
-  private fun onLogedIn(idUsuario: String) {
-    NotificacionReservaManager.crearCanalNotificacion(this)
-    NotificacionReservaManager(idUsuario).sincronizarAlarmas(this)
+  private fun onLogedIn(idUsuario: String, fcmtoken: String?) {
+    notificationManager = NotificacionReservaManager(idUsuario)
+    askNotificationPermission()
 
-    mainActivityViewModel.buscarYGuardarUsuarioPorId(idUsuario)
+    mainActivityViewModel.buscarUsuarioPorId(idUsuario)
+    mainActivityViewModel.usuario.observe(this) {
+      mainActivityViewModel.guardarFcmToken(it, fcmtoken)
+    }
 
     fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     obtenerUbicacion()
   }
 
   override fun onLogOut() {
+    val prefs =
+      getSharedPreferences(getString(R.string.shared_pref_file), Context.MODE_PRIVATE)
+
     iniciarAutenticacion()
+  }
+
+  private fun askNotificationPermission() {
+    // This is only necessary for API level >= 33 (TIRAMISU)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+        PackageManager.PERMISSION_GRANTED
+      ) {
+        initNotifications()
+      } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+        // TODO ask rational permission
+        requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+      } else {
+        // Directly ask for the permission
+        requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+      }
+    }
+  }
+
+  private fun initNotifications() {
+    NotificacionReservaManager.crearCanalNotificacion(this)
+    notificationManager.sincronizarAlarmas(this)
   }
 
   override fun onFabBuscarClicked(fabBuscar: View) {
@@ -130,9 +173,9 @@ class MainActivity :
   private fun obtenerUbicacion() {
     if (
       ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-        PackageManager.PERMISSION_GRANTED &&
-        ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
-          PackageManager.PERMISSION_GRANTED
+      PackageManager.PERMISSION_GRANTED &&
+      ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
+      PackageManager.PERMISSION_GRANTED
     ) {
       if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
         return
@@ -156,7 +199,7 @@ class MainActivity :
   }
 
   private fun pedirPermisos() {
-    requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
   }
 
   override fun onReservaClicked() {

@@ -11,9 +11,10 @@ class Usuario(
   var foto: String,
   var idDetalleUsuario: String,
   var detalleUsuario: DetalleUsuario?,
+  var fcmTokens: MutableSet<String>
 ) : BaseClass(id) {
 
-  constructor() : this(UUID.randomUUID().toString(), "", "", "", "", null)
+  constructor() : this(UUID.randomUUID().toString(), "", "", "", "", null, HashSet())
 
   override fun toString(): String {
     return "Usuario{" +

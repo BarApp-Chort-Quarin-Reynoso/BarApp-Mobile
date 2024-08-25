@@ -13,6 +13,7 @@ object UsuarioMapper {
       usuario.apellido,
       usuario.foto,
       usuario.idDetalleUsuario,
+      usuario.fcmTokens
     )
   }
 
@@ -25,6 +26,7 @@ object UsuarioMapper {
       usuarioEntity.foto,
       usuarioEntity.idDetalleUsuario,
       detalleUsuario,
+      usuarioEntity.fcmTokens
     )
   }
 }

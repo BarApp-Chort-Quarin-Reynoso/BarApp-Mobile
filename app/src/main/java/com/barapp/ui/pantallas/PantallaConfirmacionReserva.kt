@@ -56,7 +56,7 @@ class PantallaConfirmacionReserva : Fragment() {
     // Voy a buscar en las shared preferences el id que tiene el usuario de la sesion actual
     val idUsuario =
       this.context
-        ?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+        ?.getSharedPreferences(getString(R.string.shared_pref_file), Context.MODE_PRIVATE)
         ?.getString("idUsuario", null)
 
     binding.textViewNombre.text =

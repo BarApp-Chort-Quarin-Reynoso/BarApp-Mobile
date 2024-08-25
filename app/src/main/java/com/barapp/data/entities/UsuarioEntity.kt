@@ -8,8 +8,9 @@ class UsuarioEntity(
   var apellido: String,
   var foto: String,
   var idDetalleUsuario: String,
+  var fcmTokens: MutableSet<String>
 ) {
-  constructor() : this(UUID.randomUUID().toString(), "", "", "", "")
+  constructor() : this(UUID.randomUUID().toString(), "", "", "", "", HashSet())
 
   override fun toString(): String {
     return "UsuarioEntity(idUsuario='$idUsuario', nombre='$nombre', apellido='$apellido', foto='$foto', idDetalleUsuario='$idDetalleUsuario')"

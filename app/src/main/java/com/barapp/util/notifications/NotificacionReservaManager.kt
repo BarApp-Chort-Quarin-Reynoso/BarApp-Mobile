@@ -61,7 +61,6 @@ class NotificacionReservaManager(private val idUsuario: String) {
   }
 
   companion object {
-    const val CHANNEL_ID = "General"
     const val TIEMPO_ALARMA_MINUTOS = 60
 
     /**
@@ -151,9 +150,10 @@ class NotificacionReservaManager(private val idUsuario: String) {
      * @param context Contexto donde se debe crear el canal
      */
     fun crearCanalNotificacion(context: Context) {
-      val name = context.getString(R.string.notificacion_reserva_channel_name)
-      val description = context.getString(R.string.notificacion_reserva_channel_description)
-      val channel = NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT)
+      val channelId = context.getString(R.string.notificacion_channel_id_reserva)
+      val name = context.getString(R.string.notificacion_channel_name_reserva)
+      val description = context.getString(R.string.notificacion_channel_description_reserva)
+      val channel = NotificationChannel(channelId, name, NotificationManager.IMPORTANCE_DEFAULT)
       channel.description = description
       context.getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
     }

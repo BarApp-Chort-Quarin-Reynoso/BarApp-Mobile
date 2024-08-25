@@ -71,7 +71,22 @@ class UsuarioRepository private constructor() : IGenericRepository<Usuario> {
       })
   }
 
-  override fun actualizar(entidad: Usuario) {}
+  override fun actualizar(entidad: Usuario) {
+    Timber.d("Actualizando usuario: $entidad")
+    api.updateUser(entidad.id, entidad).enqueue(object : Callback<Usuario> {
+      override fun onResponse(call: Call<Usuario>, response: Response<Usuario>) {
+        if (response.isSuccessful) {
+          Timber.d("Usuario actualizado exitosamente")
+        } else {
+          Timber.e("Error actualizado usuario: ${response.errorBody()}")
+        }
+      }
+
+      override fun onFailure(call: Call<Usuario>, t: Throwable) {
+        Timber.e(t)
+      }
+    })
+  }
 
   override fun borrar(entidad: Usuario) {}
 
