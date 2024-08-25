@@ -151,15 +151,18 @@ class PantallaMiCuenta : Fragment() {
   private fun cerrarSesion() {
 
     val prefs =
-      requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+      requireActivity().getSharedPreferences(getString(R.string.shared_pref_file), Context.MODE_PRIVATE)
+    val persistentPref = requireActivity().getSharedPreferences(getString(R.string.persistent_pref_file), Context.MODE_PRIVATE)
 
     if (prefs != null) {
+      val fcmtoken = persistentPref.getString(getString(R.string.prefkey_fcmtoken), null)
       val editor = prefs.edit()
 
       activityViewModel.usuario.value?.let {
         val manager = NotificacionReservaManager(it.id)
         manager.eliminarAlarmas(requireContext())
       }
+      activityViewModel.eliminarFcmToken(fcmtoken)
 
       editor.clear()
       editor.apply()

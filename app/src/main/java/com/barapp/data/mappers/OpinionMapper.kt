@@ -54,6 +54,7 @@ object OpinionMapper {
           opinionUsuarioEntity.apellido,
           opinionUsuarioEntity.foto,
           opinionUsuarioEntity.idDetalleUsuario,
+          HashSet()
         )
       opinion = fromEntity(opinionEntity, UsuarioMapper.fromEntity(usuarioEntity, null))
       resultado.add(opinion)

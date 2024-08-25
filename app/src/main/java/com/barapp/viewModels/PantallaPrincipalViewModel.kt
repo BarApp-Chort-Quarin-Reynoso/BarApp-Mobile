@@ -130,7 +130,6 @@ class PantallaPrincipalViewModel(
    * @author Federico Quarin
    */
   fun calcularDistanciasCercaDeTi() {
-    Timber.e("calcularDistanciasCercaDeTi ejecutado")
     if (listaRestaurantesCercaDeTi.value != null && ubicacionUsuario != null) {
       val subscription =
         calcularDistanciasABares(listaRestaurantesCercaDeTi.value!!, ubicacionUsuario!!) {
