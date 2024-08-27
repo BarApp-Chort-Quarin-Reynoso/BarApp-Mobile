@@ -11,12 +11,16 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import com.barapp.R
+import com.barapp.data.mappers.RestauranteMapper.toRestauranteUsuario
+import com.barapp.data.repositories.DetalleUsuarioRepository
+import com.barapp.data.repositories.RestauranteFavoritoRepository
 import com.barapp.databinding.FragmentPantallaUbicacionBaresBinding
 import com.barapp.model.Restaurante
 import com.barapp.util.CambiarPermisosEnConfiguracion
@@ -24,6 +28,7 @@ import com.barapp.util.Interpolator
 import com.barapp.util.Maps
 import com.barapp.util.MarkerUtils
 import com.barapp.util.interfaces.OnRestauranteClicked
+import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.PantallaBaresCercanosViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
@@ -54,6 +59,11 @@ class PantallaBaresCercanos : Fragment() {
   private lateinit var fusedLocationClient: FusedLocationProviderClient
 
   private val viewModel: PantallaBaresCercanosViewModel by viewModels()
+
+  private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+  private val detalleUsuarioRepository: DetalleUsuarioRepository = DetalleUsuarioRepository.instance
+  private val restauranteFavoritoRepository: RestauranteFavoritoRepository =
+    RestauranteFavoritoRepository.instance
 
   private lateinit var onRestauranteClicked: OnRestauranteClicked
 
@@ -293,6 +303,53 @@ class PantallaBaresCercanos : Fragment() {
         )
       )
       .into(binding.imageViewLogo)
+
+    if (
+      mainActivityViewModel.usuario.value!!.detalleUsuario!!.idsRestaurantesFavoritos.contains(restaurante.id)
+      ||
+      mainActivityViewModel.usuario.value!!.detalleUsuario!!.idsRestaurantesFavoritos.contains(restaurante.idRestaurante)
+    ) {
+      binding.botonFavorito.setIconResource(R.drawable.icon_filled_favorite_24)
+      binding.botonFavorito.isChecked = true
+    } else {
+      binding.botonFavorito.setIconResource(R.drawable.icon_outlined_favorite_24)
+      binding.botonFavorito.isChecked = false
+    }
+    binding.botonFavorito.setOnClickListener {
+      if (binding.botonFavorito.isChecked) {
+        binding.botonFavorito.setIconResource(R.drawable.icon_filled_favorite_24)
+        hacerFavorito(restaurante)
+      } else {
+        binding.botonFavorito.setIconResource(R.drawable.icon_outlined_favorite_24)
+        eliminarFavorito(restaurante)
+      }
+    }
+  }
+
+  /**
+   * Agrega un restaurante a favoritos
+   *
+   * @param restaurante Restaurante a hacer favorito
+   * @author Chort Julio
+   */
+  private fun hacerFavorito(restaurante: Restaurante) {
+    val restauranteFavorito = toRestauranteUsuario(restaurante)
+    restauranteFavorito.idUsuario = mainActivityViewModel.usuario.value!!.id
+    mainActivityViewModel.usuario.value!!.detalleUsuario!!.idsRestaurantesFavoritos.add(restaurante.id)
+    detalleUsuarioRepository.actualizarFavoritos(mainActivityViewModel.usuario.value!!.detalleUsuario!!)
+    restauranteFavoritoRepository.guardar(restauranteFavorito, mainActivityViewModel.usuario.value!!.id)
+  }
+
+  /**
+   * Elimina un restaurante de favoritos
+   *
+   * @param restaurante Restaurante a eliminar
+   * @author Chort Julio
+   */
+  private fun eliminarFavorito(restaurante: Restaurante) {
+    mainActivityViewModel.usuario.value!!.detalleUsuario!!.idsRestaurantesFavoritos.remove(restaurante.id)
+    detalleUsuarioRepository.actualizarFavoritos(mainActivityViewModel.usuario.value!!.detalleUsuario!!)
+    restauranteFavoritoRepository.borrar(restaurante)
   }
 
   /**
