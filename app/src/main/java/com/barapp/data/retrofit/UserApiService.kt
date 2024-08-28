@@ -32,9 +32,6 @@ interface UserApiService {
   @PUT("/api/usuarios/{id}")
   fun updateUser(@Path("id") id: String, @Body usuario: Usuario): Call<Usuario>
 
-  @PATCH("/api/usuarios/detalle/{id}/restaurantes-favoritos")
-  fun updateFavoriteRestaurants(@Path("id") id: String, @Body idRestaurantesFavoritos: HashSet<String>): Call<DetalleUsuario>
-
   @PATCH("/api/usuarios/detalle/{id}/busquedas-recientes")
   fun updateRecentSearches(@Path("id") id: String, @Body busquedasRecientes: LinkedList<String>): Call<Void>
 

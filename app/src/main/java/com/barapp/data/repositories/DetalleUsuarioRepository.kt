@@ -58,24 +58,6 @@ class DetalleUsuarioRepository private constructor() : IGenericRepository<Detall
     guardar(entidad)
   }
 
-  fun actualizarFavoritos(entidad: DetalleUsuario) {
-    Timber.d("Actualizando favoritos del usuario con id: ${entidad.id}" + " con favoritos: ${entidad.idsRestaurantesFavoritos}")
-    api.updateFavoriteRestaurants(entidad.id, entidad.idsRestaurantesFavoritos).enqueue(object : Callback<DetalleUsuario> {
-      override fun onResponse(call: Call<DetalleUsuario>, response: Response<DetalleUsuario>) {
-        if (response.isSuccessful) {
-          val data = response.body()
-          Timber.d("Data received: $data")
-        } else {
-          Timber.e("Error: ${response.errorBody()}")
-        }
-      }
-
-      override fun onFailure(call: Call<DetalleUsuario>, t: Throwable) {
-        Timber.e(t)
-      }
-    })
-  }
-
   fun actualizarBusquedasRecientes(entidad: DetalleUsuario) {
     Timber.d("Actualizando busquedas recientes del usuario con id: ${entidad.id}" + " con busquedas recientes: ${entidad.busquedasRecientes}")
     api.updateRecentSearches(entidad.id, entidad.busquedasRecientes).enqueue(object : Callback<Void> {
