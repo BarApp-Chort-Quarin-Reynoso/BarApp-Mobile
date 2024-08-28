@@ -29,10 +29,10 @@ interface RestaurantApiService {
   fun getRestaurantHours(@Path("correo") correo: String, @Query("mesAnio") mesAnio: String): Call<Map<String, Map<String, HorarioConCapacidadDisponible>>>
 
   @POST("/api/restaurantes/{id}/favoritos")
-  fun addFavoriteRestaurant(@Path("id") id: String, @Body restaurante: RestauranteUsuario): Call<Restaurante>
+  fun addFavoriteRestaurant(@Path("id") id: String, @Body restaurante: RestauranteUsuario, @Query("idDetalleUsuario") idDetalleUsuario: String): Call<List<String>>
 
   @DELETE("/api/restaurantes/{id}/favoritos")
-  fun deleteFavoriteRestaurant(@Path("id") id: String): Call<Void>
+  fun deleteFavoriteRestaurant(@Path("id") id: String, @Query("idUsuario") idUsuario: String, @Query("idDetalleUsuario") idDetalleUsuario: String): Call<List<String>>
 
   @POST("/api/restaurantes/{id}/vistos-recientemente")
   fun addSeenRecentlyRestaurant(@Path("id") id: String, @Body restaurante: RestauranteUsuario): Call<Restaurante>

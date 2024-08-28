@@ -37,37 +37,43 @@ class RestauranteFavoritoRepository private constructor() {
     })
   }
 
-  fun guardar(entidad: RestauranteUsuario, idUsuario: String) {
-    Timber.d("Guardando restaurante favorito: " + entidad.idRestauranteUsuario + " idUsuario: " + idUsuario)
-    restaurantAPI.addFavoriteRestaurant(entidad.idRestauranteUsuario, entidad).enqueue(object : Callback<Restaurante> {
-      override fun onResponse(call: Call<Restaurante>, response: Response<Restaurante>) {
+  fun guardar(entidad: RestauranteUsuario, idDetalleUsuario: String, callback: FirestoreCallback<List<String>>) {
+    Timber.d("Guardando restaurante favorito: " + entidad.idRestauranteUsuario + " del usuario con idDetalleUsuario: $idDetalleUsuario")
+    restaurantAPI.addFavoriteRestaurant(entidad.idRestauranteUsuario, entidad, idDetalleUsuario).enqueue(object : Callback<List<String>> {
+      override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
         if (response.isSuccessful) {
           val data = response.body()
-          Timber.d("Restaurante favorito guardado: $data")
+          Timber.d("Restaurante favorito guardado con éxito, lista actualizada de restaurantes favoritos del usuario: $data")
+          callback.onSuccess(data!!)
         } else {
           val errorBodyString = response.errorBody()?.string()
           Timber.e("Error guardando restaurante favorito: $errorBodyString")
+          callback.onError(Throwable("Error guardando favorito"))
         }
       }
 
-      override fun onFailure(call: Call<Restaurante>, t: Throwable) {
+      override fun onFailure(call: Call<List<String>>, t: Throwable) {
         Timber.e(t)
       }
     })
   }
 
-  fun borrar(entidad: Restaurante) {
-    Timber.d("Borrando restaurante favorito: " + entidad.id)
-    restaurantAPI.deleteFavoriteRestaurant(entidad.id).enqueue(object : Callback<Void> {
-      override fun onResponse(call: Call<Void>, response: Response<Void>) {
+  fun borrar(idRestaurante: String, idUsuario: String, idDetalleUsuario: String, callback: FirestoreCallback<List<String>>) {
+    Timber.d("Borrando restaurante favorito: $idRestaurante del idUsuario: $idUsuario con idDetalleUsuario: $idDetalleUsuario")
+    restaurantAPI.deleteFavoriteRestaurant(idRestaurante, idUsuario, idDetalleUsuario).enqueue(object : Callback<List<String>> {
+      override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
         if (response.isSuccessful) {
-          Timber.d("Restaurante favorito eliminado con éxito")
+          val data = response.body()
+          Timber.d("Restaurante favorito eliminado con éxito, lista actualizada de restaurantes favoritos del usuario: $data")
+          callback.onSuccess(data!!)
         } else {
-          Timber.e(response.errorBody().toString())
+          val errorBodyString = response.errorBody()?.string()
+          Timber.e("Error eliminando restaurante favorito: $errorBodyString")
+          callback.onError(Throwable("Error eliminando favorito"))
         }
       }
 
-      override fun onFailure(call: Call<Void>, t: Throwable) {
+      override fun onFailure(call: Call<List<String>>, t: Throwable) {
         Timber.e(t)
       }
     })

@@ -18,6 +18,7 @@ import com.barapp.ui.pantallas.PantallaMisFavoritos
 import com.barapp.ui.recyclerViewAdapters.ResultadosRestauranteRecyclerAdapter.RestauranteViewHolder
 import com.barapp.data.repositories.DetalleUsuarioRepository
 import com.barapp.data.repositories.RestauranteFavoritoRepository
+import com.barapp.data.utils.FirestoreCallback
 import com.barapp.util.diffCallbacks.RestauranteDiffCallback
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -115,15 +116,23 @@ class ResultadosRestauranteRecyclerAdapter(
   private fun hacerFavorito(restaurante: Restaurante) {
     val restauranteFavorito = toRestauranteUsuario(restaurante)
     restauranteFavorito.idUsuario = usuario.id
-    usuario.detalleUsuario!!.idsRestaurantesFavoritos.add(restauranteFavorito.idRestaurante)
-    detalleUsuarioRepository.actualizarFavoritos(usuario.detalleUsuario!!)
-    restauranteFavoritoRepository.guardar(restauranteFavorito, usuario.id)
+    restauranteFavoritoRepository.guardar(restauranteFavorito, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
+      override fun onSuccess(result: List<String>) {
+        usuario.detalleUsuario!!.idsRestaurantesFavoritos = HashSet(result)
+      }
+
+      override fun onError(exception: Throwable) {}
+    })
   }
 
   private fun eliminarFavorito(restaurante: Restaurante, position: Int) {
-    usuario.detalleUsuario!!.idsRestaurantesFavoritos.remove(restaurante.idRestaurante)
-    detalleUsuarioRepository.actualizarFavoritos(usuario.detalleUsuario!!)
-    restauranteFavoritoRepository.borrar(restaurante)
+    restauranteFavoritoRepository.borrar(restaurante.id, usuario.id, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
+      override fun onSuccess(result: List<String>) {
+        usuario.detalleUsuario!!.idsRestaurantesFavoritos = HashSet(result)
+      }
+
+      override fun onError(exception: Throwable) {}
+    })
     if (handler is PantallaMisFavoritos) {
       restaurantes.remove(restaurante)
       notifyItemRemoved(position)

@@ -21,6 +21,7 @@ import com.barapp.R
 import com.barapp.data.mappers.RestauranteMapper.toRestauranteUsuario
 import com.barapp.data.repositories.DetalleUsuarioRepository
 import com.barapp.data.repositories.RestauranteFavoritoRepository
+import com.barapp.data.utils.FirestoreCallback
 import com.barapp.databinding.FragmentPantallaUbicacionBaresBinding
 import com.barapp.model.Restaurante
 import com.barapp.util.CambiarPermisosEnConfiguracion
@@ -335,9 +336,13 @@ class PantallaBaresCercanos : Fragment() {
   private fun hacerFavorito(restaurante: Restaurante) {
     val restauranteFavorito = toRestauranteUsuario(restaurante)
     restauranteFavorito.idUsuario = mainActivityViewModel.usuario.value!!.id
-    mainActivityViewModel.usuario.value!!.detalleUsuario!!.idsRestaurantesFavoritos.add(restaurante.id)
-    detalleUsuarioRepository.actualizarFavoritos(mainActivityViewModel.usuario.value!!.detalleUsuario!!)
-    restauranteFavoritoRepository.guardar(restauranteFavorito, mainActivityViewModel.usuario.value!!.id)
+    restauranteFavoritoRepository.guardar(restauranteFavorito, mainActivityViewModel.usuario.value!!.idDetalleUsuario, object : FirestoreCallback<List<String>> {
+      override fun onSuccess(result: List<String>) {
+        mainActivityViewModel.usuario.value!!.detalleUsuario!!.idsRestaurantesFavoritos = HashSet(result)
+      }
+
+      override fun onError(exception: Throwable) {}
+    })
   }
 
   /**
@@ -347,9 +352,13 @@ class PantallaBaresCercanos : Fragment() {
    * @author Chort Julio
    */
   private fun eliminarFavorito(restaurante: Restaurante) {
-    mainActivityViewModel.usuario.value!!.detalleUsuario!!.idsRestaurantesFavoritos.remove(restaurante.id)
-    detalleUsuarioRepository.actualizarFavoritos(mainActivityViewModel.usuario.value!!.detalleUsuario!!)
-    restauranteFavoritoRepository.borrar(restaurante)
+    restauranteFavoritoRepository.borrar(restaurante.id, mainActivityViewModel.usuario.value!!.id, mainActivityViewModel.usuario.value!!.idDetalleUsuario, object : FirestoreCallback<List<String>> {
+      override fun onSuccess(result: List<String>) {
+        mainActivityViewModel.usuario.value!!.detalleUsuario!!.idsRestaurantesFavoritos = HashSet(result)
+      }
+
+      override fun onError(exception: Throwable) {}
+    })
   }
 
   /**

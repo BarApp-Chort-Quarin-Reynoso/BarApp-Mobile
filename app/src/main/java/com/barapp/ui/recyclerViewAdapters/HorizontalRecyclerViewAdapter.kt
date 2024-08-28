@@ -16,6 +16,7 @@ import com.barapp.model.Usuario
 import com.barapp.ui.recyclerViewAdapters.HorizontalRecyclerViewAdapter.RestaurantesViewHolder
 import com.barapp.data.repositories.DetalleUsuarioRepository
 import com.barapp.data.repositories.RestauranteFavoritoRepository
+import com.barapp.data.utils.FirestoreCallback
 import com.barapp.model.EstadoRestaurante
 import com.barapp.util.diffCallbacks.RestauranteDiffCallback
 import com.bumptech.glide.Glide
@@ -170,15 +171,23 @@ class HorizontalRecyclerViewAdapter(
   private fun hacerFavorito(restaurante: Restaurante) {
     val restauranteFavorito = toRestauranteUsuario(restaurante)
     restauranteFavorito.idUsuario = usuario.id
-    usuario.detalleUsuario!!.idsRestaurantesFavoritos.add(restauranteFavorito.idRestaurante)
-    detalleUsuarioRepository.actualizarFavoritos(usuario.detalleUsuario!!)
-    restauranteFavoritoRepository.guardar(restauranteFavorito, usuario.id)
+    restauranteFavoritoRepository.guardar(restauranteFavorito, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
+      override fun onSuccess(result: List<String>) {
+        usuario.detalleUsuario!!.idsRestaurantesFavoritos = HashSet(result)
+      }
+
+      override fun onError(exception: Throwable) {}
+    })
   }
 
   private fun eliminarFavorito(restaurante: Restaurante) {
-    usuario.detalleUsuario!!.idsRestaurantesFavoritos.remove(restaurante.idRestaurante)
-    detalleUsuarioRepository.actualizarFavoritos(usuario.detalleUsuario!!)
-    restauranteFavoritoRepository.borrar(restaurante)
+    restauranteFavoritoRepository.borrar(restaurante.id, usuario.id, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
+      override fun onSuccess(result: List<String>) {
+        usuario.detalleUsuario!!.idsRestaurantesFavoritos = HashSet(result)
+      }
+
+      override fun onError(exception: Throwable) {}
+    })
   }
 
   override fun getItemCount(): Int {
