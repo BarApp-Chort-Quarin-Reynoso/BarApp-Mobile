@@ -165,8 +165,6 @@ class PantallaMiCuenta : Fragment() {
       editor.apply()
       FirebaseAuth.getInstance().signOut()
 
-      NavHostFragment.findNavController(this).popBackStack()
-
       logOutListener.onLogOut()
     }
   }
