@@ -61,17 +61,18 @@ class PantallaSignUp : Fragment() {
     setearTextChangedListeners()
     botonCrearCuenta.setOnClickListener {
       if (validarDatos()) {
+        setSignUpButtonEnabled(false)
         crearUsuarioEnFirebase()
       }
-    }
-
-    viewModel.idUsuario.observe(viewLifecycleOwner) {
-      (activity as AuthActivity?)!!.onLoginExitoso(it)
     }
 
     viewModel.error.observe(viewLifecycleOwner) {
       (activity as AuthActivity?)!!.errorAutenticacion()
       Timber.e(it)
+      setSignUpButtonEnabled(true)
+    }
+    viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
+      setLoading(isLoading)
     }
   }
 
@@ -189,5 +190,13 @@ class PantallaSignUp : Fragment() {
         // noop
       }
     }
+  }
+
+  private fun setLoading(loading: Boolean) {
+    (activity as AuthActivity).setLoading(loading)
+  }
+
+  private fun setSignUpButtonEnabled(enabled: Boolean) {
+    binding.botonCrearCuentaSignup.isEnabled = enabled
   }
 }

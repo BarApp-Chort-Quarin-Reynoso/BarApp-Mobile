@@ -54,6 +54,8 @@ class PantallaLogin : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
+    setLoading(false)
+
     // Componentes
     botonLoguearse = binding.botonIngresar
     botonRegistrarse = binding.botonRegistrarse
@@ -68,37 +70,20 @@ class PantallaLogin : Fragment() {
     viewModel.error.observe(viewLifecycleOwner) {
       (activity as AuthActivity).errorAutenticacion()
       Timber.e(it)
+      setLoginButtonEnabled(true)
+    }
+    viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
+      setLoading(isLoading)
     }
 
     setearTextChangedListeners()
     botonLoguearse.setOnClickListener {
       if (validarDatos()) {
-        val call = RetrofitInstance.createService(LoginService::class.java).login(email.editText!!.text.toString(), contrasenia.editText!!.text.toString(), "cCwWAQ1vuYRRVkT2jZgkyqpYsm5xWq4XOr9PQrIJV7gQ5i8KER11LDVZ2LN8ZXOSv6lFqZtt1A1C")
-        call.enqueue(object : Callback<Void> {
-        override fun onResponse(call: Call<Void>, response: Response<Void>) {
-          val headers = response.headers()
-          Timber.d("Headers: $headers")
-          val jsessionIdFull = headers.get("Set-Cookie")
-          val jsessionId = jsessionIdFull?.split("=")?.get(1)?.split(";")?.get(0)
-
-          val sharedPref = requireContext().getSharedPreferences("MyApp", Context.MODE_PRIVATE)
-          with(sharedPref.edit()) {
-            putString("JSESSIONID", jsessionId)
-            apply()
-          }
-
-          viewModel.signInUsuarioEnFirebase(
-            email.editText!!.text.toString(),
-            contrasenia.editText!!.text.toString()
-          )
-        }
-
-        override fun onFailure(call: Call<Void>, t: Throwable) {
-          (activity as AuthActivity).errorAutenticacion()
-          Timber.e(t)
-        }
-
-      })
+        setLoginButtonEnabled(false)
+        viewModel.signInUsuarioEnFirebase(
+          email.editText!!.text.toString(),
+          contrasenia.editText!!.text.toString()
+        )
       }
     }
     botonRegistrarse.setOnClickListener {
@@ -166,5 +151,13 @@ class PantallaLogin : Fragment() {
         // noop
       }
     }
+  }
+
+  private fun setLoading(loading: Boolean) {
+    (activity as AuthActivity).setLoading(loading)
+  }
+
+  private fun setLoginButtonEnabled(enabled: Boolean) {
+    binding.botonIngresar.isEnabled = enabled
   }
 }
