@@ -14,17 +14,19 @@ import com.barapp.R
 import com.barapp.databinding.FragmentPantallaPrincipalBinding
 import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
+import com.barapp.ui.MainActivity
 import com.barapp.util.interfaces.OnRestauranteClicked
 import com.barapp.util.interfaces.OnSnackbarShowed
 import com.barapp.ui.recyclerViewAdapters.HorizontalRecyclerViewAdapter
 import com.barapp.util.Interpolator
+import com.barapp.util.interfaces.LoadingHandler
 import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.PantallaPrincipalViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialFadeThrough
 
 class PantallaPrincipal :
-  Fragment(), HorizontalRecyclerViewAdapter.ActualizarFavoritos, OnSnackbarShowed {
+  Fragment(), HorizontalRecyclerViewAdapter.ActualizarFavoritos, OnSnackbarShowed, LoadingHandler {
   companion object {
     const val ID_CERCA_DE_TI = "1"
     const val ID_VISTOS_RECIENTEMENTE = "2"
@@ -96,6 +98,7 @@ class PantallaPrincipal :
                 onRestauranteClicked.onRestauranteClicked(restaurante, transitionView, distancia)
               }
             },
+            this
           )
       }
 
@@ -115,6 +118,7 @@ class PantallaPrincipal :
                 onRestauranteClicked.onRestauranteClicked(restaurante, transitionView, distancia)
               }
             },
+            this
           )
       }
 
@@ -134,6 +138,7 @@ class PantallaPrincipal :
                 onRestauranteClicked.onRestauranteClicked(restaurante, transitionView, distancia)
               }
             },
+            this
           )
       }
 
@@ -289,5 +294,9 @@ class PantallaPrincipal :
 
   override fun showSnackbar(snackbar: Snackbar) {
     showSnackbarReservaExitosa = true
+  }
+
+  override fun setLoading(loading: Boolean) {
+    (activity as MainActivity).setLoading(loading)
   }
 }

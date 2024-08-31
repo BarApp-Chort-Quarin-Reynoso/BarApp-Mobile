@@ -17,7 +17,9 @@ import com.barapp.databinding.BottomShiftFiltersBinding
 import com.barapp.databinding.FragmentPantallaResultadosBusquedaBinding
 import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
+import com.barapp.ui.MainActivity
 import com.barapp.ui.recyclerViewAdapters.ResultadosRestauranteRecyclerAdapter
+import com.barapp.util.interfaces.LoadingHandler
 import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.PantallaResultadosBusquedaViewModel
 import com.barapp.viewModels.sharedViewModels.RestauranteSeleccionadoSharedViewModel
@@ -25,7 +27,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.transition.Hold
 import com.google.android.material.transition.MaterialSharedAxis
 
-class PantallaResultadosBusqueda : Fragment(), ResultadosRestauranteRecyclerAdapter.Callbacks {
+class PantallaResultadosBusqueda : Fragment(), ResultadosRestauranteRecyclerAdapter.Callbacks,
+  LoadingHandler {
 
   private lateinit var binding: FragmentPantallaResultadosBusquedaBinding
   private lateinit var bottomSheetDialog: BottomSheetDialog
@@ -154,6 +157,7 @@ class PantallaResultadosBusqueda : Fragment(), ResultadosRestauranteRecyclerAdap
             onClickResultado(transitionView, restaurante, distancia)
           }
         },
+        this
       )
 
     recyclerView.adapter = adapter
@@ -181,5 +185,9 @@ class PantallaResultadosBusqueda : Fragment(), ResultadosRestauranteRecyclerAdap
   private fun resultadosEncontradosPluralOSingular(cant: Int): String {
     return if (cant == 1) getString(R.string.placeholder_restaurante_encontrado, cant)
     else getString(R.string.placeholder_restaurantes_encontrados, cant)
+  }
+
+  override fun setLoading(loading: Boolean) {
+    (activity as MainActivity).setLoading(loading)
   }
 }

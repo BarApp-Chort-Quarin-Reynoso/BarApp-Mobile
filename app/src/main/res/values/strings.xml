@@ -171,6 +171,8 @@
     <string name="error_contrasenia_no_coincide">"Las contraseñas deben ser las mismas"</string>
     <string name="error_mail_no_valido">El mail ingresado no es válido</string>
     <string name="error_authenticating_user">Se ha producido un error autenticando al usuario</string>
+    <string name="error_titulo_algo_salio_mal">Algo salió mal</string>
+    <string name="error_buscando_detalle_restaurante">"Ocurrió un error al buscar la información del restaurante %1$s. Intente nuevamente en unos minutos."</string>
 
     <!-- Notification channel -->
     <string name="notificacion_reserva_channel_name">"General"</string>

@@ -31,7 +31,7 @@ class DetalleRestauranteRepository private constructor() : IGenericRepository<De
   private val api = RetrofitInstance.createService(RestaurantApiService::class.java)
 
   override fun buscarPorId(id: String, callback: FirestoreCallback<DetalleRestaurante>) {
-    Timber.d("Buscando detalle restaurante con id: $id")
+    Timber.d("Buscando detalle restaurante del restaurante con id: $id")
     api.getRestaurantDetailById(id).enqueue(object : Callback<DetalleRestaurante> {
       override fun onResponse(call: Call<DetalleRestaurante>, response: Response<DetalleRestaurante>) {
         if (response.isSuccessful) {
@@ -49,30 +49,11 @@ class DetalleRestauranteRepository private constructor() : IGenericRepository<De
         callback.onError(t)
       }
     })
-  //    db
-//      .collection(COLECCION_DETALLES_RESTAURANTES)
-//      .document(id)
-//      .get()
-//      .addOnSuccessListener { documentSnapshot: DocumentSnapshot ->
-//        val detalleRestauranteEntity =
-//          documentSnapshot.toObject(DetalleRestauranteEntity::class.java)
-//        val listaHorarios = fromEntityToList(detalleRestauranteEntity!!.listaHorarioEntities)
-//        val listaOpiniones = fromOpinionUsuarioToList(detalleRestauranteEntity.listaOpinionEntities)
-//        callback.onSuccess(fromEntity(detalleRestauranteEntity, listaHorarios, listaOpiniones))
-//      }
-//      .addOnFailureListener { t: Exception? -> Timber.e(t) }
   }
 
   override fun buscarTodos(callback: FirestoreCallback<List<DetalleRestaurante>>) {}
 
-  override fun guardar(entidad: DetalleRestaurante) {
-    db
-      .collection(COLECCION_DETALLES_RESTAURANTES)
-      .document(entidad.id)
-      .set(toEntity(entidad))
-      .addOnSuccessListener { aVoid: Void? -> Timber.d("DetalleRestaurante successfully written!") }
-      .addOnFailureListener { t: Exception? -> Timber.e(t) }
-  }
+  override fun guardar(entidad: DetalleRestaurante) {}
 
   fun actualizarFotoUsuario(usuario: Usuario) {
     db.collection(COLECCION_DETALLES_RESTAURANTES).get().addOnCompleteListener {

@@ -22,7 +22,7 @@ interface RestaurantApiService {
   @GET("/api/restaurantes/{id}")
   fun getRestaurantById(@Path("id") id: String): Call<Restaurante>
 
-  @GET("/api/restaurantes/detalle/{id}")
+  @GET("/api/restaurantes/{id}/detalle")
   fun getRestaurantDetailById(@Path("id") id: String): Call<DetalleRestaurante>
 
   @GET("/api/restaurantes/{correo}/horarios")

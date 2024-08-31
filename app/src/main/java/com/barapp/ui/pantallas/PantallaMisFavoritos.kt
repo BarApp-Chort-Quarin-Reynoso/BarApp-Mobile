@@ -15,15 +15,17 @@ import com.barapp.R
 import com.barapp.databinding.FragmentPantallaMisFavoritosBinding
 import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
+import com.barapp.ui.MainActivity
 import com.barapp.util.interfaces.OnRestauranteClicked
 import com.barapp.ui.recyclerViewAdapters.ResultadosRestauranteRecyclerAdapter
 import com.barapp.util.Interpolator
+import com.barapp.util.interfaces.LoadingHandler
 import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.PantallaMisFavoritosViewModel
 import com.faltenreich.skeletonlayout.Skeleton
 import com.google.android.material.transition.MaterialFadeThrough
 
-class PantallaMisFavoritos : Fragment(), ResultadosRestauranteRecyclerAdapter.Callbacks {
+class PantallaMisFavoritos : Fragment(), ResultadosRestauranteRecyclerAdapter.Callbacks, LoadingHandler {
 
   private lateinit var binding: FragmentPantallaMisFavoritosBinding
 
@@ -84,6 +86,7 @@ class PantallaMisFavoritos : Fragment(), ResultadosRestauranteRecyclerAdapter.Ca
                 onRestauranteClicked.onRestauranteClicked(restaurante, transitionView, distancia)
               }
             },
+            this
           )
       }
 
@@ -155,5 +158,9 @@ class PantallaMisFavoritos : Fragment(), ResultadosRestauranteRecyclerAdapter.Ca
 
   private fun restFavoritosPluralOSingular(cant: Int): String {
     return if (cant == 1) " restaurante favorito" else " restaurantes favoritos"
+  }
+
+  override fun setLoading(loading: Boolean) {
+    (activity as MainActivity).setLoading(loading)
   }
 }
