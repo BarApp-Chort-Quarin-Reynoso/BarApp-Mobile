@@ -26,7 +26,7 @@ interface RestaurantApiService {
   fun getRestaurantDetailById(@Path("id") id: String): Call<DetalleRestaurante>
 
   @GET("/api/restaurantes/{correo}/horarios")
-  fun getRestaurantHours(@Path("correo") correo: String, @Query("mesAnio") mesAnio: String): Call<Map<String, Map<String, HorarioConCapacidadDisponible>>>
+  fun getRestaurantHours(@Path("correo") correo: String, @Query("mesAnio") mesAnio: String, @Query("cantMeses") cantMeses: Int): Call<Map<String, Map<String, HorarioConCapacidadDisponible>>>
 
   @POST("/api/restaurantes/{id}/favoritos")
   fun addFavoriteRestaurant(@Path("id") id: String, @Body restaurante: RestauranteUsuario, @Query("idDetalleUsuario") idDetalleUsuario: String): Call<List<String>>

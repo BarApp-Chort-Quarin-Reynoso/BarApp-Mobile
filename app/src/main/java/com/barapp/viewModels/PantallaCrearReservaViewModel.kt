@@ -15,16 +15,20 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.time.LocalDate
-import java.time.LocalTime
 import java.time.ZoneId
 import java.util.*
 import kotlin.collections.ArrayList
 import timber.log.Timber
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import kotlin.collections.LinkedHashMap
 
 class PantallaCrearReservaViewModel : ViewModel() {
 
   private val restauranteRepo: RestauranteRepository = RestauranteRepository.instance
+
+  val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+  private val formatterMonth: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM")
 
   var indexChipSeleccionado = 0
   var todosChipsInhabilitadosDesayuno = true
@@ -38,11 +42,17 @@ class PantallaCrearReservaViewModel : ViewModel() {
 
   lateinit var barSeleccionado: Restaurante
   var cantidadPersonas: Int = 0
-  lateinit var fechaReserva: LocalDate
+  var fechaReserva: LocalDate? = null
+    set(value) {
+      value?.let {
+        _textoFechaReserva.postValue(fechaAFormatoTexto(value))
+      }
+      field = value
+    }
   lateinit var horaReserva: Horario
   private lateinit var ultimaHoraSeleccionadaTexto: String
 
-  private val zonaArgentina = ZoneId.of("America/Buenos_Aires")
+  val zonaArgentina: ZoneId = ZoneId.of("America/Buenos_Aires")
   private var diaSeleccionadoEnLong: Long = MaterialDatePicker.todayInUtcMilliseconds()
 
   private val _textoCantidadPersonas: MutableLiveData<String> = MutableLiveData()
@@ -78,8 +88,15 @@ class PantallaCrearReservaViewModel : ViewModel() {
   private val _habilitarDialogTodosDeshabilitados: MutableLiveData<Boolean> = MutableLiveData()
   val habilitarDialogTodosDeshabilitados: LiveData<Boolean> = _habilitarDialogTodosDeshabilitados
 
-  private val _horariosDiaSeleccionado: MutableLiveData<List<HorarioConCapacidadDisponible>> = MutableLiveData()
-  val horariosDiaSeleccionado: LiveData<List<HorarioConCapacidadDisponible>> = _horariosDiaSeleccionado
+  private val _horariosDiaSeleccionado: MutableLiveData<List<HorarioConCapacidadDisponible>> =
+    MutableLiveData()
+  val horariosDiaSeleccionado: LiveData<List<HorarioConCapacidadDisponible>> =
+    _horariosDiaSeleccionado
+
+  private val _horariosPorMes: MutableLiveData<Map<LocalDate, Map<TipoComida, HorarioConCapacidadDisponible>>> =
+    MutableLiveData()
+  val horariosPorMes: LiveData<Map<LocalDate, Map<TipoComida, HorarioConCapacidadDisponible>>> =
+    _horariosPorMes
 
   private val _claredChipGroup: MutableLiveData<Boolean> = MutableLiveData()
   val clearedChipGroup: LiveData<Boolean> = _claredChipGroup
@@ -109,7 +126,7 @@ class PantallaCrearReservaViewModel : ViewModel() {
   }
 
   private fun obtenerMaximoPersonas(): Int {
-      return 30
+    return 30
   }
 
   /**
@@ -121,7 +138,8 @@ class PantallaCrearReservaViewModel : ViewModel() {
   fun quitarPersona() {
 
     cantidadPersonas--
-    _textoCantidadPersonas.value = if (cantidadPersonas == 1) "1 persona" else "$cantidadPersonas personas"
+    _textoCantidadPersonas.value =
+      if (cantidadPersonas == 1) "1 persona" else "$cantidadPersonas personas"
     _habilitarBotonQuitarPersona.value = (cantidadPersonas > 1)
     actualizarEstadoChips()
   }
@@ -147,65 +165,6 @@ class PantallaCrearReservaViewModel : ViewModel() {
   }
 
   /**
-   * Primero se crea un [CalendarConstraints] para asignarselo luego al [MaterialDatePicker], con
-   * intención de que el usuario sólo pueda elegir una fecha entre el día de hoy y el mes siguiente.
-   *
-   * @author Julio Chort
-   */
-  fun crearDatePicker() {
-    // Para que sólo pueda abrirse una vez
-    this._habilitarCardDatePicker.postValue(false)
-
-    val hoy = MaterialDatePicker.todayInUtcMilliseconds()
-    val calendario = Calendar.getInstance(TimeZone.getTimeZone(zonaArgentina))
-
-    calendario.timeInMillis = hoy
-    calendario.add(Calendar.MONTH, 1)
-    val unMesDespues = calendario.timeInMillis
-
-    // Se construyen las restricciones del calendario
-    val constraintsBuilder =
-      CalendarConstraints.Builder()
-        .setStart(hoy)
-        .setEnd(unMesDespues)
-        .setValidator(DateValidatorPointForward.now())
-
-    // Se asignan tanto las restricciones como el resto de propiedades
-    val datePicker =
-      MaterialDatePicker.Builder.datePicker()
-        .setTitleText(R.string.pantalla_reservar_titulo_calendario)
-        .setSelection(diaSeleccionadoEnLong)
-        .setCalendarConstraints(constraintsBuilder.build())
-        .setPositiveButtonText(R.string.boton_seleccionar)
-        .build()
-
-    datePicker.addOnPositiveButtonClickListener { selection ->
-      diaSeleccionadoEnLong = selection
-      fechaReserva =
-        Date(
-            selection -
-              TimeZone.getTimeZone(zonaArgentina)
-                .getOffset(MaterialDatePicker.todayInUtcMilliseconds())
-          )
-          .toInstant()
-          .atZone(zonaArgentina)
-          .toLocalDate()
-
-      _textoFechaReserva.postValue(fechaAFormatoTexto(fechaReserva))
-
-      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-      val fechaCompleta = fechaReserva.format(formatter)
-
-      val mesAnio = fechaCompleta.substring(0, 7)
-
-      buscarHorarios(barSeleccionado.correo, mesAnio, fechaCompleta)
-    }
-    datePicker.addOnDismissListener { _habilitarCardDatePicker.postValue(true) }
-
-    this._datePicker.postValue(datePicker)
-  }
-
-  /**
    * Se pasa la fecha de [LocalDate] a un formato en el sentido de [X, Y de Z], donde X son las
    * primeras 3 letras del día de la semana, Y es el número del día en el mes y Z es el mes del año.
    * El formato se encuentra disponible únicamente en español.
@@ -215,10 +174,10 @@ class PantallaCrearReservaViewModel : ViewModel() {
   private fun fechaAFormatoTexto(fecha: LocalDate): String {
 
     return diaDeLaSemana(fecha.dayOfWeek.toString()) +
-      " " +
-      fecha.dayOfMonth +
-      " de " +
-      mesDelAnio(fecha.month.toString())
+        " " +
+        fecha.dayOfMonth +
+        " de " +
+        mesDelAnio(fecha.month.toString())
   }
 
   /**
@@ -253,24 +212,45 @@ class PantallaCrearReservaViewModel : ViewModel() {
     }
   }
 
-  private fun buscarHorarios(correo: String, mesAnio: String, diaSeleccionado: String) {
-    restauranteRepo.buscarHorariosPorCorreo(correo, mesAnio, object : FirestoreCallback<Map<String, Map<String, HorarioConCapacidadDisponible>>> {
-      override fun onSuccess(result: Map<String, Map<String, HorarioConCapacidadDisponible>>) {
-      val horarios = result[diaSeleccionado]?.values?.toList()
-      Timber.d("Horarios: $horarios")
-        if (horarios.isNullOrEmpty()) {
-          comprobarSiSeMuestraDialogTodosInhabilitados()
+  fun buscarHorarios(mesAnio: YearMonth) {
+    val correo = barSeleccionado.correo
+    val mesAnioString = mesAnio.format(formatterMonth)
+    restauranteRepo.buscarHorariosPorCorreo(
+      correo,
+      mesAnioString,
+      3,
+      object : FirestoreCallback<Map<String, Map<String, HorarioConCapacidadDisponible>>> {
+        override fun onSuccess(result: Map<String, Map<String, HorarioConCapacidadDisponible>>) {
+          _horariosPorMes.postValue(mapHorarios(result))
         }
-          else {
+
+        override fun onError(exception: Throwable) {
+          Timber.e(exception)
+        }
+      })
+  }
+
+  fun buscarHorarios(correo: String, mesAnio: String, diaSeleccionado: String) {
+    restauranteRepo.buscarHorariosPorCorreo(
+      correo,
+      mesAnio,
+      6,
+      object : FirestoreCallback<Map<String, Map<String, HorarioConCapacidadDisponible>>> {
+        override fun onSuccess(result: Map<String, Map<String, HorarioConCapacidadDisponible>>) {
+          val horarios = result[diaSeleccionado]?.values?.toList()
+          Timber.d("Horarios: $horarios")
+          if (horarios.isNullOrEmpty()) {
+            comprobarSiSeMuestraDialogTodosInhabilitados()
+          } else {
             _horariosDiaSeleccionado.postValue(horarios!!)
             mostrarHorariosDisponiblesEnListado(horarios)
+          }
         }
-      }
 
-      override fun onError(exception: Throwable) {
-        Timber.e(exception)
-      }
-    })
+        override fun onError(exception: Throwable) {
+          Timber.e(exception)
+        }
+      })
   }
 
   private fun cantidadMaximaPersoans(horario: HorarioConCapacidadDisponible): Int {
@@ -288,10 +268,16 @@ class PantallaCrearReservaViewModel : ViewModel() {
       val cantidadMaximaPersonas = cantidadMaximaPersoans(horario)
       val tipoComidaHorario = horario.tipoComida
       when (tipoComidaHorario) {
-        TipoComida.DESAYUNO -> _horariosDesayuno.value = mapOf(horario.horarios to cantidadMaximaPersonas)
-        TipoComida.ALMUERZO -> _horariosAlmuerzo.value =  mapOf(horario.horarios to cantidadMaximaPersonas)
-        TipoComida.MERIENDA -> _horariosMerienda.value =  mapOf(horario.horarios to cantidadMaximaPersonas)
-        TipoComida.CENA -> _horariosCena.value =  mapOf(horario.horarios to cantidadMaximaPersonas)
+        TipoComida.DESAYUNO -> _horariosDesayuno.value =
+          mapOf(horario.horarios to cantidadMaximaPersonas)
+
+        TipoComida.ALMUERZO -> _horariosAlmuerzo.value =
+          mapOf(horario.horarios to cantidadMaximaPersonas)
+
+        TipoComida.MERIENDA -> _horariosMerienda.value =
+          mapOf(horario.horarios to cantidadMaximaPersonas)
+
+        TipoComida.CENA -> _horariosCena.value = mapOf(horario.horarios to cantidadMaximaPersonas)
         else -> return
       }
     }
@@ -309,9 +295,15 @@ class PantallaCrearReservaViewModel : ViewModel() {
       val cantidadMaximaPersonas = cantidadMaximaPersoans(horario)
       val tipoComidaHorario = horario.tipoComida
       when (tipoComidaHorario) {
-        TipoComida.DESAYUNO -> _horariosDesayuno.value = mapOf(horario.horarios to cantidadMaximaPersonas)
-        TipoComida.ALMUERZO -> _horariosAlmuerzo.value = mapOf(horario.horarios to cantidadMaximaPersonas)
-        TipoComida.MERIENDA -> _horariosMerienda.value = mapOf(horario.horarios to cantidadMaximaPersonas)
+        TipoComida.DESAYUNO -> _horariosDesayuno.value =
+          mapOf(horario.horarios to cantidadMaximaPersonas)
+
+        TipoComida.ALMUERZO -> _horariosAlmuerzo.value =
+          mapOf(horario.horarios to cantidadMaximaPersonas)
+
+        TipoComida.MERIENDA -> _horariosMerienda.value =
+          mapOf(horario.horarios to cantidadMaximaPersonas)
+
         TipoComida.CENA -> _horariosCena.value = mapOf(horario.horarios to cantidadMaximaPersonas)
         else -> return
       }
@@ -354,15 +346,30 @@ class PantallaCrearReservaViewModel : ViewModel() {
   private fun comprobarSiSeMuestraDialogTodosInhabilitados() {
     if (
       !vieneDePantallaConfirmacionReserva &&
-        todosChipsInhabilitadosDesayuno &&
-        todosChipsInhabilitadosAlmuerzo &&
-        todosChipsInhabilitadosMerienda &&
-        todosChipsInhabilitadosCena
+      todosChipsInhabilitadosDesayuno &&
+      todosChipsInhabilitadosAlmuerzo &&
+      todosChipsInhabilitadosMerienda &&
+      todosChipsInhabilitadosCena
     ) {
       _habilitarDialogTodosDeshabilitados.value = true
     }
 
     vieneDePantallaConfirmacionReserva = false
+  }
+
+  private fun mapHorarios(horarios: Map<String, Map<String, HorarioConCapacidadDisponible>>): Map<LocalDate, Map<TipoComida, HorarioConCapacidadDisponible>> {
+    val map: MutableMap<LocalDate, MutableMap<TipoComida, HorarioConCapacidadDisponible>> =
+      LinkedHashMap()
+    horarios.forEach { (fecha, submap) ->
+      val fechaConvertida: LocalDate = LocalDate.parse(fecha, formatter)
+      map[fechaConvertida] = LinkedHashMap()
+      submap.forEach { (tipoComida, horario) ->
+        val tipoComidaConvertido = TipoComida.valueOf(tipoComida)
+        map[fechaConvertida]!![tipoComidaConvertido] = horario
+      }
+    }
+
+    return map
   }
 
   /**
@@ -398,6 +405,7 @@ class PantallaCrearReservaViewModel : ViewModel() {
       "JUNE" -> "Junio"
       "JULY" -> "Julio"
       "AUGUST" -> "Agosto"
+      "SEPTEMBER" -> "Septiembre"
       "OCTOBER" -> "Octubre"
       "NOVEMBER" -> "Noviembre"
       "DECEMBER" -> "Diciembre"

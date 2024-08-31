@@ -60,9 +60,9 @@ class RestauranteRepository private constructor() : IGenericRepository<Restauran
     })
   }
 
-  fun buscarHorariosPorCorreo(correo: String, mesAnio: String, callback: FirestoreCallback<Map<String, Map<String, HorarioConCapacidadDisponible>>>) {
+  fun buscarHorariosPorCorreo(correo: String, mesAnio: String, cantMesas: Int, callback: FirestoreCallback<Map<String, Map<String, HorarioConCapacidadDisponible>>>) {
     Timber.d("Buscando horarios para restaurante con correo: $correo")
-    api.getRestaurantHours(correo, mesAnio).enqueue(object : Callback<Map<String, Map<String, HorarioConCapacidadDisponible>>> {
+    api.getRestaurantHours(correo, mesAnio, cantMesas).enqueue(object : Callback<Map<String, Map<String, HorarioConCapacidadDisponible>>> {
         override fun onResponse(call: Call<Map<String, Map<String, HorarioConCapacidadDisponible>>>, response: Response<Map<String, Map<String, HorarioConCapacidadDisponible>>>) {
         if (response.isSuccessful) {
           val data = response.body()
