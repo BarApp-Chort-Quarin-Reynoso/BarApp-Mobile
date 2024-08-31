@@ -164,4 +164,15 @@ class MainActivity :
     NavHostFragment.findNavController(binding.fragmentContainerView.getFragment())
       .navigate(R.id.action_pantallaNavegacionPrincipal_to_pantallaResumenReserva, null, null)
   }
+
+  fun setLoading(loading: Boolean) {
+    if (loading) {
+      binding.loadingOverlay.visibility = View.VISIBLE
+      binding.loadingProgressBar.visibility = View.VISIBLE
+    }
+    else {
+      binding.loadingOverlay.visibility = View.GONE
+      binding.loadingProgressBar.visibility = View.GONE
+    }
+  }
 }

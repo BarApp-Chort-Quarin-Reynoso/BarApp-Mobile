@@ -5,58 +5,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.barapp.data.mappers.RestauranteMapper.toRestauranteUsuario
-import com.barapp.model.DetalleRestaurante
 import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
 import com.barapp.data.utils.FirestoreCallback
-import com.barapp.data.repositories.DetalleRestauranteRepository
-import com.barapp.data.repositories.DetalleUsuarioRepository
 import com.barapp.data.repositories.RestauranteFavoritoRepository
-import timber.log.Timber
 
 class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) : ViewModel() {
-
-  private val detalleRestauranteRepo: DetalleRestauranteRepository =
-    DetalleRestauranteRepository.instance
-
-  private val detalleUsuarioRepository: DetalleUsuarioRepository = DetalleUsuarioRepository.instance
   private val restauranteFavoritoRepository: RestauranteFavoritoRepository =
     RestauranteFavoritoRepository.instance
-
-  private val _detalleRestaurante: MutableLiveData<DetalleRestaurante> = MutableLiveData()
-  val detalleRestaurante: LiveData<DetalleRestaurante> = _detalleRestaurante
 
   private val _loading: MutableLiveData<Boolean> = MutableLiveData()
   val loading: LiveData<Boolean> = _loading
 
   private val _error: MutableLiveData<Throwable?> = MutableLiveData()
   val error: LiveData<Throwable?> = _error
-
-  init {
-    buscarDetalleRestaurante()
-  }
-
-  private fun buscarDetalleRestaurante() {
-    _loading.value = true
-
-    Timber.d("Buscando detalle restaurante del restaurante: $restaurante")
-
-    detalleRestauranteRepo.buscarPorId(
-      restaurante.idDetalleRestaurante,
-      object : FirestoreCallback<DetalleRestaurante> {
-        override fun onSuccess(result: DetalleRestaurante) {
-          _loading.postValue(false)
-          _detalleRestaurante.postValue(result)
-          restaurante = restaurante.copy(result)
-        }
-
-        override fun onError(exception: Throwable) {
-          _loading.postValue(false)
-          _error.postValue(exception)
-        }
-      },
-    )
-  }
 
   fun errorMostrado() {
     _error.value = null

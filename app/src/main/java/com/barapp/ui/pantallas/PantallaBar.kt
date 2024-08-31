@@ -34,6 +34,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.Hold
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialSharedAxis
@@ -158,7 +159,7 @@ class PantallaBar : Fragment() {
       }
     }
 
-    viewModel.detalleRestaurante.observe(viewLifecycleOwner) { detalle ->
+    barSeleccionadoViewModel.restaurante?.detalleRestaurante?.let { detalle ->
       binding.textViewDescripcion.text = detalle.descripcion
 
       val url = Uri.parse(detalle.menu)
@@ -267,7 +268,7 @@ class PantallaBar : Fragment() {
   }
 
   private fun mostrarMenu() {
-    viewModel.detalleRestaurante.value?.let {
+    barSeleccionadoViewModel.restaurante?.detalleRestaurante?.let {
       if (it.menu.isNotEmpty()) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it.menu))
         startActivity(browserIntent)
@@ -319,8 +320,8 @@ class PantallaBar : Fragment() {
     reenterTransition = null
 
     // Copiar el bar y el detalle para crear la reserva
-    barAReservarViewModel.barSeleccionado = viewModel.restaurante
-    barAReservarViewModel.detalleBarSeleccionado = viewModel.restaurante.detalleRestaurante!!
+    barAReservarViewModel.barSeleccionado = barSeleccionadoViewModel.restaurante!!
+    barAReservarViewModel.detalleBarSeleccionado = barSeleccionadoViewModel.restaurante!!.detalleRestaurante!!
 
     NavHostFragment.findNavController(this)
       .navigate(R.id.action_pantallaBar_to_pantallaCrearReserva, null, null, extras)
