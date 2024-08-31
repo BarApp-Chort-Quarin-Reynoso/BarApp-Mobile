@@ -33,6 +33,17 @@ class AuthActivity : AppCompatActivity() {
       .show()
   }
 
+  fun setLoading(loading: Boolean) {
+    if (loading) {
+      binding.loadingOverlay.visibility = View.VISIBLE
+      binding.loadingProgressBar.visibility = View.VISIBLE
+    }
+    else {
+      binding.loadingOverlay.visibility = View.GONE
+      binding.loadingProgressBar.visibility = View.GONE
+    }
+  }
+
   companion object {
     const val RESULTADO_USUARIO_LOGEADO = 100
   }
