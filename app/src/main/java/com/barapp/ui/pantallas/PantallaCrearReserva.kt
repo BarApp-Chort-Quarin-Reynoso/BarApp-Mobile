@@ -16,17 +16,28 @@ import com.barapp.databinding.FragmentPantallaCrearReservaBinding
 import com.barapp.databinding.ItemChipHorarioBinding
 import com.barapp.databinding.ItemTituloHorarioBinding
 import com.barapp.model.Horario
-import com.barapp.util.Interpolator
-import com.barapp.viewModels.sharedViewModels.BarAReservarSharedViewModel
-import com.barapp.viewModels.sharedViewModels.CrearReservaSharedViewModel
+import com.barapp.model.HorarioConCapacidadDisponible
+import com.barapp.model.TipoComida
+import com.barapp.util.AvailableDatesValidator
 import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.PantallaCrearReservaViewModel
+import com.barapp.viewModels.sharedViewModels.BarAReservarSharedViewModel
+import com.barapp.viewModels.sharedViewModels.CrearReservaSharedViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialContainerTransform
+import java.time.LocalDate
 import java.time.LocalTime
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Date
+import java.util.TimeZone
+import java.util.function.Function
 
 /**
  * Esta clase es un [Fragment] que se utiliza para que el usuario pueda crear la reserva en el
@@ -51,6 +62,10 @@ class PantallaCrearReserva : Fragment() {
     navGraphViewModels(R.id.pantallaNavegacionPrincipal)
 
   private val activitySharedViewModel: MainActivityViewModel by activityViewModels()
+
+  private var diaSeleccionadoEnLong: Long = MaterialDatePicker.todayInUtcMilliseconds()
+
+  private var datePicker: MaterialDatePicker<Long>? = null
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -85,15 +100,70 @@ class PantallaCrearReserva : Fragment() {
     binding.botonQuitarPersona.setOnClickListener { viewModel.quitarPersona() }
 
     binding.cardViewFechaReserva.setOnClickListener {
+      viewModel.buscarHorarios(YearMonth.now())
       limpiarDatosViejosHorarios()
-      viewModel.crearDatePicker()
     }
+
+    viewModel.horariosPorMes.observe(viewLifecycleOwner) {h -> crearDatePicker(h)}
 
     binding.botonCrearReserva.isEnabled = false
 
     binding.botonCrearReserva.setOnClickListener {
       viewModel.pasarChipSeleccionadoAHorario()
       navegarAConfirmarReserva()
+    }
+  }
+
+  private fun crearDatePicker(horariosPorMes: Map<LocalDate, Map<TipoComida, HorarioConCapacidadDisponible>>) {
+    val hoy = MaterialDatePicker.todayInUtcMilliseconds()
+    val calendario = Calendar.getInstance(TimeZone.getTimeZone(viewModel.zonaArgentina))
+
+    calendario.timeInMillis = hoy
+    calendario.add(Calendar.MONTH, 1)
+    val unMesDespues = calendario.timeInMillis
+
+    val availableDatesValidator = AvailableDatesValidator(horariosPorMes.keys)
+
+    // Se construyen las restricciones del calendario
+    val constraintsBuilder =
+      CalendarConstraints.Builder()
+        .setStart(hoy)
+        .setEnd(unMesDespues)
+        .setValidator(DateValidatorPointForward.now())
+        .setValidator(availableDatesValidator)
+
+    // Se asignan tanto las restricciones como el resto de propiedades
+    datePicker = MaterialDatePicker.Builder.datePicker()
+        .setTitleText(R.string.pantalla_reservar_titulo_calendario)
+        .setSelection(diaSeleccionadoEnLong)
+        .setCalendarConstraints(constraintsBuilder.build())
+        .setPositiveButtonText(R.string.boton_seleccionar)
+        .build()
+
+
+    datePicker!!.addOnPositiveButtonClickListener { selection ->
+      diaSeleccionadoEnLong = selection
+      val fechaReserva =
+        Date(
+          selection -
+              TimeZone.getTimeZone(viewModel.zonaArgentina)
+                .getOffset(MaterialDatePicker.todayInUtcMilliseconds())
+        )
+          .toInstant()
+          .atZone(viewModel.zonaArgentina)
+          .toLocalDate()
+
+      viewModel.fechaReserva = fechaReserva
+
+      val fechaCompleta = fechaReserva.format(viewModel.formatter)
+
+      val mesAnio = fechaCompleta.substring(0, 7)
+
+      viewModel.buscarHorarios(viewModel.barSeleccionado.correo, mesAnio, fechaCompleta)
+    }
+
+    if (!sharedViewModelProximaPantalla.vieneDePantallaConfirmacionReserva) {
+      datePicker!!.show(parentFragmentManager, "DATE_PICKER")
     }
   }
 
@@ -189,12 +259,6 @@ class PantallaCrearReserva : Fragment() {
 
     viewModel.habilitarBotonQuitarPersona.observe(viewLifecycleOwner) { banderaHabilitar ->
       binding.botonQuitarPersona.isEnabled = banderaHabilitar
-    }
-
-    viewModel.datePicker.observe(viewLifecycleOwner) { datePicker ->
-      if (!sharedViewModelProximaPantalla.vieneDePantallaConfirmacionReserva) {
-        datePicker.show(parentFragmentManager, "DATE_PICKER")
-      }
     }
 
     viewModel.habilitarCardDatePicker.observe(viewLifecycleOwner) { banderaHabilitar ->
@@ -428,7 +492,7 @@ class PantallaCrearReserva : Fragment() {
     sharedViewModelProximaPantalla.textoFechaReserva = viewModel.textoFechaReserva.value.toString()
 
     sharedViewModelProximaPantalla.cantidadPersonas = viewModel.cantidadPersonas
-    sharedViewModelProximaPantalla.fechaReserva = viewModel.fechaReserva
+    sharedViewModelProximaPantalla.fechaReserva = viewModel.fechaReserva!!
     sharedViewModelProximaPantalla.horaReserva = viewModel.horaReserva
 
     sharedViewModelProximaPantalla.barSeleccionado = sharedViewModelBarAReservar.barSeleccionado
