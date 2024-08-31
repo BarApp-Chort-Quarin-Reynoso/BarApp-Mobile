@@ -37,7 +37,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.TimeZone
-import java.util.function.Function
 
 /**
  * Esta clase es un [Fragment] que se utiliza para que el usuario pueda crear la reserva en el
@@ -56,10 +55,10 @@ class PantallaCrearReserva : Fragment() {
   private val viewModel: PantallaCrearReservaViewModel by viewModels()
 
   private val sharedViewModelProximaPantalla: CrearReservaSharedViewModel by
-    navGraphViewModels(R.id.pantallaCrearReserva)
+  navGraphViewModels(R.id.pantallaCrearReserva)
 
   private val sharedViewModelBarAReservar: BarAReservarSharedViewModel by
-    navGraphViewModels(R.id.pantallaNavegacionPrincipal)
+  navGraphViewModels(R.id.pantallaNavegacionPrincipal)
 
   private val activitySharedViewModel: MainActivityViewModel by activityViewModels()
 
@@ -95,16 +94,24 @@ class PantallaCrearReserva : Fragment() {
 
     binding.toolbar.setNavigationOnClickListener { volverAtras() }
 
-    binding.botonAgregarPersona.setOnClickListener { viewModel.agregarPersona() }
+    binding.botonAgregarPersona.setOnClickListener {
+      viewModel.agregarPersona()
+      binding.botonCrearReserva.isEnabled = false
+    }
 
-    binding.botonQuitarPersona.setOnClickListener { viewModel.quitarPersona() }
+    binding.botonQuitarPersona.setOnClickListener {
+      viewModel.quitarPersona()
+      binding.botonCrearReserva.isEnabled = false
+    }
 
     binding.cardViewFechaReserva.setOnClickListener {
-      viewModel.buscarHorarios(YearMonth.now())
+      viewModel.buscarHorariosPorMes(YearMonth.now())
       limpiarDatosViejosHorarios()
     }
 
-    viewModel.horariosPorMes.observe(viewLifecycleOwner) {h -> crearDatePicker(h)}
+    viewModel.horariosPorMes.observe(viewLifecycleOwner) { h ->
+      crearDatePicker(h)
+    }
 
     binding.botonCrearReserva.isEnabled = false
 
@@ -134,11 +141,11 @@ class PantallaCrearReserva : Fragment() {
 
     // Se asignan tanto las restricciones como el resto de propiedades
     datePicker = MaterialDatePicker.Builder.datePicker()
-        .setTitleText(R.string.pantalla_reservar_titulo_calendario)
-        .setSelection(diaSeleccionadoEnLong)
-        .setCalendarConstraints(constraintsBuilder.build())
-        .setPositiveButtonText(R.string.boton_seleccionar)
-        .build()
+      .setTitleText(R.string.pantalla_reservar_titulo_calendario)
+      .setSelection(diaSeleccionadoEnLong)
+      .setCalendarConstraints(constraintsBuilder.build())
+      .setPositiveButtonText(R.string.boton_seleccionar)
+      .build()
 
 
     datePicker!!.addOnPositiveButtonClickListener { selection ->
@@ -153,13 +160,15 @@ class PantallaCrearReserva : Fragment() {
           .atZone(viewModel.zonaArgentina)
           .toLocalDate()
 
-      viewModel.fechaReserva = fechaReserva
+      viewModel.setFechaSeleccionada(fechaReserva)
+    }
 
-      val fechaCompleta = fechaReserva.format(viewModel.formatter)
+    datePicker!!.addOnCancelListener {
+      viewModel.setFechaSeleccionada(null)
+    }
 
-      val mesAnio = fechaCompleta.substring(0, 7)
-
-      viewModel.buscarHorarios(viewModel.barSeleccionado.correo, mesAnio, fechaCompleta)
+    datePicker!!.addOnNegativeButtonClickListener {
+      viewModel.setFechaSeleccionada(null)
     }
 
     if (!sharedViewModelProximaPantalla.vieneDePantallaConfirmacionReserva) {
@@ -249,8 +258,9 @@ class PantallaCrearReserva : Fragment() {
       binding.txtViewCantidadPersonas.text = textoCantPersonas
     }
 
-    viewModel.textoFechaReserva.observe(viewLifecycleOwner) { textoFecha ->
-      binding.textViewFechaReserva.text = textoFecha
+    viewModel.fechaReserva.observe(viewLifecycleOwner) { fecha ->
+      binding.textViewFechaReserva.text = fecha?.let { viewModel.fechaAFormatoTexto(fecha) }
+        ?: requireContext().resources.getString(R.string.pantalla_reservar_texto_fecha_reserva)
     }
 
     viewModel.habilitarBotonAgregarPersona.observe(viewLifecycleOwner) { banderaHabilitar ->
@@ -362,9 +372,9 @@ class PantallaCrearReserva : Fragment() {
 
         val indexEnChipGroupTotal =
           (indexChipGroupDesayuno +
-            indexChipGroupAlmuerzo +
-            indexChipGroupMerienda +
-            indexChipGroupCena)
+              indexChipGroupAlmuerzo +
+              indexChipGroupMerienda +
+              indexChipGroupCena)
 
         indexChipGroupCena =
           agregarChipsAlChipGroup(
@@ -381,7 +391,7 @@ class PantallaCrearReserva : Fragment() {
           .setTitle(R.string.pantalla_reservar_titulo_dialog)
           .setMessage(R.string.pantalla_reservar_texto_dialog)
           .setPositiveButton(R.string.boton_aceptar) { _, _ -> limpiarDatosViejosHorarios() }
-          .setOnDismissListener() { limpiarDatosViejosHorarios() }
+          .setOnDismissListener { limpiarDatosViejosHorarios() }
           .show()
       }
     }
@@ -448,6 +458,11 @@ class PantallaCrearReserva : Fragment() {
     binding.botonCrearReserva.isEnabled = true
   }
 
+  private fun checkearHabilitarReserva() {
+    if (viewModel.fechaReserva.value != null)
+      binding.botonCrearReserva.isEnabled = true
+  }
+
   /**
    * Se infla un [Chip] a partir del binding [ItemChipHorarioBinding] con el texto pasado por
    * parámetro
@@ -459,7 +474,7 @@ class PantallaCrearReserva : Fragment() {
     chip.text = texto
     chip.setOnClickListener {
       if (chip.isChecked) {
-        binding.botonCrearReserva.isEnabled = true
+        checkearHabilitarReserva()
         viewModel.datosDelChipSeleccionado(chip.text.toString(), index)
       } else {
         binding.botonCrearReserva.isEnabled = false
@@ -489,10 +504,11 @@ class PantallaCrearReserva : Fragment() {
   private fun copiarDatosAlViewModelCompartido() {
     sharedViewModelProximaPantalla.textoCantidadPersonas =
       viewModel.textoCantidadPersonas.value.toString()
-    sharedViewModelProximaPantalla.textoFechaReserva = viewModel.textoFechaReserva.value.toString()
+    sharedViewModelProximaPantalla.textoFechaReserva =
+      viewModel.fechaReserva.value!!.let { fecha -> viewModel.fechaAFormatoTexto(fecha) }
 
     sharedViewModelProximaPantalla.cantidadPersonas = viewModel.cantidadPersonas
-    sharedViewModelProximaPantalla.fechaReserva = viewModel.fechaReserva!!
+    sharedViewModelProximaPantalla.fechaReserva = viewModel.fechaReserva.value!!
     sharedViewModelProximaPantalla.horaReserva = viewModel.horaReserva
 
     sharedViewModelProximaPantalla.barSeleccionado = sharedViewModelBarAReservar.barSeleccionado

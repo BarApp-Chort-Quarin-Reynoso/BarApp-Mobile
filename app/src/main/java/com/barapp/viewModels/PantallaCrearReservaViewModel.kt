@@ -11,8 +11,6 @@ import com.barapp.model.Restaurante
 import com.barapp.model.TipoComida
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.time.LocalDate
 import java.time.ZoneId
@@ -21,13 +19,14 @@ import kotlin.collections.ArrayList
 import timber.log.Timber
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import java.util.stream.Collectors
 import kotlin.collections.LinkedHashMap
 
 class PantallaCrearReservaViewModel : ViewModel() {
 
   private val restauranteRepo: RestauranteRepository = RestauranteRepository.instance
 
-  val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+  private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
   private val formatterMonth: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM")
 
   var indexChipSeleccionado = 0
@@ -42,13 +41,7 @@ class PantallaCrearReservaViewModel : ViewModel() {
 
   lateinit var barSeleccionado: Restaurante
   var cantidadPersonas: Int = 0
-  var fechaReserva: LocalDate? = null
-    set(value) {
-      value?.let {
-        _textoFechaReserva.postValue(fechaAFormatoTexto(value))
-      }
-      field = value
-    }
+
   lateinit var horaReserva: Horario
   private lateinit var ultimaHoraSeleccionadaTexto: String
 
@@ -58,8 +51,8 @@ class PantallaCrearReservaViewModel : ViewModel() {
   private val _textoCantidadPersonas: MutableLiveData<String> = MutableLiveData()
   val textoCantidadPersonas: LiveData<String> = _textoCantidadPersonas
 
-  private val _textoFechaReserva: MutableLiveData<String> = MutableLiveData()
-  val textoFechaReserva: LiveData<String> = _textoFechaReserva
+  private val _fechaReserva: MutableLiveData<LocalDate?> = MutableLiveData()
+  val fechaReserva: LiveData<LocalDate?> = _fechaReserva
 
   private val _habilitarBotonAgregarPersona: MutableLiveData<Boolean> = MutableLiveData()
   val habilitarBotonAgregarPersona: LiveData<Boolean> = _habilitarBotonAgregarPersona
@@ -103,7 +96,7 @@ class PantallaCrearReservaViewModel : ViewModel() {
 
   init {
     _habilitarBotonAgregarPersona.value = true
-    _habilitarBotonQuitarPersona.value = true
+    _habilitarBotonQuitarPersona.value = false
     _horariosDesayuno.value = HashMap()
     _horariosAlmuerzo.value = HashMap()
     _horariosMerienda.value = HashMap()
@@ -121,12 +114,9 @@ class PantallaCrearReservaViewModel : ViewModel() {
   fun agregarPersona() {
     cantidadPersonas++
     _textoCantidadPersonas.value = ("$cantidadPersonas personas")
-    _habilitarBotonAgregarPersona.value != (cantidadPersonas == obtenerMaximoPersonas())
+    _habilitarBotonQuitarPersona.value = true
+    _habilitarBotonAgregarPersona.value = (cantidadPersonas != obtenerMaximoPersonas())
     actualizarEstadoChips()
-  }
-
-  private fun obtenerMaximoPersonas(): Int {
-    return 30
   }
 
   /**
@@ -141,6 +131,7 @@ class PantallaCrearReservaViewModel : ViewModel() {
     _textoCantidadPersonas.value =
       if (cantidadPersonas == 1) "1 persona" else "$cantidadPersonas personas"
     _habilitarBotonQuitarPersona.value = (cantidadPersonas > 1)
+    _habilitarBotonAgregarPersona.value = true
     actualizarEstadoChips()
   }
 
@@ -171,8 +162,7 @@ class PantallaCrearReservaViewModel : ViewModel() {
    *
    * @author Julio Chort
    */
-  private fun fechaAFormatoTexto(fecha: LocalDate): String {
-
+  fun fechaAFormatoTexto(fecha: LocalDate): String {
     return diaDeLaSemana(fecha.dayOfWeek.toString()) +
         " " +
         fecha.dayOfMonth +
@@ -212,48 +202,50 @@ class PantallaCrearReservaViewModel : ViewModel() {
     }
   }
 
-  fun buscarHorarios(mesAnio: YearMonth) {
-    val correo = barSeleccionado.correo
-    val mesAnioString = mesAnio.format(formatterMonth)
-    restauranteRepo.buscarHorariosPorCorreo(
-      correo,
-      mesAnioString,
-      3,
-      object : FirestoreCallback<Map<String, Map<String, HorarioConCapacidadDisponible>>> {
-        override fun onSuccess(result: Map<String, Map<String, HorarioConCapacidadDisponible>>) {
-          _horariosPorMes.postValue(mapHorarios(result))
-        }
-
-        override fun onError(exception: Throwable) {
-          Timber.e(exception)
-        }
-      })
-  }
-
-  fun buscarHorarios(correo: String, mesAnio: String, diaSeleccionado: String) {
-    restauranteRepo.buscarHorariosPorCorreo(
-      correo,
-      mesAnio,
-      6,
-      object : FirestoreCallback<Map<String, Map<String, HorarioConCapacidadDisponible>>> {
-        override fun onSuccess(result: Map<String, Map<String, HorarioConCapacidadDisponible>>) {
-          val horarios = result[diaSeleccionado]?.values?.toList()
-          Timber.d("Horarios: $horarios")
-          if (horarios.isNullOrEmpty()) {
-            comprobarSiSeMuestraDialogTodosInhabilitados()
-          } else {
-            _horariosDiaSeleccionado.postValue(horarios!!)
-            mostrarHorariosDisponiblesEnListado(horarios)
+  fun buscarHorariosPorMes(mesAnio: YearMonth) {
+    if (horariosPorMes.value.isNullOrEmpty()) {
+      val correo = barSeleccionado.correo
+      val mesAnioString = mesAnio.format(formatterMonth)
+      restauranteRepo.buscarHorariosPorCorreo(
+        correo,
+        mesAnioString,
+        3,
+        object : FirestoreCallback<Map<String, Map<String, HorarioConCapacidadDisponible>>> {
+          override fun onSuccess(result: Map<String, Map<String, HorarioConCapacidadDisponible>>) {
+            _horariosPorMes.postValue(mapHorarios(result))
           }
-        }
 
-        override fun onError(exception: Throwable) {
-          Timber.e(exception)
-        }
-      })
+          override fun onError(exception: Throwable) {
+            Timber.e(exception)
+          }
+        })
+    } else {
+      _horariosPorMes.postValue(horariosPorMes.value)
+    }
   }
 
-  private fun cantidadMaximaPersoans(horario: HorarioConCapacidadDisponible): Int {
+  fun setFechaSeleccionada(diaSeleccionado: LocalDate?) {
+    _fechaReserva.postValue(diaSeleccionado)
+
+    if (diaSeleccionado == null) {
+      _horariosDiaSeleccionado.postValue(ArrayList())
+    } else {
+      val horarios = (horariosPorMes.value?.get(diaSeleccionado)?.values ?: ArrayList())
+        .stream()
+        .collect(Collectors.toList())
+      if (!horarios.isNullOrEmpty()) {
+        Timber.d("Horarios: $horarios")
+        _horariosDiaSeleccionado.postValue(horarios)
+        mostrarHorariosDisponiblesEnListado(horarios)
+      }
+    }
+  }
+
+  private fun obtenerMaximoPersonas(): Int {
+    return 30
+  }
+
+  private fun cantidadMaximaPersonas(horario: HorarioConCapacidadDisponible): Int {
     var cantidadPersonasMaxima = 1
     for (mesa in horario.mesas) {
       if (mesa.cantidadDePersonasPorMesa > cantidadPersonasMaxima) {
@@ -265,7 +257,7 @@ class PantallaCrearReservaViewModel : ViewModel() {
 
   private fun mostrarHorariosDisponiblesEnListado(horarios: List<HorarioConCapacidadDisponible>) {
     for (horario in horarios) {
-      val cantidadMaximaPersonas = cantidadMaximaPersoans(horario)
+      val cantidadMaximaPersonas = cantidadMaximaPersonas(horario)
       val tipoComidaHorario = horario.tipoComida
       when (tipoComidaHorario) {
         TipoComida.DESAYUNO -> _horariosDesayuno.value =
@@ -289,10 +281,13 @@ class PantallaCrearReservaViewModel : ViewModel() {
   }
 
   private fun actualizarEstadoChips() {
-    val horarios = _horariosDiaSeleccionado.value ?: return
+    if (_horariosDiaSeleccionado.value.isNullOrEmpty())
+      return
+
+    val horarios = _horariosDiaSeleccionado.value!!
     _claredChipGroup.value = true
     for (horario in horarios) {
-      val cantidadMaximaPersonas = cantidadMaximaPersoans(horario)
+      val cantidadMaximaPersonas = cantidadMaximaPersonas(horario)
       val tipoComidaHorario = horario.tipoComida
       when (tipoComidaHorario) {
         TipoComida.DESAYUNO -> _horariosDesayuno.value =
