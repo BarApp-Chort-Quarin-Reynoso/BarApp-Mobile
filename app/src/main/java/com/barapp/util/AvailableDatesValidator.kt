@@ -13,19 +13,16 @@ class AvailableDatesValidator(
 ) : DateValidator {
   constructor(parcel: Parcel) : this()
 
-  private val zonaArgentina: ZoneId = ZoneId.of("America/Buenos_Aires")
-
   override fun describeContents(): Int {
     TODO("Not yet implemented")
   }
 
   override fun writeToParcel(dest: Parcel, flags: Int) {
-
+    TODO("Not yet implemented")
   }
 
   override fun isValid(date: Long): Boolean {
-    val localDate = Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDate()
-    val month = YearMonth.of(localDate.year, localDate.month)
+    val localDate = Instant.ofEpochMilli(date).atZone(ZoneId.of("UTC")).toLocalDate()
     return datesAvailable.contains(localDate)
   }
 

@@ -1,6 +1,7 @@
 package com.barapp.ui.pantallas
 
 import android.os.Bundle
+import android.os.Parcel
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,9 +28,11 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.DayViewDecorator
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialContainerTransform
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.YearMonth
@@ -138,6 +141,7 @@ class PantallaCrearReserva : Fragment() {
         .setEnd(unMesDespues)
         .setValidator(DateValidatorPointForward.now())
         .setValidator(availableDatesValidator)
+        .setFirstDayOfWeek(1)
 
     // Se asignan tanto las restricciones como el resto de propiedades
     datePicker = MaterialDatePicker.Builder.datePicker()
@@ -146,7 +150,6 @@ class PantallaCrearReserva : Fragment() {
       .setCalendarConstraints(constraintsBuilder.build())
       .setPositiveButtonText(R.string.boton_seleccionar)
       .build()
-
 
     datePicker!!.addOnPositiveButtonClickListener { selection ->
       diaSeleccionadoEnLong = selection
