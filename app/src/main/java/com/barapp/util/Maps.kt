@@ -69,7 +69,6 @@ class Maps {
       ubicacionUsuario: Location,
     ): HashMap<String, Int?> {
       val distancias: HashMap<String, Int?> = LinkedHashMap()
-      Timber.e("Mi ubicacion: %s - %s", ubicacionUsuario.latitude, ubicacionUsuario.longitude)
       for (r in restaurantes) {
         val ubicacionRestaurante = Location("")
         ubicacionRestaurante.latitude = r.ubicacion.latitud

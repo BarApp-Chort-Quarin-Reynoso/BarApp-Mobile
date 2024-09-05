@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:dividerPadding="25sp"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.barapp.ui.pantallas.PantallaResumenReserva">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -14,19 +15,19 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
+            style="@style/Widget.Barapp.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="@string/pantalla_resumen_reserva_titulo_datos_sobre_reserva_en"
-            app:titleCentered="true"
-            app:titleTextAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:navigationIcon="@drawable/icon_outlined_arrow_back_24"
+            app:navigationIconTint="?attr/colorOnSurface"
 
             app:subtitle="@string/pantalla_resumen_reserva_titulo_nombre_restaurante"
             app:subtitleCentered="true"
             app:subtitleTextAppearance="@style/TextAppearance.AppCompat.Headline"
             app:subtitleTextColor="@color/md_theme_dark_inversePrimary"
-            app:navigationIcon="@drawable/icon_outlined_arrow_back_24"
-            app:navigationIconTint="?attr/colorOnSurface"
-            style="@style/Widget.Barapp.Toolbar"/>
+            app:title="@string/pantalla_resumen_reserva_titulo_datos_sobre_reserva_en"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Body1" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.card.MaterialCardView
@@ -60,8 +61,8 @@
                     android:id="@+id/imageViewCantidadPersonas"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginVertical="10dp"
                     android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="10dp"
                     app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
                     app:srcCompat="@drawable/icon_outlined_people_24" />
 
@@ -69,16 +70,16 @@
                     android:id="@+id/labelCantidadPersonas"
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/pantalla_resumen_reserva_label_cantidad_personas"
                     android:layout_marginVertical="10dp"
+                    android:text="@string/pantalla_resumen_reserva_label_cantidad_personas"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textViewCantidadPersonas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/pantalla_resumen_reserva_texto_cantidad_personas"
                     android:layout_marginVertical="10dp"
+                    android:text="@string/pantalla_resumen_reserva_texto_cantidad_personas"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
             </LinearLayout>
 
@@ -89,27 +90,27 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/imageViewCalendario"
-                    android:layout_marginVertical="10dp"
-                    android:layout_marginHorizontal="10dp"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="10dp"
                     app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
-                    app:srcCompat="@drawable/icon_outlined_insert_invitation_24"/>
+                    app:srcCompat="@drawable/icon_outlined_insert_invitation_24" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/labelFechaReserva"
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/pantalla_resumen_reserva_label_fecha_reserva"
                     android:layout_marginVertical="10dp"
+                    android:text="@string/pantalla_resumen_reserva_label_fecha_reserva"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textViewFechaReserva"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/pantalla_resumen_reserva_texto_fecha_reserva"
                     android:layout_marginVertical="10dp"
+                    android:text="@string/pantalla_resumen_reserva_texto_fecha_reserva"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
             </LinearLayout>
 
@@ -122,8 +123,8 @@
                     android:id="@+id/imageViewHoraReserva"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginVertical="10dp"
                     android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="10dp"
                     app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
                     app:srcCompat="@drawable/icon_outlined_access_time_24" />
 
@@ -139,8 +140,8 @@
                     android:id="@+id/textViewHoraReserva"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/pantalla_resumen_reserva_texto_hora_reserva"
                     android:layout_marginVertical="10dp"
+                    android:text="@string/pantalla_resumen_reserva_texto_hora_reserva"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
             </LinearLayout>
@@ -178,8 +179,8 @@
                     android:id="@+id/imageViewPersona"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginVertical="10dp"
                     android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="10dp"
                     app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
                     app:srcCompat="@drawable/icon_outlined_person_24" />
 
@@ -187,16 +188,16 @@
                     android:id="@+id/labelNombre"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/pantalla_resumen_reserva_label_nombre"
                     android:layout_marginVertical="10dp"
+                    android:text="@string/pantalla_resumen_reserva_label_nombre"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textViewNombre"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/pantalla_resumen_reserva_texto_nombre"
                     android:layout_marginVertical="10dp"
+                    android:text="@string/pantalla_resumen_reserva_texto_nombre"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
             </LinearLayout>
 
@@ -209,25 +210,25 @@
                     android:id="@+id/imageViewMail"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginVertical="10dp"
                     android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="10dp"
                     app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
-                    app:srcCompat="@drawable/icon_outlined_email_24"/>
+                    app:srcCompat="@drawable/icon_outlined_email_24" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/labelMail"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/pantalla_resumen_reserva_label_mail"
                     android:layout_marginVertical="10dp"
+                    android:text="@string/pantalla_resumen_reserva_label_mail"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textViewMail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/pantalla_resumen_reserva_texto_mail"
                     android:layout_marginVertical="10dp"
+                    android:text="@string/pantalla_resumen_reserva_texto_mail"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
             </LinearLayout>
 
@@ -240,10 +241,10 @@
                     android:id="@+id/imageViewTelefono"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginVertical="10dp"
                     android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="10dp"
                     app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
-                    app:srcCompat="@drawable/icon_outlined_call_24"/>
+                    app:srcCompat="@drawable/icon_outlined_call_24" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/labelTelefono"
@@ -257,8 +258,8 @@
                     android:id="@+id/textViewTelefono"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/pantalla_resumen_reserva_texto_telefono"
                     android:layout_marginVertical="10dp"
+                    android:text="@string/pantalla_resumen_reserva_texto_telefono"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
             </LinearLayout>
@@ -266,16 +267,57 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/botonCancelarReserva"
-        style="@style/Widget.Material3.Button.Icon"
+        android:id="@+id/botonIrAlDetalle"
+        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginVertical="10dp"
-        android:text="@string/boton_cancelar_reserva"
-        android:contentDescription="@string/boton_cancelar_reserva_descripcion"
-        app:backgroundTint="@color/md_theme_light_error"
-        app:icon="@drawable/icon_outlined_close_24" />
+        android:layout_marginHorizontal="10dp"
+        android:contentDescription="Concretar reserva"
+        android:text="Ir al detalle del bar"
+        android:visibility="gone"
+        android:textColor="@color/accepted_booking"
+        app:icon="@drawable/icon_filled_done_24"
+        app:iconTint="@color/accepted_booking"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/accepted_booking" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botonCancelarReserva"
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="7dp"
+            android:contentDescription="Cancelar"
+            android:text="Cancelar"
+            android:textColor="@color/cancelled_booking"
+            app:icon="@drawable/icon_outlined_close_24"
+            app:iconTint="@color/cancelled_booking"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="@color/cancelled_booking" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botonConcretarReserva"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="7dp"
+            android:contentDescription="Concretar"
+            android:text="Concretar"
+            app:backgroundTint="@color/md_theme_light_primary"
+            app:icon="@drawable/baseline_qr_code_24" />
+    </LinearLayout>
 
 
 </LinearLayout>

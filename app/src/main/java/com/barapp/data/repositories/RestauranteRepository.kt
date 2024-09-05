@@ -37,6 +37,27 @@ class RestauranteRepository private constructor() : IGenericRepository<Restauran
     })
   }
 
+  fun buscarPorIdConDetalle(id: String, callback: FirestoreCallback<Restaurante>) {
+    Timber.d("Buscando restaurante con id: $id")
+    api.getRestaurantByIdWithDetail(id).enqueue(object : Callback<Restaurante> {
+      override fun onResponse(call: Call<Restaurante>, response: Response<Restaurante>) {
+        if (response.isSuccessful) {
+          val data = response.body()
+          Timber.d("Restaurante recibido: $data")
+          callback.onSuccess(data!!)
+        } else {
+          Timber.e("Error: ${response.errorBody()}")
+          callback.onError(Throwable("Error recuperando Restaurante"))
+        }
+      }
+
+      override fun onFailure(call: Call<Restaurante>, t: Throwable) {
+        Timber.e(t)
+        callback.onError(t)
+      }
+    })
+  }
+
   override fun buscarTodos(callback: FirestoreCallback<List<Restaurante>>) {
     Timber.d("Buscando todos los restaurantes")
     api.getAllRestaurants().enqueue(object : Callback<List<Restaurante>> {

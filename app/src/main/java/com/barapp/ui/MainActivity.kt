@@ -190,7 +190,6 @@ class MainActivity :
       .addOnSuccessListener {
         it?.let {
           mainActivityViewModel.setearUbicacion(it)
-          Timber.e("Localizacion encontrada")
         }
           ?: run {
             // TODO ver como pedir activar localizacion

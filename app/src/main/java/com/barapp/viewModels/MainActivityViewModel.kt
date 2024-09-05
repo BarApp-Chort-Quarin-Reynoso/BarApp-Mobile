@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.barapp.barapp.model.Reserva
+import com.barapp.data.entities.RestauranteInfoQR
 import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
 import com.barapp.data.utils.FirestoreCallback
@@ -13,6 +14,7 @@ import com.barapp.data.repositories.DetalleUsuarioRepository
 import com.barapp.data.repositories.ReservaRepository
 import com.barapp.data.repositories.RestauranteVistoRecientementeRepository
 import com.barapp.data.repositories.UsuarioRepository
+import com.barapp.model.DetalleRestaurante
 import com.barapp.model.DetalleUsuario
 import timber.log.Timber
 
@@ -145,6 +147,18 @@ class MainActivityViewModel(var origen: String?) : ViewModel() {
         }
       })
     }
+  }
+
+  fun concretarReserva(idUsuario: String, restauranteInfoQR: RestauranteInfoQR, callback: FirestoreCallback<Reserva>) {
+    reservaRepository.concretarReserva(reservaLD.value!!.id, idUsuario, restauranteInfoQR, object : FirestoreCallback<Reserva> {
+      override fun onSuccess(result: Reserva) {
+        callback.onSuccess(result)
+      }
+
+      override fun onError(exception: Throwable) {
+        callback.onError(exception)
+      }
+    })
   }
 
   class Factory(private val origen: String?) : ViewModelProvider.Factory {

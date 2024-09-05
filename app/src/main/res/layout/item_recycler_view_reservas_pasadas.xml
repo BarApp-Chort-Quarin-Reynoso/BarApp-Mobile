@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -22,8 +23,8 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:contentDescription="@string/imagen_logo_restaurante_descripcion"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/txtViewNombreRestaurante"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -35,13 +36,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:textSize="12sp"
                 android:padding="5dp"
                 android:paddingStart="0dp"
-                android:textStyle="bold"
                 android:text="@string/texto_ejemplo_bar_estado_reserva"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/md_theme_light_error"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/txtViewNombreRestaurante"
                 app:layout_constraintStart_toEndOf="@id/imageViewLogo"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,15 +51,16 @@
                 android:id="@+id/txtViewDatosReserva"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/texto_ejemplo_datos_reserva"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="?android:attr/textColorSecondary"
-                app:layout_constraintBottom_toTopOf="@+id/txtViewNombreRestaurante"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/txtViewEstadoReserva"/>
+                app:layout_constraintStart_toEndOf="@+id/imageViewLogo"
+                app:layout_constraintTop_toBottomOf="@+id/txtViewDireccionRestaurante" />
 
             <TextView
                 android:id="@+id/txtViewNombreRestaurante"
@@ -70,7 +73,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/txtViewDireccionRestaurante"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imageViewLogo"
-                app:layout_constraintTop_toBottomOf="@id/txtViewEstadoReserva" />
+                app:layout_constraintTop_toBottomOf="@+id/botonOpinar" />
 
             <TextView
                 android:id="@+id/txtViewDireccionRestaurante"
@@ -88,15 +91,15 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/botonOpinar"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/boton_opinar_descripcion"
+                android:minHeight="24dp"
                 android:text="@string/boton_opinar"
                 app:icon="@drawable/icon_outlined_star_24"
-                android:contentDescription="@string/boton_opinar_descripcion"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtViewDireccionRestaurante"
-                style="@style/Widget.Material3.Button.TextButton" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

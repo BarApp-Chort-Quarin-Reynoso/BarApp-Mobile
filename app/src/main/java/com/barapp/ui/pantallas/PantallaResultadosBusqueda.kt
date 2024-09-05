@@ -129,7 +129,7 @@ class PantallaResultadosBusqueda : Fragment(), ResultadosRestauranteRecyclerAdap
 
     val extras = FragmentNavigatorExtras(transitionView to transitionView.transitionName)
 
-    restauranteSeleccionadoViewModel.restaurante = restaurante
+    restauranteSeleccionadoViewModel.setSyncRestaurante(restaurante)
     restauranteSeleccionadoViewModel.distancia = distancia
 
     exitTransition = Hold()

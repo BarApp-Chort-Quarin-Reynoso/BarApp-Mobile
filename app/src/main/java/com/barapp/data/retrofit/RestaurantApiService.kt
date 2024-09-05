@@ -23,6 +23,9 @@ interface RestaurantApiService {
   @GET("/api/restaurantes/{id}")
   fun getRestaurantById(@Path("id") id: String): Call<Restaurante>
 
+  @GET("/api/restaurantes/{id}/con-detalle")
+  fun getRestaurantByIdWithDetail(@Path("id") id: String): Call<Restaurante>
+
   @GET("/api/restaurantes/{id}/detalle")
   fun getRestaurantDetailById(@Path("id") id: String): Call<DetalleRestaurante>
 

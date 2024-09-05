@@ -45,18 +45,6 @@ open class Restaurante(
     idRestaurante
   )
 
-  override fun toString(): String {
-    return "Restaurante{" +
-            "id='" + id + '\'' +
-            ", nombre='" + nombre + '\'' +
-            ", estado=" + estado +
-            ", puntuacion=" + puntuacion +
-            ", cantidadOpiniones=" + cantidadOpiniones +
-            ", portada='" + portada + '\'' +
-            ", correo='" + correo + '\'' +
-            '}'
-  }
-
   fun copy(detalleRestaurante: DetalleRestaurante): Restaurante {
     return Restaurante(
       id,
@@ -72,5 +60,9 @@ open class Restaurante(
       detalleRestaurante,
       idRestaurante
     )
+  }
+
+  override fun toString(): String {
+    return "Restaurante(nombre='$nombre', estado=$estado, puntuacion=$puntuacion, cantidadOpiniones=$cantidadOpiniones, portada='$portada', correo='$correo', logo='$logo', ubicacion=$ubicacion, idDetalleRestaurante='$idDetalleRestaurante', detalleRestaurante=$detalleRestaurante, idRestaurante='$idRestaurante')"
   }
 }
