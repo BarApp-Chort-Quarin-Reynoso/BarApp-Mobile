@@ -22,6 +22,7 @@ import com.barapp.databinding.FragmentPantallaBarBinding
 import com.barapp.databinding.OpinionLayoutBinding
 import com.barapp.model.EstadoRestaurante
 import com.barapp.model.Opinion
+import com.barapp.model.Restaurante
 import com.barapp.ui.AuthActivity
 import com.barapp.ui.MainActivity
 import com.barapp.util.Interpolator
@@ -57,6 +58,7 @@ class PantallaBar : Fragment() {
   companion object {
     const val ORIGEN_RESULTADOS_BUSQUEDA = 1
     const val ORIGEN_PANTALLA_PRINCIPAL = 2
+    const val ORIGEN_RESUMEN_RESERVA = 3
   }
 
   private val ubicacionViewModel: UbicacionBarSharedViewModel by
@@ -64,7 +66,6 @@ class PantallaBar : Fragment() {
 
   private val viewModel: PantallaBarViewModel by viewModels {
     PantallaBarViewModel.Factory(
-      barSeleccionadoViewModel.restaurante!!,
       mainActivityViewModel.usuario.value!!,
     )
   }
@@ -116,6 +117,7 @@ class PantallaBar : Fragment() {
         when (it) {
           ORIGEN_RESULTADOS_BUSQUEDA -> R.id.pantallaResultadosBusqueda
           ORIGEN_PANTALLA_PRINCIPAL -> R.id.pantallaNavegacionPrincipal
+          ORIGEN_RESUMEN_RESERVA -> R.id.pantallaResumenReserva
           else -> 0
         }
       val backStackEntry = navController.getBackStackEntry(origen)
@@ -124,93 +126,112 @@ class PantallaBar : Fragment() {
         ViewModelProvider(backStackEntry)[RestauranteSeleccionadoSharedViewModel::class.java]
     }
 
-    mainActivityViewModel.guardarRestauranteVistoRecientemente(barSeleccionadoViewModel.restaurante!!)
 
-    ubicacionViewModel.ubicacionRestaurante = viewModel.restaurante.ubicacion
-    ubicacionViewModel.nombreRestaurante = viewModel.restaurante.nombre
-    ubicacionViewModel.logo = viewModel.restaurante.logo
+    barSeleccionadoViewModel.restauranteLd.observe(viewLifecycleOwner) { restaurante ->
+      viewModel.restaurante = restaurante
+      viewModel.buscarReservasPendientes()
 
-    binding.textViewNombre.text = viewModel.restaurante.nombre
-    binding.textViewDireccion.text =
-      getString(
-        R.string.cardview_texto_direccion,
-        viewModel.restaurante.ubicacion.calle,
-        viewModel.restaurante.ubicacion.numero,
-      )
-    binding.txtViewPuntuacionRestaurante.text =
-      viewModel.restaurante.puntuacion.toString().substring(0, 3)
-    binding.ratingBarPuntuacion.rating = viewModel.restaurante.puntuacion.toFloat()
-    "(${viewModel.restaurante.cantidadOpiniones})".also {
-      binding.txtViewCantidadOpiniones.text = it
+      mainActivityViewModel.guardarRestauranteVistoRecientemente(restaurante)
+      binding.linearLayoutOpiniones.setOnClickListener { mostrarMasOpiniones(restaurante) }
+      binding.botonVerMasOpiniones.setOnClickListener { mostrarMasOpiniones(restaurante) }
+
+      ubicacionViewModel.ubicacionRestaurante = restaurante.ubicacion
+      ubicacionViewModel.nombreRestaurante = restaurante.nombre
+      ubicacionViewModel.logo = restaurante.logo
+
+      binding.textViewNombre.text = restaurante.nombre
+      binding.textViewDireccion.text =
+        getString(
+          R.string.cardview_texto_direccion,
+          restaurante.ubicacion.calle,
+          restaurante.ubicacion.numero,
+        )
+      binding.txtViewPuntuacionRestaurante.text =
+        restaurante.puntuacion.toString().substring(0, 3)
+      binding.ratingBarPuntuacion.rating = restaurante.puntuacion.toFloat()
+      "(${restaurante.cantidadOpiniones})".also {
+        binding.txtViewCantidadOpiniones.text = it
+      }
+
+      Glide.with(requireContext())
+        .load(restaurante.logo)
+        .apply(RequestOptions.circleCropTransform())
+        .into(binding.imageViewLogo)
+      Glide.with(requireContext())
+        .load(restaurante.portada)
+        .apply(RequestOptions.centerCropTransform())
+        .listener(onImageLoadedRequestListener())
+        .into(binding.imageViewFoto)
+
+      restaurante.estado.let {
+        binding.fabReservar.isEnabled = it == EstadoRestaurante.HABILITADO
+
+        if (it == EstadoRestaurante.PAUSADO) {
+          binding.txtViewPaused.visibility = View.VISIBLE
+          binding.imageViewFoto.alpha = 0.5f
+        } else {
+          binding.txtViewPaused.visibility = View.GONE
+          binding.imageViewFoto.alpha = 1.0f
+        }
+      }
+
+      restaurante.detalleRestaurante?.let { detalle ->
+
+        if (detalle.descripcion.isEmpty()) {
+          binding.textViewDescripcion.visibility = View.GONE
+          binding.textViewDescripcionVacia.visibility = View.VISIBLE
+        } else {
+          binding.textViewDescripcion.text = detalle.descripcion
+          binding.textViewDescripcion.visibility = View.VISIBLE
+          binding.textViewDescripcionVacia.visibility = View.GONE
+        }
+
+        val url = Uri.parse(detalle.menu)
+        if (detalle.menu.isNotEmpty() && URLUtil.isValidUrl(url.toString())) {
+          binding.botonMenu.isEnabled = true
+          botonMenuHabilitado = true
+          if (toolbarEsVisible) mostrarBotonesToolbar()
+        } else {
+          binding.botonMenu.isEnabled = false
+        }
+
+        when (detalle.opiniones.size) {
+          0 -> {
+            binding.opinion1.opinionLayout.visibility = View.GONE
+            binding.opinion2.opinionLayout.visibility = View.GONE
+            binding.botonVerMasOpiniones.visibility = View.GONE
+            binding.linearLayoutOpiniones.visibility = View.GONE
+          }
+
+          1 -> {
+            setearOpinion(detalle.opiniones[0], binding.opinion1)
+            binding.labelNoHayOpiniones.visibility = View.GONE
+            binding.opinion2.opinionLayout.visibility = View.GONE
+          }
+
+          else -> {
+            setearOpinion(detalle.opiniones[0], binding.opinion1)
+            setearOpinion(detalle.opiniones[1], binding.opinion2)
+            binding.labelNoHayOpiniones.visibility = View.GONE
+          }
+        }
+      }
+
+      if (viewModel.esFavorito()) {
+        binding.botonFavorito.isChecked = true
+        binding.botonFavorito.setIconResource(R.drawable.icon_filled_favorite_24)
+      } else {
+        binding.botonFavorito.isChecked = false
+        binding.botonFavorito.setIconResource(R.drawable.icon_outlined_favorite_24)
+      }
     }
-
-    Glide.with(requireContext())
-      .load(viewModel.restaurante.logo)
-      .apply(RequestOptions.circleCropTransform())
-      .into(binding.imageViewLogo)
-    Glide.with(requireContext())
-      .load(viewModel.restaurante.portada)
-      .apply(RequestOptions.centerCropTransform())
-      .listener(onImageLoadedRequestListener())
-      .into(binding.imageViewFoto)
 
     barSeleccionadoViewModel.distancia?.let {
       binding.textViewDistancia.text = getString(R.string.cardview_texto_distancia, it)
+      if (it == 0) {
+        binding.textViewDistancia.visibility = View.INVISIBLE
+      }
     } ?: run { binding.textViewDistancia.visibility = View.INVISIBLE }
-
-    barSeleccionadoViewModel.restaurante?.estado.let {
-      binding.fabReservar.isEnabled = it == EstadoRestaurante.HABILITADO
-
-      if (it == EstadoRestaurante.PAUSADO) {
-        binding.txtViewPaused.visibility = View.VISIBLE
-        binding.imageViewFoto.alpha = 0.5f
-      } else {
-        binding.txtViewPaused.visibility = View.GONE
-        binding.imageViewFoto.alpha = 1.0f
-      }
-    }
-
-    barSeleccionadoViewModel.restaurante?.detalleRestaurante?.let { detalle ->
-
-      if (detalle.descripcion.isEmpty()) {
-        binding.textViewDescripcion.visibility = View.GONE
-        binding.textViewDescripcionVacia.visibility = View.VISIBLE
-      } else {
-        binding.textViewDescripcion.text = detalle.descripcion
-        binding.textViewDescripcion.visibility = View.VISIBLE
-        binding.textViewDescripcionVacia.visibility = View.GONE
-      }
-
-      val url = Uri.parse(detalle.menu)
-      if (detalle.menu.isNotEmpty() && URLUtil.isValidUrl(url.toString())) {
-        binding.botonMenu.isEnabled = true
-        botonMenuHabilitado = true
-        if (toolbarEsVisible) mostrarBotonesToolbar()
-      } else {
-        binding.botonMenu.isEnabled = false
-      }
-
-      when (detalle.opiniones.size) {
-        0 -> {
-          binding.opinion1.opinionLayout.visibility = View.GONE
-          binding.opinion2.opinionLayout.visibility = View.GONE
-          binding.botonVerMasOpiniones.visibility = View.GONE
-          binding.linearLayoutOpiniones.visibility = View.GONE
-        }
-
-        1 -> {
-          setearOpinion(detalle.opiniones[0], binding.opinion1)
-          binding.labelNoHayOpiniones.visibility = View.GONE
-          binding.opinion2.opinionLayout.visibility = View.GONE
-        }
-
-        else -> {
-          setearOpinion(detalle.opiniones[0], binding.opinion1)
-          setearOpinion(detalle.opiniones[1], binding.opinion2)
-          binding.labelNoHayOpiniones.visibility = View.GONE
-        }
-      }
-    }
 
     viewModel.loading.observe(viewLifecycleOwner) {
       setLoading(it)
@@ -256,18 +277,10 @@ class PantallaBar : Fragment() {
       }
     )
 
-    binding.linearLayoutOpiniones.setOnClickListener { mostrarMasOpiniones() }
     binding.botonMenu.setOnClickListener { mostrarMenu() }
     binding.botonUbicacion.setOnClickListener { mostrarUbicacion() }
-    binding.botonVerMasOpiniones.setOnClickListener { mostrarMasOpiniones() }
 
-    if (viewModel.esFavorito()) {
-      binding.botonFavorito.isChecked = true
-      binding.botonFavorito.setIconResource(R.drawable.icon_filled_favorite_24)
-    } else {
-      binding.botonFavorito.isChecked = false
-      binding.botonFavorito.setIconResource(R.drawable.icon_outlined_favorite_24)
-    }
+
 
     binding.botonFavorito.setOnClickListener { cambiarFavorito() }
 
@@ -289,7 +302,6 @@ class PantallaBar : Fragment() {
 
   override fun onResume() {
     super.onResume()
-    binding.ratingBarPuntuacion.rating = barSeleccionadoViewModel.restaurante!!.puntuacion.toFloat()
   }
 
   private fun mostrarBotonesToolbar() {
@@ -313,7 +325,7 @@ class PantallaBar : Fragment() {
   }
 
   private fun mostrarMenu() {
-    barSeleccionadoViewModel.restaurante?.detalleRestaurante?.let {
+    viewModel.restaurante?.detalleRestaurante?.let {
       if (it.menu.isNotEmpty()) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it.menu))
         startActivity(browserIntent)
@@ -365,9 +377,9 @@ class PantallaBar : Fragment() {
     reenterTransition = null
 
     // Copiar el bar y el detalle para crear la reserva
-    barAReservarViewModel.barSeleccionado = barSeleccionadoViewModel.restaurante!!
+    barAReservarViewModel.barSeleccionado = viewModel.restaurante!!
     barAReservarViewModel.detalleBarSeleccionado =
-      barSeleccionadoViewModel.restaurante!!.detalleRestaurante!!
+      viewModel.restaurante!!.detalleRestaurante!!
 
     NavHostFragment.findNavController(this)
       .navigate(R.id.action_pantallaBar_to_pantallaCrearReserva, null, null, extras)
@@ -405,14 +417,14 @@ class PantallaBar : Fragment() {
     }
   }
 
-  private fun mostrarMasOpiniones() {
+  private fun mostrarMasOpiniones(restaurante: Restaurante) {
     opinionesSharedViewModel.nombreRestauranteSeleccionado =
-      barSeleccionadoViewModel.restaurante!!.nombre
-    opinionesSharedViewModel.idRestauranteSeleccionado = barSeleccionadoViewModel.restaurante!!.id
+      restaurante.nombre
+    opinionesSharedViewModel.idRestauranteSeleccionado = restaurante.id
     opinionesSharedViewModel.caracteristicasRestauranteSeleccionado =
-      barSeleccionadoViewModel.restaurante!!.detalleRestaurante!!.caracteristicas
+      restaurante.detalleRestaurante!!.caracteristicas
     opinionesSharedViewModel.puntuacionRestauranteSeleccionado =
-      barSeleccionadoViewModel.restaurante!!.puntuacion
+      restaurante.puntuacion
 
     NavHostFragment.findNavController(this)
       .navigate(R.id.action_pantallaBar_to_pantallaOpiniones)
@@ -428,6 +440,9 @@ class PantallaBar : Fragment() {
     binding.textViewFecha.text = getFechaFormateada(opinion.fecha)
     binding.textViewOpinion.text =
       getString(R.string.pantalla_bar_texto_opinion, opinion.comentario)
+    if (opinion.comentario == "") {
+      binding.textViewOpinion.visibility = View.INVISIBLE
+    }
     binding.ratingBarPuntuacion.rating = opinion.nota.toFloat()
     binding.textViewCantidadPersonas.text =
       getTextoCantidadPersonasOpinion(opinion.cantidadPersonas)

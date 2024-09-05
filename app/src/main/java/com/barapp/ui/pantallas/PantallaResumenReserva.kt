@@ -1,16 +1,31 @@
 package com.barapp.ui.pantallas
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.navGraphViewModels
 import com.barapp.R
+import com.barapp.barapp.model.Reserva
+import com.barapp.data.entities.RestauranteInfoQR
+import com.barapp.data.utils.FirestoreCallback
 import com.barapp.databinding.FragmentPantallaResumenReservaBinding
+import com.barapp.model.EstadoReserva
 import com.barapp.viewModels.MainActivityViewModel
+import com.barapp.viewModels.sharedViewModels.RestauranteSeleccionadoSharedViewModel
+import com.google.android.material.transition.Hold
+import com.google.gson.Gson
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanIntentResult
+import com.journeyapps.barcodescanner.ScanOptions
+import timber.log.Timber
 import java.time.LocalDate
 
 class PantallaResumenReserva : Fragment() {
@@ -19,6 +34,12 @@ class PantallaResumenReserva : Fragment() {
 
   private val activitySharedViewModel: MainActivityViewModel by activityViewModels()
 
+  private val restauranteSeleccionadoViewModel: RestauranteSeleccionadoSharedViewModel by navGraphViewModels(R.id.pantallaResumenReserva)
+
+  private lateinit var barcodeLauncher: ActivityResultLauncher<ScanOptions>
+
+  private val gson = Gson()
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -26,6 +47,41 @@ class PantallaResumenReserva : Fragment() {
   ): View {
 
     binding = FragmentPantallaResumenReservaBinding.inflate(inflater, container, false)
+
+    barcodeLauncher = registerForActivityResult<ScanOptions, ScanIntentResult>(
+      ScanContract()
+    ) { result: ScanIntentResult ->
+      if (result.contents == null) {
+        Toast.makeText(this.context, "Cancelado", Toast.LENGTH_LONG).show()
+      } else {
+        val restauranteInfoQR = gson.fromJson(result.contents, RestauranteInfoQR::class.java)
+
+        // Guardado de datos de sesion
+        val prefs = this.requireContext().getSharedPreferences(getString(R.string.shared_pref_file), Context.MODE_PRIVATE)
+        val idUsuario = prefs.getString("idUsuario", "")
+
+        if (idUsuario !== "") {
+          activitySharedViewModel.concretarReserva(idUsuario!!, restauranteInfoQR, object : FirestoreCallback<Reserva> {
+            override fun onSuccess(result: Reserva) {
+              if (result.estado == EstadoReserva.PENDIENTE)  {
+                Toast.makeText(context, "No se pudo concretar la reserva.", Toast.LENGTH_LONG).show()
+              } else {
+                activitySharedViewModel.setReservaSync(result)
+
+                binding.botonConcretarReserva.visibility = View.GONE
+                binding.botonCancelarReserva.visibility = View.GONE
+                binding.botonIrAlDetalle.visibility = View.VISIBLE
+
+                Toast.makeText(context, "La reserva se ha concretado con éxito.", Toast.LENGTH_LONG).show()
+              }
+            }
+            override fun onError(exception: Throwable) {
+              Timber.d("Error al concretar una reserva")
+            }
+          })
+        }
+      }
+    }
 
     return binding.root
   }
@@ -39,6 +95,11 @@ class PantallaResumenReserva : Fragment() {
 
     activitySharedViewModel.reservaLD.observe(viewLifecycleOwner) { r ->
       binding.toolbar.subtitle = r.restaurante.nombre
+      if (r.estado == EstadoReserva.CONCRETADA) {
+        binding.botonConcretarReserva.visibility = View.GONE
+        binding.botonCancelarReserva.visibility = View.GONE
+        binding.botonIrAlDetalle.visibility = View.VISIBLE
+      }
 
       val cantPersonas = r.cantidadPersonas
       binding.textViewCantidadPersonas.text =
@@ -66,7 +127,31 @@ class PantallaResumenReserva : Fragment() {
         )
     }
 
+    binding.botonConcretarReserva.setOnClickListener {
+      val scanOptions = ScanOptions()
+      scanOptions.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+      scanOptions.setBeepEnabled(false)
+      scanOptions.setOrientationLocked(false)
+      scanOptions.setCameraId(0)
+      scanOptions.setBarcodeImageEnabled(true)
+      scanOptions.setPrompt("Escanea el código QR")
+      scanOptions.setBarcodeImageEnabled(true)
+      barcodeLauncher.launch(scanOptions)
+    }
     binding.botonCancelarReserva.setOnClickListener { cancelarReserva() }
+
+    binding.botonIrAlDetalle.setOnClickListener {
+      val bundle = Bundle()
+      bundle.putInt("origen", PantallaBar.ORIGEN_RESUMEN_RESERVA)
+
+      restauranteSeleccionadoViewModel.buscarRestaurante(activitySharedViewModel.reservaLD.value!!.restaurante.id)
+      restauranteSeleccionadoViewModel.distancia = 0
+
+      exitTransition = Hold()
+
+      NavHostFragment.findNavController(this)
+        .navigate(R.id.action_pantallaResumenReserva_to_pantallaBar, bundle)
+    }
   }
 
   private fun volverAtras() {

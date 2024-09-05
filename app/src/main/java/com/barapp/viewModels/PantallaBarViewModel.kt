@@ -13,14 +13,12 @@ import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.repositories.RestauranteFavoritoRepository
 import com.barapp.util.RestauranteUtils.getRealIdRestaurante
 
-class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) : ViewModel() {
+class PantallaBarViewModel(var usuario: Usuario) : ViewModel() {
+  var restaurante: Restaurante? = null
+
   private val restauranteFavoritoRepository = RestauranteFavoritoRepository.instance
 
   private val reservaRepository = ReservaRepository.instance
-
-  init {
-    buscarReservasPendientes()
-  }
 
   private val _loading: MutableLiveData<Boolean> = MutableLiveData()
   val loading: LiveData<Boolean> = _loading
@@ -40,7 +38,7 @@ class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) :
 
   fun hacerFavorito() {
     this._loading.value = true
-    val restauranteFavorito = toRestauranteUsuario(restaurante)
+    val restauranteFavorito = toRestauranteUsuario(restaurante!!)
     restauranteFavorito.idUsuario = usuario.id
     restauranteFavoritoRepository.guardar(restauranteFavorito, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
       override fun onSuccess(result: List<String>) {
@@ -57,7 +55,7 @@ class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) :
 
   fun eliminarFavorito() {
     this._loading.value = true
-    restauranteFavoritoRepository.borrar(getRealIdRestaurante(restaurante), usuario.id, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
+    restauranteFavoritoRepository.borrar(getRealIdRestaurante(restaurante!!), usuario.id, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
       override fun onSuccess(result: List<String>) {
         usuario.detalleUsuario!!.idsRestaurantesFavoritos = HashSet(result)
         _loading.postValue(false)
@@ -71,12 +69,12 @@ class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) :
   }
 
   fun esFavorito(): Boolean {
-    return (usuario.detalleUsuario!!.idsRestaurantesFavoritos.contains(restaurante.id) ||
-        usuario.detalleUsuario!!.idsRestaurantesFavoritos.contains(restaurante.idRestaurante))
+    return (usuario.detalleUsuario!!.idsRestaurantesFavoritos.contains(restaurante!!.id) ||
+        usuario.detalleUsuario!!.idsRestaurantesFavoritos.contains(restaurante!!.idRestaurante))
   }
 
-  private fun buscarReservasPendientes() {
-    reservaRepository.buscarUltimasReservasPendientes(restaurante.id, usuario.id, 3, object : FirestoreCallback<List<Reserva>> {
+  fun buscarReservasPendientes() {
+    reservaRepository.buscarUltimasReservasPendientes(restaurante!!.id, usuario.id, 3, object : FirestoreCallback<List<Reserva>> {
       override fun onSuccess(result: List<Reserva>) {
         _loadingReservasPendientes.postValue(false)
         _alcanzoLimiteReservas.postValue(result.size == 3)
@@ -89,11 +87,11 @@ class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) :
     })
   }
 
-  class Factory(private val restaurante: Restaurante, private val usuario: Usuario) :
+  class Factory(private val usuario: Usuario) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
       if (modelClass.isAssignableFrom(PantallaBarViewModel::class.java)) {
-        @Suppress("UNCHECKED_CAST") return PantallaBarViewModel(restaurante, usuario) as T
+        @Suppress("UNCHECKED_CAST") return PantallaBarViewModel(usuario) as T
       }
 
       throw IllegalArgumentException("UNKNOWN VIEW MODEL CLASS")

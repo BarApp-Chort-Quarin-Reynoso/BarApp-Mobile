@@ -4,6 +4,7 @@ import com.barapp.data.entities.HorarioEntity
 import com.barapp.data.entities.ReservaEntity
 import com.barapp.data.entities.RestauranteEntity
 import com.barapp.barapp.model.Reserva
+import com.barapp.data.entities.RestauranteInfoQR
 import com.barapp.model.Ubicacion
 import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.utils.IGenericRepository
@@ -101,6 +102,70 @@ class ReservaRepository private constructor() : IGenericRepository<Reserva> {
         callback.onError(t)
       }
     })
+  }
+
+  fun concretarReserva(idReserva: String, idUsuario: String, restauranteInfoQR: RestauranteInfoQR, callback: FirestoreCallback<Reserva>) {
+    api.concretarReserva(idReserva, idUsuario, restauranteInfoQR.restauranteId).enqueue(object : Callback<Reserva> {
+      override fun onResponse(call: Call<Reserva>, response: Response<Reserva>) {
+        if (response.isSuccessful) {
+          Timber.d("Reserva devuelta exitosamente")
+          callback.onSuccess(response.body()!!)
+        } else {
+          Timber.e("Error: ${response.errorBody()}")
+          callback.onError(Throwable(response.message()))
+        }
+      }
+
+      override fun onFailure(call: Call<Reserva>, t: Throwable) {
+        Timber.e(t)
+      }
+    })
+  }
+
+  fun buscarReservasANotificar(
+    idUsuario: String,
+    minutosMinimos: Int,
+    callback: FirestoreCallback<List<Reserva>>,
+  ) {
+    val listaReservas: MutableList<Reserva> = ArrayList()
+    db
+      .collection(COLECCION_RESERVAS)
+      .whereEqualTo("idUsuario", idUsuario)
+      .whereGreaterThan(
+        "timestamp",
+        Timestamp(
+          LocalDateTime.now()
+            .plusMinutes(minutosMinimos.toLong())
+            .atZone(ZoneId.of("America/Buenos_Aires"))
+            .toInstant()
+            .epochSecond,
+          0,
+        ),
+      )
+      .get()
+      .addOnCompleteListener { task: Task<QuerySnapshot> ->
+        if (task.isSuccessful) {
+          for (document in task.result) {
+            val reservaEntity = document.toObject(ReservaEntity::class.java)
+            val restauranteEntity = document.toObject(RestauranteEntity::class.java)
+            val horarioEntity = document.toObject(HorarioEntity::class.java)
+            // Tiene solo idUbicacion, calle y numero, el resto de campos son nulls
+            val ubicacion = document.toObject(Ubicacion::class.java)
+            val reserva =
+              fromEntity(
+                reservaEntity,
+                fromEntity(restauranteEntity, ubicacion, null),
+                fromEntity(horarioEntity),
+                null,
+              )
+            listaReservas.add(reserva)
+          }
+          callback.onSuccess(listaReservas)
+        } else {
+          Timber.d("Falló la busqueda de reservas")
+          callback.onError(task.exception!!)
+        }
+      }
   }
 
   override fun guardar(entidad: Reserva) {

@@ -2,6 +2,7 @@ package com.barapp.ui.recyclerViewAdapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.RatingBar
 import android.widget.TextView
@@ -30,6 +31,9 @@ class OpinionesRecyclerAdapter (private val opiniones : MutableList<Opinion>) : 
         holder.usuario.text = nombreCompleto
         holder.fecha.text = getFechaFormateada(opinion.fecha)
         holder.opinion.text = opinion.comentario
+        if (opinion.comentario == "") {
+            holder.opinion.visibility = View.INVISIBLE
+        }
         holder.rating.rating = opinion.nota.toFloat()
         holder.cantidadPersonas.text = getTextoCantidadPersonas(opinion.cantidadPersonas)
         "(${opinion.horario.tipoComida})".also { holder.tipoComida.text = it }

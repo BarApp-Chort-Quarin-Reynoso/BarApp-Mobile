@@ -89,7 +89,11 @@
         android:id="@+id/pantallaResumenReserva"
         android:name="com.barapp.ui.pantallas.PantallaResumenReserva"
         android:label="PantallaResumenReserva"
-        tools:layout="@layout/fragment_pantalla_resumen_reserva"/>
+        tools:layout="@layout/fragment_pantalla_resumen_reserva">
+        <action
+            android:id="@+id/action_pantallaResumenReserva_to_pantallaBar"
+            app:destination="@id/pantallaBar" />
+    </fragment>
     <fragment
         android:id="@+id/pantallaCrearOpinion"
         android:name="com.barapp.ui.pantallas.PantallaCrearOpinion"

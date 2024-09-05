@@ -3,6 +3,7 @@ package com.barapp.data.retrofit
 import com.barapp.barapp.model.Reserva
 import com.barapp.model.EstadoReserva
 import com.barapp.model.Opinion
+import com.barapp.model.Restaurante
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -31,6 +32,9 @@ interface ReservationApiService {
     @Query("idUsuario") idUsuario: String,
     @Query("cantidad") cantidad: Int
   ): Call<List<Reserva>>
+
+  @GET("/api/reservas/{idReserva}/concretar")
+  fun concretarReserva(@Path("idReserva") idReserva: String, @Query("idUsuario") idUsuario: String, @Query("idRestaurante") idRestaurante: String): Call<Reserva>
 
   @POST("/api/reservas/{id}")
   fun createReservation(@Path("id") id: String, @Body reserva: Reserva): Call<String>
