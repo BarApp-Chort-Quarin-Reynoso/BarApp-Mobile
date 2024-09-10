@@ -6,6 +6,7 @@ import com.barapp.data.utils.IGenericRepository
 import com.barapp.data.retrofit.RestaurantApiService
 import com.barapp.data.retrofit.RetrofitInstance
 import com.barapp.model.HorarioConCapacidadDisponible
+import com.barapp.model.Opinion
 import com.google.android.gms.maps.model.LatLng
 import retrofit2.Call
 import retrofit2.Callback
@@ -134,6 +135,33 @@ class RestauranteRepository private constructor() : IGenericRepository<Restauran
       }
 
       override fun onFailure(call: Call<List<Restaurante>>, t: Throwable) {
+        Timber.e(t)
+        callback.onError(t)
+      }
+    })
+  }
+
+  fun buscarOpinionesRestaurante(
+    idRestaurante: String,
+    callback: FirestoreCallback<List<Opinion>>
+  ) {
+    Timber.d("Buscando opiniones para restaurante con id: $idRestaurante")
+    api.getReviewsByRestaurant(idRestaurante).enqueue(object : Callback<List<Opinion>> {
+      override fun onResponse(
+        call: Call<List<Opinion>>,
+        response: Response<List<Opinion>>
+      ) {
+        if (response.isSuccessful) {
+          val data = response.body()
+          Timber.d("Opiniones recibidas: $data")
+          callback.onSuccess(data!!)
+        } else {
+          Timber.e("Error: ${response.errorBody()}")
+          callback.onError(Throwable("Error recuperando Opiniones"))
+        }
+      }
+
+      override fun onFailure(call: Call<List<Opinion>>, t: Throwable) {
         Timber.e(t)
         callback.onError(t)
       }

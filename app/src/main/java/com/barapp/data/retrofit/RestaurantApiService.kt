@@ -2,6 +2,7 @@ package com.barapp.data.retrofit
 
 import com.barapp.model.DetalleRestaurante
 import com.barapp.model.HorarioConCapacidadDisponible
+import com.barapp.model.Opinion
 import com.barapp.model.Restaurante
 import com.barapp.model.RestauranteUsuario
 import retrofit2.Call
@@ -39,4 +40,7 @@ interface RestaurantApiService {
 
   @GET("/api/restaurantes/cercanos")
   fun getRestaurantsByArea(@Query("neLat") neLat: String, @Query("neLon") neLon: String, @Query("swLat") swLat: String, @Query("swLon") swLon: String, ): Call<List<Restaurante>>
+
+  @GET("/api/restaurantes/{id}/opiniones")
+    fun getReviewsByRestaurant(@Path("id") id: String): Call<List<Opinion>>
 }

@@ -99,5 +99,28 @@
     <style name="BarApp.CardViewElevatedStyle" parent="Widget.Material3.CardView.Elevated">
         <item name="cardBackgroundColor">?attr/colorSurface</item>
         <item name="backgroundTint">@color/md_theme_light_surface1_overlay</item>
+        <item name="cardElevation">2dp</item>
+    </style>
+
+    <style name="BarApp.TextAppearancePuntuactionTitleDisplay" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="android:textSize">48sp</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textColor">@color/orange_primary</item>
+    </style>
+
+    <style name="BarApp.RatingBarSmallDisplaySmall" parent="@android:style/Widget.Material.RatingBar.Small">
+        <item name="android:indeterminate">false</item>
+        <item name="android:isIndicator">true</item>
+        <item name="android:numStars">5</item>
+        <item name="android:rating">1</item>
+        <item name="android:progressTint">@color/orange_primary</item>
+    </style>
+
+    <style name="BarApp.RatingBarSmallDisplayMedium" parent="@android:style/Widget.Material.Light.RatingBar.Indicator">
+        <item name="android:indeterminate">false</item>
+        <item name="android:isIndicator">true</item>
+        <item name="android:numStars">5</item>
+        <item name="android:rating">1</item>
+        <item name="android:progressTint">@color/orange_primary</item>
     </style>
 </resources>
