@@ -3,6 +3,7 @@ package com.barapp.data.mappers
 import com.barapp.data.entities.OpinionEntity
 import com.barapp.data.entities.OpinionUsuarioEntity
 import com.barapp.data.entities.UsuarioEntity
+import com.barapp.model.Horario
 import com.barapp.model.Opinion
 import com.barapp.model.Usuario
 
@@ -14,7 +15,7 @@ object OpinionMapper {
 
   @JvmStatic
   fun fromEntity(opinionEntity: OpinionEntity, usuario: Usuario?): Opinion {
-    return Opinion(opinionEntity.idOpinion, opinionEntity.comentario, opinionEntity.nota, usuario!!)
+    return Opinion(opinionEntity.idOpinion, opinionEntity.comentario, opinionEntity.nota, usuario!!, Horario(), "", 0)
   }
 
   @JvmStatic
