@@ -156,32 +156,53 @@
                 android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintStart_toStartOf="@+id/txtViewNombreRestaurante"
                 app:layout_constraintTop_toBottomOf="@+id/txtViewNombreRestaurante"
-                app:layout_constraintEnd_toStartOf="@+id/txtViewPuntuacionRestaurante" />
+                app:layout_constraintEnd_toStartOf="@id/linearLayoutOpiniones" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutOpiniones"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtViewUbicacionRestaurante"
+                app:layout_constraintHorizontal_chainStyle="spread">
 
             <TextView
                 android:id="@+id/txtViewPuntuacionRestaurante"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end"
+                android:layout_marginEnd="2dp"
                 android:text="@string/texto_ejemplo_bar_nota"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="?android:attr/textColorSecondary"
-                app:layout_constraintTop_toTopOf="@id/txtViewUbicacionRestaurante"
-                app:layout_constraintStart_toEndOf="@id/txtViewUbicacionRestaurante"
-                app:layout_constraintEnd_toStartOf="@+id/imageViewEstrella" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ratingBarPuntuacion"
+                app:layout_constraintStart_toEndOf="@id/textViewDistancia"
+                app:layout_constraintTop_toBottomOf="@id/textViewDireccion" />
 
-            <ImageView
-                android:id="@+id/imageViewEstrella"
+            <RatingBar
+                android:id="@+id/ratingBarPuntuacion"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginEnd="16dp"
-                android:contentDescription="@string/imagen_estrella_descripcion"
-                app:layout_constraintBottom_toBottomOf="@+id/txtViewPuntuacionRestaurante"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/textViewCantidadOpiniones"
+                app:layout_constraintStart_toEndOf="@id/txtViewPuntuacionRestaurante"
+                app:layout_constraintTop_toBottomOf="@id/textViewDireccion"
+                style="@style/BarApp.RatingBarSmallDisplaySmall" />
+
+            <TextView
+                android:id="@+id/textViewCantidadOpiniones"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/card_inner_horizontal_margin"
+                android:text="@string/texto_ejemplo_bar_cantidad_opiniones"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/txtViewPuntuacionRestaurante"
-                app:layout_constraintTop_toTopOf="@+id/txtViewPuntuacionRestaurante"
-                app:srcCompat="@drawable/icon_filled_star_24"
-                app:tint="#FFC107" />
+                app:layout_constraintStart_toEndOf="@id/ratingBarPuntuacion"
+                app:layout_constraintTop_toBottomOf="@id/textViewDireccion" />
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

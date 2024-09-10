@@ -116,7 +116,7 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -177,7 +177,7 @@
 
                 <TextView
                     android:id="@+id/textViewDistancia"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/card_inner_horizontal_margin"
                     android:layout_marginTop="1dp"
@@ -186,39 +186,54 @@
                     android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="?android:attr/textColorSecondary"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textViewNota"
                     app:layout_constraintStart_toEndOf="@id/imageViewLogo"
                     app:layout_constraintTop_toBottomOf="@id/textViewDireccion" />
 
-                <TextView
-                    android:id="@+id/textViewNota"
+                <LinearLayout
+                    android:id="@+id/linearLayoutOpiniones"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginEnd="2dp"
-                    android:layout_marginBottom="@dimen/card_inner_vertical_margin"
-                    android:text="@string/texto_ejemplo_bar_nota"
-                    android:textAppearance="?attr/textAppearanceBodyMedium"
-                    android:textColor="?android:attr/textColorSecondary"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/imageViewEstrella"
-                    app:layout_constraintStart_toEndOf="@id/textViewDistancia"
-                    app:layout_constraintTop_toBottomOf="@id/textViewDireccion" />
-
-                <ImageView
-                    android:id="@+id/imageViewEstrella"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginEnd="@dimen/card_inner_horizontal_margin"
-                    android:layout_marginBottom="@dimen/card_inner_vertical_margin"
-                    android:contentDescription="@string/imagen_estrella_descripcion"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/textViewNota"
                     app:layout_constraintTop_toBottomOf="@id/textViewDireccion"
-                    app:srcCompat="@drawable/icon_filled_star_24"
-                    app:tint="@color/barapp_yellow" />
+                    app:layout_constraintHorizontal_chainStyle="spread">
+
+                    <TextView
+                        android:id="@+id/txtViewPuntuacionRestaurante"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="2dp"
+                        android:text="@string/texto_ejemplo_bar_nota"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:textColor="?android:attr/textColorSecondary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/ratingBarPuntuacion"
+                        app:layout_constraintStart_toEndOf="@id/textViewDistancia"
+                        app:layout_constraintTop_toBottomOf="@id/textViewDireccion" />
+
+                    <RatingBar
+                        android:id="@+id/ratingBarPuntuacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/txtViewCantidadOpiniones"
+                        app:layout_constraintStart_toEndOf="@id/txtViewPuntuacionRestaurante"
+                        app:layout_constraintTop_toBottomOf="@id/textViewDireccion"
+                        style="@style/BarApp.RatingBarSmallDisplaySmall" />
+
+                    <TextView
+                        android:id="@+id/txtViewCantidadOpiniones"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/card_inner_horizontal_margin"
+                        android:text="@string/texto_ejemplo_bar_cantidad_opiniones"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:textColor="?android:attr/textColorSecondary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/ratingBarPuntuacion"
+                        app:layout_constraintTop_toBottomOf="@id/textViewDireccion" />
+                </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -291,7 +306,7 @@
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <Space
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="70dp"/>
 

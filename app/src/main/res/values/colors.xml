@@ -67,4 +67,6 @@
 
     <color name="card_view_backgroundTint_color">#F7F1F1</color>
     <color name="barapp_yellow">#FDCC0D</color>
+
+    <color name="orange_primary">#EB5905</color>
 </resources>

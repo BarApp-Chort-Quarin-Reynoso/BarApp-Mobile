@@ -280,7 +280,13 @@ class PantallaBaresCercanos : Fragment() {
     binding.txtViewNombreRestaurante.text = restaurante.nombre
     binding.txtViewUbicacionRestaurante.text =
       String.format("%s %s", restaurante.ubicacion.calle, restaurante.ubicacion.numero)
-    binding.txtViewPuntuacionRestaurante.text = restaurante.puntuacion.toString()
+    if (restaurante.cantidadOpiniones == 0) {
+      binding.linearLayoutOpiniones.visibility = View.GONE
+    } else {
+      binding.txtViewPuntuacionRestaurante.text = restaurante.puntuacion.toString().substring(0, 3)
+      binding.ratingBarPuntuacion.rating = restaurante.puntuacion.toFloat()
+      "(${restaurante.cantidadOpiniones})".also { binding.textViewCantidadOpiniones.text = it }
+    }
     Glide.with(requireContext())
       .load(restaurante.portada)
       .apply(

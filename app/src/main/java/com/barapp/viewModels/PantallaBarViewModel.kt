@@ -25,24 +25,34 @@ class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) :
   }
 
   fun hacerFavorito() {
+    this._loading.value = true
     val restauranteFavorito = toRestauranteUsuario(restaurante)
     restauranteFavorito.idUsuario = usuario.id
     restauranteFavoritoRepository.guardar(restauranteFavorito, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
       override fun onSuccess(result: List<String>) {
         usuario.detalleUsuario!!.idsRestaurantesFavoritos = HashSet(result)
+        _loading.postValue(false)
       }
 
-      override fun onError(exception: Throwable) {}
+      override fun onError(exception: Throwable) {
+        _loading.postValue(false)
+        _error.postValue(exception)
+      }
     })
   }
 
   fun eliminarFavorito() {
+    this._loading.value = true
     restauranteFavoritoRepository.borrar(restaurante.id, usuario.id, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
       override fun onSuccess(result: List<String>) {
         usuario.detalleUsuario!!.idsRestaurantesFavoritos = HashSet(result)
+        _loading.postValue(false)
       }
 
-      override fun onError(exception: Throwable) {}
+      override fun onError(exception: Throwable) {
+        _loading.postValue(false)
+        _error.postValue(exception)
+      }
     })
   }
 

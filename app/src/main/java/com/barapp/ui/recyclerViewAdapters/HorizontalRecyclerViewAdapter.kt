@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DiffUtil.DiffResult
@@ -68,7 +69,13 @@ class HorizontalRecyclerViewAdapter(
     val calleNumero = restaurante.ubicacion.calle + " " + restaurante.ubicacion.numero
     holder.nombreRestaurante.text = restaurante.nombre
     holder.ubicacionRestaurante.text = calleNumero
-    holder.puntuacionRestaurante.text = String.format(restaurante.puntuacion.toString())
+    if (restaurante.cantidadOpiniones == 0) {
+      holder.linearLayoutOpiniones.visibility = View.GONE
+    } else {
+      holder.puntuacionRestaurante.text = String.format(restaurante.puntuacion.toString().substring(0, 3))
+      holder.ratingBarPuntuacion.rating = restaurante.puntuacion.toFloat()
+      "(${restaurante.cantidadOpiniones})".also { holder.cantidadOpiniones.text = it }
+    }
     Glide.with(holder.root.context)
       .load(restaurante.logo)
       .apply(RequestOptions.circleCropTransform())
@@ -208,7 +215,10 @@ class HorizontalRecyclerViewAdapter(
     val nombreRestaurante: TextView
     val ubicacionRestaurante: TextView
     val distanciaRestaurante: TextView
+    val linearLayoutOpiniones: View
     val puntuacionRestaurante: TextView
+    val ratingBarPuntuacion: RatingBar
+    val cantidadOpiniones: TextView
     val textoPausado: TextView
     val logoRestaurante: ImageView
     val fotoRestaurante: ImageView
@@ -223,7 +233,10 @@ class HorizontalRecyclerViewAdapter(
       nombreRestaurante = binding.txtViewNombreRestaurante
       ubicacionRestaurante = binding.txtViewUbicacionRestaurante
       distanciaRestaurante = binding.txtViewDistanciaRestaurante
+      linearLayoutOpiniones = binding.linearLayoutOpiniones
       puntuacionRestaurante = binding.txtViewPuntuacionRestaurante
+      ratingBarPuntuacion = binding.ratingBarPuntuacion
+      cantidadOpiniones = binding.txtViewCantidadOpiniones
       textoPausado = binding.txtViewPaused
       logoRestaurante = binding.imageViewLogo
       fotoRestaurante = binding.imageViewFoto

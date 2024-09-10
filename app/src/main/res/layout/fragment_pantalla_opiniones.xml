@@ -1,73 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:id="@+id/parent_layout">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:contentDescription="@string/boton_atras_descripcion"
-            app:navigationIcon="@drawable/icon_outlined_arrow_back_24"
-            app:navigationIconTint="?attr/colorOnSurface"
-            style="@style/Widget.Barapp.Toolbar" />
-    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/txtViewCantidadOpiniones"
-            android:layout_width="0dp"
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="@dimen/card_inner_horizontal_margin"
-            android:text="@string/pantalla_opiniones_label_cantidad_opiniones"
-            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
+            android:fitsSystemWindows="true">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/botonSwapOpiniones"
-            style="?attr/materialIconButtonFilledStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:state_checked="false"
-            android:contentDescription="@string/boton_ordenar_descripcion"
-            app:backgroundTint="@color/md_theme_light_background"
-            app:icon="@drawable/icon_outlined_swap_vert_24" />
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="@string/pantalla_opiniones_toolbar_title"
+                app:navigationIcon="@drawable/icon_outlined_arrow_back_24"
+                app:navigationIconTint="?attr/colorOnSurface"
+                style="@style/Widget.Barapp.Toolbar"/>
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/botonFiltrosOpiniones"
-            style="?attr/materialIconButtonFilledStyle"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayoutPuntuacion"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checkable="true"
-            android:contentDescription="@string/boton_filtros_descripcion"
-            app:backgroundTint="@color/md_theme_light_background"
-            app:icon="@drawable/icon_outlined_tune_24" />
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/textViewPuntuacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/texto_ejemplo_bar_nota"
+                app:layout_constraintEnd_toStartOf="@id/ratingBarPuntuacion"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                style="@style/BarApp.TextAppearancePuntuactionTitleDisplay"/>
+
+            <RatingBar
+                android:id="@+id/ratingBarPuntuacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/textViewPuntuacion"
+                app:layout_constraintEnd_toEndOf="parent"
+                style="@style/BarApp.RatingBarSmallDisplayMedium" />
+
+            <TextView
+                android:id="@+id/textViewCantidadOpiniones"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pantalla_opiniones_label_cantidad_opiniones"
+                android:textAppearance="@style/BarApp.TextAppearanceTitleSmall"
+                app:layout_constraintEnd_toEndOf="@id/ratingBarPuntuacion"
+                app:layout_constraintTop_toBottomOf="@id/ratingBarPuntuacion"
+                app:layout_constraintStart_toStartOf="@id/ratingBarPuntuacion"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linearLayoutCaracteristicas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/card_inner_horizontal_margin"
+            app:divider="@drawable/empty_divider_title_body"
+            app:showDividers="middle">
+
+            <TextView
+                android:id="@+id/labelTituloCaracteristicas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/pantalla_opiniones_title_valoracion_caracteristicas"
+                android:textAppearance="@style/BarApp.TextAppearanceTitle" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewCaracteristicas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewOpiniones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/card_inner_horizontal_margin" />
 
     </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewOpiniones"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <include
-        layout="@layout/lista_vacia_disenio"
-        android:id="@+id/listaVacia"
-        />
-
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>

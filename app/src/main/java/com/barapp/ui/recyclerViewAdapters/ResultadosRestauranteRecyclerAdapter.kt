@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.DiffUtil
@@ -67,12 +68,18 @@ class ResultadosRestauranteRecyclerAdapter(
     val ubicacion = restaurante.ubicacion.calle + " " + restaurante.ubicacion.numero
     holder.nombreRestaurante.text = restaurante.nombre
     holder.ubicacionRestaurante.text = ubicacion
-    holder.puntuacionRestaurante.text = String.format(restaurante.puntuacion.toString())
+    if (restaurante.cantidadOpiniones == 0) {
+      holder.linearLayoutOpiniones.visibility = View.GONE
+    } else {
+      holder.puntuacionRestaurante.text = String.format(restaurante.puntuacion.toString().substring(0, 3))
+      holder.ratingBarPuntuacion.rating = restaurante.puntuacion.toFloat()
+      "(${restaurante.cantidadOpiniones})".also { holder.cantidadOpiniones.text = it }
+    }
     Glide.with(holder.root.context)
       .load(restaurante.logo)
       .apply(RequestOptions.circleCropTransform())
       .into(holder.logoRestaurante)
-    holder.imagenEstrella.setImageResource(R.drawable.icon_filled_star_24)
+    //holder.imagenEstrella.setImageResource(R.drawable.icon_filled_star_24)
 
     if (usuario.detalleUsuario!!.idsRestaurantesFavoritos.contains(restaurantes[position].idRestaurante)) {
       holder.botonFavorito.setIconResource(R.drawable.icon_filled_favorite_24)
@@ -182,8 +189,10 @@ class ResultadosRestauranteRecyclerAdapter(
     val distanciaRestaurante: TextView
     val logoRestaurante: ImageView
     val botonFavorito: MaterialButton
+    val linearLayoutOpiniones: View
     val puntuacionRestaurante: TextView
-    val imagenEstrella: ImageView
+    val ratingBarPuntuacion: RatingBar
+    val cantidadOpiniones: TextView
     val root: View
     val listener: OnItemClickListener
 
@@ -195,8 +204,10 @@ class ResultadosRestauranteRecyclerAdapter(
       ubicacionRestaurante = binding.txtViewUbicacionRestaurante
       distanciaRestaurante = binding.txtViewDistanciaRestaurante
       botonFavorito = binding.botonFavorito
+      linearLayoutOpiniones = binding.linearLayoutOpiniones
       puntuacionRestaurante = binding.txtViewPuntuacionRestaurante
-      imagenEstrella = binding.imageViewEstrella
+      ratingBarPuntuacion = binding.ratingBarPuntuacion
+      cantidadOpiniones = binding.txtViewCantidadOpiniones
       card.setOnClickListener(this)
       this.listener = listener
     }

@@ -16,16 +16,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navGraphViewModels
-import androidx.transition.TransitionInflater
 import com.barapp.R
 import com.barapp.databinding.FragmentPantallaBarBinding
 import com.barapp.databinding.OpinionLayoutBinding
 import com.barapp.model.EstadoRestaurante
 import com.barapp.model.Opinion
+import com.barapp.ui.AuthActivity
+import com.barapp.ui.MainActivity
 import com.barapp.util.Interpolator
 import com.barapp.viewModels.sharedViewModels.BarAReservarSharedViewModel
 import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.PantallaBarViewModel
+import com.barapp.viewModels.sharedViewModels.PantallaOpinionesSharedViewModel
 import com.barapp.viewModels.sharedViewModels.RestauranteSeleccionadoSharedViewModel
 import com.barapp.viewModels.sharedViewModels.UbicacionBarSharedViewModel
 import com.bumptech.glide.Glide
@@ -34,11 +36,11 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.Hold
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialSharedAxis
-import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Esta clase es un [Fragment] que se utiliza para mostrar un bar en especifico. A traves del mismo
@@ -72,6 +74,9 @@ class PantallaBar : Fragment() {
 
   private val barAReservarViewModel: BarAReservarSharedViewModel by
     navGraphViewModels(R.id.pantallaNavegacionPrincipal)
+
+  private val opinionesSharedViewModel: PantallaOpinionesSharedViewModel by
+    navGraphViewModels(R.id.pantallaBar)
 
   private lateinit var binding: FragmentPantallaBarBinding
 
@@ -131,7 +136,9 @@ class PantallaBar : Fragment() {
         viewModel.restaurante.ubicacion.calle,
         viewModel.restaurante.ubicacion.numero,
       )
-    binding.textViewNota.text = viewModel.restaurante.puntuacion.toString()
+    binding.txtViewPuntuacionRestaurante.text = viewModel.restaurante.puntuacion.toString().substring(0, 3)
+    binding.ratingBarPuntuacion.rating = viewModel.restaurante.puntuacion.toFloat()
+    "(${viewModel.restaurante.cantidadOpiniones})".also { binding.txtViewCantidadOpiniones.text = it }
 
     Glide.with(requireContext())
       .load(viewModel.restaurante.logo)
@@ -176,6 +183,7 @@ class PantallaBar : Fragment() {
           binding.opinion1.opinionLayout.visibility = View.GONE
           binding.opinion2.opinionLayout.visibility = View.GONE
           binding.botonVerMasOpiniones.visibility = View.GONE
+          binding.linearLayoutOpiniones.visibility = View.GONE
         }
         1 -> {
           setearOpinion(detalle.opiniones[0], binding.opinion1)
@@ -190,7 +198,10 @@ class PantallaBar : Fragment() {
       }
     }
 
-    viewModel.loading.observe(viewLifecycleOwner) { Timber.i("Loading") }
+    viewModel.loading.observe(viewLifecycleOwner) {
+      println("Loading: $it")
+      setLoading(it)
+    }
 
     viewModel.error.observe(viewLifecycleOwner) {
       it?.run {
@@ -215,6 +226,7 @@ class PantallaBar : Fragment() {
       }
     )
 
+    binding.linearLayoutOpiniones.setOnClickListener { mostrarMasOpiniones() }
     binding.botonMenu.setOnClickListener { mostrarMenu() }
     binding.botonUbicacion.setOnClickListener { mostrarUbicacion() }
     binding.botonVerMasOpiniones.setOnClickListener { mostrarMasOpiniones() }
@@ -245,6 +257,11 @@ class PantallaBar : Fragment() {
     binding.botonAtras.setOnClickListener { volverAtras() }
 
     binding.fabReservar.setOnClickListener { mostrarPantallaReservar() }
+  }
+
+  override fun onResume() {
+    super.onResume()
+    binding.ratingBarPuntuacion.rating = barSeleccionadoViewModel.restaurante!!.puntuacion.toFloat()
   }
 
   private fun mostrarBotonesToolbar() {
@@ -360,6 +377,12 @@ class PantallaBar : Fragment() {
   }
 
   private fun mostrarMasOpiniones() {
+    opinionesSharedViewModel.nombreRestauranteSeleccionado = barSeleccionadoViewModel.restaurante!!.nombre
+    opinionesSharedViewModel.idRestauranteSeleccionado = barSeleccionadoViewModel.restaurante!!.id
+    opinionesSharedViewModel.caracteristicasRestauranteSeleccionado =
+      barSeleccionadoViewModel.restaurante!!.detalleRestaurante!!.caracteristicas
+    opinionesSharedViewModel.puntuacionRestauranteSeleccionado = barSeleccionadoViewModel.restaurante!!.puntuacion
+
     NavHostFragment.findNavController(this)
       .navigate(R.id.action_pantallaBar_to_pantallaOpiniones)
   }
@@ -371,12 +394,34 @@ class PantallaBar : Fragment() {
         opinion.usuario.nombre,
         opinion.usuario.apellido,
       )
+    binding.textViewFecha.text = getFechaFormateada(opinion.fecha)
     binding.textViewOpinion.text =
       getString(R.string.pantalla_bar_texto_opinion, opinion.comentario)
     binding.ratingBarPuntuacion.rating = opinion.nota.toFloat()
+    binding.textViewCantidadPersonas.text = getTextoCantidadPersonasOpinion(opinion.cantidadPersonas)
+    "(${opinion.horario.tipoComida})".also { binding.textViewTipoComida.text = it }
     Glide.with(requireContext())
       .load(opinion.usuario.foto)
       .apply(RequestOptions.circleCropTransform())
       .into(binding.imageViewFotoPerfil)
+  }
+
+  private fun setLoading(loading: Boolean) {
+    (activity as MainActivity).setLoading(loading)
+  }
+
+  private fun getTextoCantidadPersonasOpinion(cantidadPersonas: Int): String {
+    return "Reservó para " + if (cantidadPersonas == 1) {
+      "1 persona"
+    } else {
+      "$cantidadPersonas personas"
+    }
+  }
+
+  private fun getFechaFormateada(fecha: String): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale("es", "ES"))
+    val date = inputFormat.parse(fecha)
+    return outputFormat.format(date!!)
   }
 }

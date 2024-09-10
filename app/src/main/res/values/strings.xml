@@ -142,9 +142,13 @@
     <string name="texto_ejemplo_bar_direccion">Rivadavia 3186</string>
     <string name="texto_ejemplo_bar_distancia">a 200 mts</string>
     <string name="texto_ejemplo_bar_nota">1.0</string>
+    <string name="texto_ejemplo_bar_cantidad_opiniones">(1)</string>
     <string name="texto_ejemplo_bar_descripcion">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam mattis libero eu neque finibus interdum. Fusce eget sem elit. Proin sit amet massa vel diam malesuada maximus. Nullam cursus leo ligula, in vulputate eros sagittis vel. Maecenas pharetra.</string>
     <string name="texto_ejemplo_nombre_usuario">Juan Carlos Pintos</string>
+    <string name="texto_ejemplo_fecha">29 dic. 2023</string>
     <string name="texto_ejemplo_opinion">“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam mattis libero eu neque finibus interdum.”</string>
+    <string name="texto_ejemplo_cantidad_personas">2 personas</string>
+    <string name="texto_ejemplo_tipo_comida">(CENA)</string>
     <string name="texto_ejemplo_datos_reserva">4 personas | 22/03 | 13:00</string>
 
     <!-- Rational permission request dialog -->
@@ -173,6 +177,7 @@
     <string name="error_authenticating_user">Se ha producido un error autenticando al usuario</string>
     <string name="error_titulo_algo_salio_mal">Algo salió mal</string>
     <string name="error_buscando_detalle_restaurante">"Ocurrió un error al buscar la información del restaurante %1$s. Intente nuevamente en unos minutos."</string>
+    <string name="error_buscando_opiniones_restaurante">"Ocurrió un error al buscar las opiniones del restaurante %1$s. Intente nuevamente en unos minutos."</string>
 
     <!-- Notification channel -->
     <string name="notificacion_reserva_channel_name">"General"</string>
@@ -292,8 +297,13 @@
     <string name="filter_clear">Limpiar</string>
 
     <!-- Pantalla de opiniones -->
+    <string name="pantalla_opiniones_toolbar_title">Opiniones del restaurante</string>
     <string name="pantalla_opiniones_label_cantidad_opiniones">[Cantidad opiniones]</string>
+    <string name="pantalla_opiniones_title_valoracion_caracteristicas">Valoración de las características</string>
+    <string name="pantalla_opiniones_label_caracteristica">[Label caracteristica]</string>
+    <string name="pantalla_opiniones_caracteristica_sin_valoraciones">Sin valoraciones aún</string>
     <string name="lista_vacia_opiniones">¡No hay opiniones para mostrar!</string>
+    <string name="titulo_cantidad_opiniones">%1$d opiniones</string>
 
     <!-- Pantalla Crear Opinión -->
     <string name="pantalla_crear_opinion_label_calificacion_comida">[Calificador X]</string>
