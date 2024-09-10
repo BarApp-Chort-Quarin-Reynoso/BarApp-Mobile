@@ -7,6 +7,7 @@ open class Restaurante(
   var nombre: String,
   var estado: EstadoRestaurante,
   var puntuacion: Double,
+  var cantidadOpiniones: Int,
   var portada: String,
   var correo: String,
   var logo: String,
@@ -16,12 +17,13 @@ open class Restaurante(
   var idRestaurante: String = ""
 ) : BaseClass(id) {
 
-  constructor() : this(UUID.randomUUID().toString(), "", EstadoRestaurante.ESPERANDO_HABILITACION, -1.0, "", "", "", Ubicacion(), "", null)
+  constructor() : this(UUID.randomUUID().toString(), "", EstadoRestaurante.ESPERANDO_HABILITACION, -1.0, 0, "", "", "", Ubicacion(), "", null)
 
   constructor(
     nombre: String,
     estado: EstadoRestaurante,
     puntuacion: Double,
+    cantidadOpiniones: Int,
     portada: String,
     correo: String,
     logo: String,
@@ -33,6 +35,7 @@ open class Restaurante(
     nombre,
     estado,
     puntuacion,
+    cantidadOpiniones,
     portada,
     correo,
     logo,
@@ -48,6 +51,7 @@ open class Restaurante(
             ", nombre='" + nombre + '\'' +
             ", estado=" + estado +
             ", puntuacion=" + puntuacion +
+            ", cantidadOpiniones=" + cantidadOpiniones +
             ", portada='" + portada + '\'' +
             ", correo='" + correo + '\'' +
             '}'
@@ -59,6 +63,7 @@ open class Restaurante(
       nombre,
       estado,
       puntuacion,
+      cantidadOpiniones,
       portada,
       correo,
       logo,
