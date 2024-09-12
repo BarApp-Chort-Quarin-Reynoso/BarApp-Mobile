@@ -158,10 +158,6 @@ class PantallaMiCuenta : Fragment() {
       val fcmtoken = persistentPref.getString(getString(R.string.prefkey_fcmtoken), null)
       val editor = prefs.edit()
 
-      activityViewModel.usuario.value?.let {
-        val manager = NotificacionReservaManager(it.id)
-        manager.eliminarAlarmas(requireContext())
-      }
       activityViewModel.eliminarFcmToken(fcmtoken)
 
       editor.clear()

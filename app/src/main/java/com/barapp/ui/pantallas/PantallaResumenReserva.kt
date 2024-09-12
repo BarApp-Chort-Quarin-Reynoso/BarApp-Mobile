@@ -37,18 +37,23 @@ class PantallaResumenReserva : Fragment() {
 
     binding.toolbar.setNavigationOnClickListener { volverAtras() }
 
-    binding.toolbar.subtitle = activitySharedViewModel.reserva.restaurante.nombre
+    binding.botonCancelarReserva.isEnabled = false
 
-    val cantPersonas = activitySharedViewModel.reserva.cantidadPersonas
+    activitySharedViewModel.reservaLD.observe(viewLifecycleOwner) { r ->
+      binding.toolbar.subtitle = r.restaurante.nombre
 
-    binding.textViewCantidadPersonas.text =
-      if (activitySharedViewModel.reserva.cantidadPersonas == 1)
-        getString(R.string.placeholder_persona, cantPersonas)
-      else getString(R.string.placeholder_personas, cantPersonas)
-    binding.textViewFechaReserva.text = fechaAFormatoTexto(activitySharedViewModel.reserva.getFechaAsLocalDate())
-    binding.textViewHoraReserva.text = activitySharedViewModel.reserva.horario.horario.substring(0, 5)
+      val cantPersonas = r.cantidadPersonas
+      binding.textViewCantidadPersonas.text =
+        if (cantPersonas == 1)
+          getString(R.string.placeholder_persona, cantPersonas)
+        else getString(R.string.placeholder_personas, cantPersonas)
 
-    activitySharedViewModel.usuario.value!!.let {usuario ->
+      binding.textViewFechaReserva.text = fechaAFormatoTexto(r.getFechaAsLocalDate())
+      binding.textViewHoraReserva.text = r.horario.horario.substring(0, 5)
+      binding.botonCancelarReserva.isEnabled = true
+    }
+
+    activitySharedViewModel.usuario.observe(viewLifecycleOwner) {usuario ->
       binding.textViewNombre.text =
         getString(
           R.string.placeholder_nombre_apellido,
@@ -75,7 +80,7 @@ class PantallaResumenReserva : Fragment() {
       .setTitle("Cancelar Reserva")
       .setMessage("¿Estás seguro de que deseas cancelar la reserva?")
       .setPositiveButton("Si") { dialog, _ ->
-        reservaRepository.cancelarReserva(activitySharedViewModel.reserva)
+        activitySharedViewModel.cancelarReserva()
         dialog.dismiss()
         NavHostFragment.findNavController(this).popBackStack()
       }

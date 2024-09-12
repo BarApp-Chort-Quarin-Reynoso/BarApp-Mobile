@@ -24,6 +24,7 @@ import com.barapp.util.interfaces.LogOutListener
 import com.barapp.util.notifications.NotificacionReservaManager
 import com.barapp.data.retrofit.RetrofitInstance
 import com.barapp.viewModels.MainActivityViewModel
+import com.barapp.viewModels.PantallaBarViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -34,14 +35,18 @@ class MainActivity :
   AppCompatActivity(), PantallaPrincipal.OnFabBuscarClicked, LogOutListener, OnReservaClicked {
 
   companion object {
-    const val DESDE_BOTON_PRINCIPAL = 0
-    const val DESDE_NOTIFICACION = 1
-    const val DESDE_CONFIRMACION_RESERVA = 2
+    const val DESDE_BOTON_PRINCIPAL = 1
+    const val NAVEGACION_DESDE_NOTIFICACION_RESERVA = 1
+    const val NAVEGACION_DESDE_CONFIRMACION_RESERVA = 2
+    const val NAVEGACION_DESDE_NOTIFICACION_OPINAR = 4
+    const val NAVEGACION_DESDE_NOTIFICACION_RESERVA_CANCELADA = 4
   }
 
   private lateinit var binding: MainActivityBinding
 
-  private val mainActivityViewModel: MainActivityViewModel by viewModels()
+  private val mainActivityViewModel: MainActivityViewModel by viewModels {
+    MainActivityViewModel.Factory(intent.extras?.getString("origen"))
+  }
 
   private lateinit var fusedLocationClient: FusedLocationProviderClient
   private val cancellationTokenSource: CancellationTokenSource = CancellationTokenSource()
@@ -83,8 +88,6 @@ class MainActivity :
       }
     }
 
-  private lateinit var notificationManager: NotificacionReservaManager
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
@@ -122,7 +125,6 @@ class MainActivity :
   }
 
   private fun onLogedIn(idUsuario: String, fcmtoken: String?) {
-    notificationManager = NotificacionReservaManager(idUsuario)
     askNotificationPermission()
 
     mainActivityViewModel.buscarUsuarioPorId(idUsuario)
@@ -160,7 +162,6 @@ class MainActivity :
 
   private fun initNotifications() {
     NotificacionReservaManager.crearCanalNotificacion(this)
-    notificationManager.sincronizarAlarmas(this)
   }
 
   override fun onFabBuscarClicked(fabBuscar: View) {

@@ -129,8 +129,7 @@ class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItem
   }
 
   override fun onClick(transitionView: View, reserva: Reserva) {
-
-    activityViewModel.reserva = reserva
+    activityViewModel.setReservaSync(reserva)
 
     onReservaClicked.onReservaClicked()
   }

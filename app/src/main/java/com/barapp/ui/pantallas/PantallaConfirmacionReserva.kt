@@ -76,15 +76,6 @@ class PantallaConfirmacionReserva : Fragment() {
       viewModel.usuario = activitySharedViewModel.usuario.value!!
       viewModel.barSeleccionado = sharedViewModel.barSeleccionado
 
-      val reserva =
-        viewModel.crearReserva(
-          sharedViewModel.cantidadPersonas,
-          sharedViewModel.fechaReserva,
-          sharedViewModel.horaReserva,
-        )
-
-      NotificacionReservaManager.crearAlarma(requireContext(), reserva)
-
       volverAPantallaPrincipal()
     }
   }
@@ -95,7 +86,7 @@ class PantallaConfirmacionReserva : Fragment() {
 
   private fun volverAPantallaPrincipal() {
     val bundle = Bundle()
-    bundle.putInt("origen", MainActivity.DESDE_CONFIRMACION_RESERVA)
+    bundle.putInt("origen", MainActivity.NAVEGACION_DESDE_CONFIRMACION_RESERVA)
 
     NavHostFragment.findNavController(this)
       .navigate(R.id.action_pantallaConfirmacionReserva_to_pantallaNavegacionPrincipal, bundle)

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navGraphViewModels
@@ -15,6 +16,7 @@ import com.barapp.databinding.FragmentPantallaNavegacionPrincipalBinding
 import com.barapp.model.Restaurante
 import com.barapp.util.interfaces.OnRestauranteClicked
 import com.barapp.util.interfaces.OnSnackbarShowed
+import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.sharedViewModels.RestauranteSeleccionadoSharedViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.Hold
@@ -25,6 +27,7 @@ class PantallaNavegacionPrincipal : Fragment(), OnRestauranteClicked {
 
   private val restauranteSeleccionadoViewModel: RestauranteSeleccionadoSharedViewModel by
     navGraphViewModels(R.id.pantallaNavegacionPrincipal)
+  private val activitySharedViewModel: MainActivityViewModel by activityViewModels()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -55,12 +58,23 @@ class PantallaNavegacionPrincipal : Fragment(), OnRestauranteClicked {
 
     NavigationUI.setupWithNavController(binding.bottomNavigation, navController)
 
-    arguments?.getInt("origen")?.let { origenActividad ->
-      if (origenActividad == MainActivity.DESDE_NOTIFICACION) {
-        Timber.i("Se navega a pantalla reservas")
+    activitySharedViewModel.origen?.let {
+      val intOrigen = it.toInt()
+
+      if (intOrigen == MainActivity.NAVEGACION_DESDE_NOTIFICACION_RESERVA) {
+        val idReserva = requireActivity().intent.extras!!.getString("idReserva")!!
+        activitySharedViewModel.searchReserva(idReserva)
+        Timber.i("Se navega a reserva de bar {}", idReserva)
         navController.navigate(R.id.action_global_pantallaMisReservas)
+        NavHostFragment.findNavController(this)
+          .navigate(R.id.action_pantallaNavegacionPrincipal_to_pantallaResumenReserva)
       }
-      if (origenActividad == MainActivity.DESDE_CONFIRMACION_RESERVA) {
+
+      activitySharedViewModel.origen = null
+    }
+
+    arguments?.getInt("origen")?.let { origenActividad ->
+      if (origenActividad == MainActivity.NAVEGACION_DESDE_CONFIRMACION_RESERVA) {
         val fragment =
           binding.fragmentContainerView
             .getFragment<NavHostFragment>()

@@ -10,24 +10,30 @@ import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
 import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.repositories.DetalleUsuarioRepository
+import com.barapp.data.repositories.ReservaRepository
 import com.barapp.data.repositories.RestauranteVistoRecientementeRepository
 import com.barapp.data.repositories.UsuarioRepository
 import com.barapp.model.DetalleUsuario
 import timber.log.Timber
 
-class MainActivityViewModel : ViewModel() {
+class MainActivityViewModel(var origen: String?) : ViewModel() {
 
   lateinit var reserva: Reserva
+
   private val usuarioRepository = UsuarioRepository.instance
   private val detalleUsuarioRepository = DetalleUsuarioRepository.instance
   private val restauranteVistoRecientementeRepository =
     RestauranteVistoRecientementeRepository.instance
+  private val reservaRepository = ReservaRepository.instance
 
   private val _ubicacionUsuario: MutableLiveData<Location> = MutableLiveData()
   val ubicacionUsuario: LiveData<Location> = _ubicacionUsuario
 
   private val _usuario: MutableLiveData<Usuario> = MutableLiveData()
   val usuario: LiveData<Usuario> = _usuario
+
+  private val _reservaLD: MutableLiveData<Reserva> = MutableLiveData()
+  val reservaLD: LiveData<Reserva> = _reservaLD
 
   private val _error = MutableLiveData<Throwable>()
   val error: LiveData<Throwable> = _error
@@ -110,10 +116,32 @@ class MainActivityViewModel : ViewModel() {
     }
   }
 
-  class Factory : ViewModelProvider.Factory {
+  fun setReservaSync(reserva: Reserva) {
+    _reservaLD.postValue(reserva)
+  }
+
+  fun searchReserva(idReserva: String) {
+    reservaRepository.buscarPorId(idReserva, object : FirestoreCallback<Reserva> {
+      override fun onSuccess(result: Reserva) {
+        _reservaLD.postValue(result)
+      }
+
+      override fun onError(exception: Throwable) {
+        _error.postValue(exception)
+      }
+    })
+  }
+
+  fun cancelarReserva() {
+    reservaLD.value?. let {
+      reservaRepository.cancelarReserva(it)
+    }
+  }
+
+  class Factory(private val origen: String?) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
       if (modelClass.isAssignableFrom(MainActivityViewModel::class.java)) {
-        @Suppress("UNCHECKED_CAST") return MainActivityViewModel() as T
+        @Suppress("UNCHECKED_CAST") return MainActivityViewModel(origen) as T
       }
 
       throw IllegalArgumentException("UNKNOWN VIEW MODEL CLASS")
