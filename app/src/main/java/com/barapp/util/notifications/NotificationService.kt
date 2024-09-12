@@ -6,7 +6,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import timber.log.Timber
 
-class NotificationNotificationService : FirebaseMessagingService() {
+class NotificationService : FirebaseMessagingService() {
   override fun onNewToken(token: String) {
     val persistentPref = getSharedPreferences(getString(R.string.persistent_pref_file), Context.MODE_PRIVATE)
     persistentPref.edit().putString(getString(R.string.prefkey_fcmtoken), token).apply()
@@ -17,6 +17,7 @@ class NotificationNotificationService : FirebaseMessagingService() {
   override fun onMessageReceived(message: RemoteMessage) {
     super.onMessageReceived(message)
 
-    Timber.d(message.messageId)
+    Timber.d("Message received: {}", message.messageId)
+    Timber.d("Data received from message: {}", message.data)
   }
 }

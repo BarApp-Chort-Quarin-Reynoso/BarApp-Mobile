@@ -186,7 +186,7 @@
 
     <!-- Notification -->
     <string name="notificacion_reserva_title">"Reserva en %1$s"</string>
-    <string name="notificacion_reserva_text">"Su reserva en %1$s es en una hora. ¡Lo estamos esperando!"</string>
+    <string name="notificacion_reserva_text">"Su reserva en %1$s es en media hora. ¡Lo estamos esperando!"</string>
 
     <!-- Pantalla Crear Reserva -->
     <string name="pantalla_reservar_titulo_tamanio_grupo">Tamaño de grupo</string>

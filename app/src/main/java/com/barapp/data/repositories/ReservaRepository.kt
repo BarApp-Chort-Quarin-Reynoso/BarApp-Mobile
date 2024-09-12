@@ -65,29 +65,24 @@ class ReservaRepository private constructor() : IGenericRepository<Reserva> {
   }
 
   override fun buscarPorId(id: String, callback: FirestoreCallback<Reserva>) {
-    db
-      .collection(COLECCION_RESERVAS)
-      .document(id)
-      .get()
-      .addOnSuccessListener { documentSnapshot ->
-        val reservaEntity = documentSnapshot.toObject(ReservaEntity::class.java)
-        val restauranteEntity = documentSnapshot.toObject(RestauranteEntity::class.java)
-        val horarioEntity = documentSnapshot.toObject(HorarioEntity::class.java)
-        // Tiene solo idUbicacion, calle y numero, el resto de campos son nulls
-        val ubicacion = documentSnapshot.toObject(Ubicacion::class.java)
-        val reserva =
-          fromEntity(
-            reservaEntity!!,
-            fromEntity(restauranteEntity!!, ubicacion, null),
-            fromEntity(horarioEntity!!),
-            null,
-          )
-        callback.onSuccess(reserva)
+    Timber.d("Buscando restaurante con id: $id")
+    api.getReservation(id).enqueue(object : Callback<Reserva> {
+      override fun onResponse(call: Call<Reserva>, response: Response<Reserva>) {
+        if (response.isSuccessful) {
+          val data = response.body()
+          Timber.d("Reserva recibido: $data")
+          callback.onSuccess(data!!)
+        } else {
+          Timber.e("Error: ${response.errorBody()}")
+          callback.onError(Throwable("Error recuperando Reserva"))
+        }
       }
-      .addOnFailureListener { e ->
-        Timber.w("Error recuperando reserva")
-        callback.onError(e)
+
+      override fun onFailure(call: Call<Reserva>, t: Throwable) {
+        Timber.e(t)
+        callback.onError(t)
       }
+    })
   }
 
   fun buscarTodosAsociadosAUsuario(idUsuario: String, callback: FirestoreCallback<List<Reserva>>) {
