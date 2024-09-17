@@ -167,7 +167,15 @@ class PantallaBar : Fragment() {
     }
 
     barSeleccionadoViewModel.restaurante?.detalleRestaurante?.let { detalle ->
-      binding.textViewDescripcion.text = detalle.descripcion
+
+      if (detalle.descripcion.isEmpty()) {
+        binding.textViewDescripcion.visibility = View.GONE
+        binding.textViewDescripcionVacia.visibility = View.VISIBLE
+      } else {
+        binding.textViewDescripcion.text = detalle.descripcion
+        binding.textViewDescripcion.visibility = View.VISIBLE
+        binding.textViewDescripcionVacia.visibility = View.GONE
+      }
 
       val url = Uri.parse(detalle.menu)
       if (detalle.menu.isNotEmpty() && URLUtil.isValidUrl(url.toString())) {
