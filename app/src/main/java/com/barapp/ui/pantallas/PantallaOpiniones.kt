@@ -64,6 +64,11 @@ class PantallaOpiniones : Fragment() {
         recyclerViewCaracteristicas.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerViewCaracteristicas.adapter = caracteristicasAdapter
 
+        if (opinionesSharedViewModel.caracteristicasRestauranteSeleccionado.isEmpty()) {
+            binding.labelTituloCaracteristicas.visibility = View.GONE
+            recyclerViewCaracteristicas.visibility = View.GONE
+        }
+
         // Initialize the Opiniones RecyclerView
         val recyclerViewOpiniones = binding.recyclerViewOpiniones
         recyclerViewOpiniones.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
