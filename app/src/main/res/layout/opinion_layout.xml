@@ -63,7 +63,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/textViewOpinion"
+            app:layout_constraintBottom_toTopOf="@id/textViewCantidadPersonas"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imageViewFotoPerfil"
             style="@style/BarApp.RatingBarSmallDisplaySmall" />
@@ -72,13 +72,13 @@
             android:id="@+id/textViewCantidadPersonas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/card_inner_horizontal_margin"
+            android:layout_marginBottom="8dp"
             android:text="@string/texto_ejemplo_cantidad_personas"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-            app:layout_constraintBottom_toBottomOf="@id/ratingBarPuntuacion"
-            app:layout_constraintEnd_toStartOf="@id/textViewTipoComida"
-            app:layout_constraintStart_toEndOf="@id/ratingBarPuntuacion"
-            app:layout_constraintTop_toTopOf="@id/ratingBarPuntuacion" />
+            app:layout_constraintTop_toBottomOf="@id/ratingBarPuntuacion"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/textViewOpinion" />
 
         <TextView
             android:id="@+id/textViewTipoComida"
@@ -101,7 +101,7 @@
             android:layout_marginBottom="@dimen/card_inner_vertical_margin"
             android:text="@string/texto_ejemplo_opinion"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-            app:layout_constraintTop_toBottomOf="@id/ratingBarPuntuacion"
+            app:layout_constraintTop_toBottomOf="@id/textViewCantidadPersonas"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
