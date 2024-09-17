@@ -260,6 +260,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/texto_ejemplo_bar_descripcion" />
 
+                <TextView
+                    android:id="@+id/textViewDescripcionVacia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pantalla_bar_titulo_descripcion_bar_vacio"
+                    android:textStyle="italic"
+                    android:visibility="gone"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat

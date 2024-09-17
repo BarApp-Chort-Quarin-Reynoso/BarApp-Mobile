@@ -128,6 +128,8 @@
 
     <!-- Pantalla Bar -->
     <string name="pantalla_bar_titulo_descripcion_bar">Sobre el lugar</string>
+    <string name="pantalla_bar_titulo_descripcion_bar_vacio">El bar todavía no ha cargado una descripción</string>
+
     <string name="pantalla_bar_titulo_opiniones_bar">Opiniones</string>
 
     <string name="pantalla_bar_texto_nombre_usuario">%1$s %2$s</string>
