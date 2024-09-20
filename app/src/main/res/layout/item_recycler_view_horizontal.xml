@@ -118,45 +118,38 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginBottom="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtViewUbicacionRestaurante"
-                app:layout_constraintHorizontal_chainStyle="spread">
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintTop_toBottomOf="@id/txtViewUbicacionRestaurante">
 
                 <TextView
                     android:id="@+id/txtViewPuntuacionRestaurante"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:layout_marginEnd="2dp"
                     android:text="@string/texto_ejemplo_bar_nota"
                     android:textAppearance="?attr/textAppearanceBodyMedium"
-                    android:textColor="?android:attr/textColorSecondary"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/ratingBarPuntuacion"
-                    app:layout_constraintStart_toEndOf="@id/txtViewDistanciaRestaurante"
-                    app:layout_constraintTop_toBottomOf="@id/txtViewUbicacionRestaurante" />
+                    android:textColor="?android:attr/textColorSecondary" />
 
                 <RatingBar
                     android:id="@+id/ratingBarPuntuacion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/txtViewCantidadOpiniones"
-                    app:layout_constraintStart_toEndOf="@id/txtViewPuntuacionRestaurante"
-                    app:layout_constraintTop_toBottomOf="@id/txtViewUbicacionRestaurante"
+                    android:layout_marginTop="5dp"
                     style="@style/BarApp.RatingBarSmallDisplaySmall" />
 
                 <TextView
                     android:id="@+id/txtViewCantidadOpiniones"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:layout_marginEnd="@dimen/card_inner_horizontal_margin"
                     android:text="@string/texto_ejemplo_bar_cantidad_opiniones"
                     android:textAppearance="?attr/textAppearanceBodyMedium"
-                    android:textColor="?android:attr/textColorSecondary"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/ratingBarPuntuacion"
-                    app:layout_constraintTop_toBottomOf="@id/txtViewUbicacionRestaurante" />
+                    android:textColor="?android:attr/textColorSecondary" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
