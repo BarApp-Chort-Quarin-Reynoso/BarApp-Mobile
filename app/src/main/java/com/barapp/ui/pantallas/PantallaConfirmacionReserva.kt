@@ -76,6 +76,12 @@ class PantallaConfirmacionReserva : Fragment() {
       viewModel.usuario = activitySharedViewModel.usuario.value!!
       viewModel.barSeleccionado = sharedViewModel.barSeleccionado
 
+      viewModel.crearReserva(
+        sharedViewModel.cantidadPersonas,
+        sharedViewModel.fechaReserva,
+        sharedViewModel.horaReserva,
+      )
+
       volverAPantallaPrincipal()
     }
   }
