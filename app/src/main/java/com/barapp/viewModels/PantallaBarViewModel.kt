@@ -4,21 +4,34 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.barapp.barapp.model.Reserva
 import com.barapp.data.mappers.RestauranteMapper.toRestauranteUsuario
+import com.barapp.data.repositories.ReservaRepository
 import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
 import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.repositories.RestauranteFavoritoRepository
 
 class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) : ViewModel() {
-  private val restauranteFavoritoRepository: RestauranteFavoritoRepository =
-    RestauranteFavoritoRepository.instance
+  private val restauranteFavoritoRepository = RestauranteFavoritoRepository.instance
+
+  private val reservaRepository = ReservaRepository.instance
+
+  init {
+    buscarReservasPendientes()
+  }
 
   private val _loading: MutableLiveData<Boolean> = MutableLiveData()
   val loading: LiveData<Boolean> = _loading
 
   private val _error: MutableLiveData<Throwable?> = MutableLiveData()
   val error: LiveData<Throwable?> = _error
+
+  private val _loadingReservasPendientes: MutableLiveData<Boolean> = MutableLiveData(true)
+  val loadingReservasPendientes: LiveData<Boolean> = _loadingReservasPendientes
+
+  private val _alcanzoLimiteReservas: MutableLiveData<Boolean> = MutableLiveData()
+  val alcanzoLimiteReservas: LiveData<Boolean> = _alcanzoLimiteReservas
 
   fun errorMostrado() {
     _error.value = null
@@ -59,6 +72,20 @@ class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) :
   fun esFavorito(): Boolean {
     return (usuario.detalleUsuario!!.idsRestaurantesFavoritos.contains(restaurante.id) ||
         usuario.detalleUsuario!!.idsRestaurantesFavoritos.contains(restaurante.idRestaurante))
+  }
+
+  private fun buscarReservasPendientes() {
+    reservaRepository.buscarUltimasReservasPendientes(restaurante.id, usuario.id, 3, object : FirestoreCallback<List<Reserva>> {
+      override fun onSuccess(result: List<Reserva>) {
+        _loadingReservasPendientes.postValue(false)
+        _alcanzoLimiteReservas.postValue(result.size == 3)
+      }
+
+      override fun onError(exception: Throwable) {
+        _loadingReservasPendientes.postValue(false)
+        _error.postValue(exception)
+      }
+    })
   }
 
   class Factory(private val restaurante: Restaurante, private val usuario: Usuario) :

@@ -65,7 +65,7 @@ class ReservaRepository private constructor() : IGenericRepository<Reserva> {
   }
 
   override fun buscarPorId(id: String, callback: FirestoreCallback<Reserva>) {
-    Timber.d("Buscando restaurante con id: $id")
+    Timber.d("Buscando reserva con id: $id")
     api.getReservation(id).enqueue(object : Callback<Reserva> {
       override fun onResponse(call: Call<Reserva>, response: Response<Reserva>) {
         if (response.isSuccessful) {
@@ -106,52 +106,6 @@ class ReservaRepository private constructor() : IGenericRepository<Reserva> {
     })
   }
 
-  fun buscarReservasANotificar(
-    idUsuario: String,
-    minutosMinimos: Int,
-    callback: FirestoreCallback<List<Reserva>>,
-  ) {
-    val listaReservas: MutableList<Reserva> = ArrayList()
-    db
-      .collection(COLECCION_RESERVAS)
-      .whereEqualTo("idUsuario", idUsuario)
-      .whereGreaterThan(
-        "timestamp",
-        Timestamp(
-          LocalDateTime.now()
-            .plusMinutes(minutosMinimos.toLong())
-            .atZone(ZoneId.of("America/Buenos_Aires"))
-            .toInstant()
-            .epochSecond,
-          0,
-        ),
-      )
-      .get()
-      .addOnCompleteListener { task: Task<QuerySnapshot> ->
-        if (task.isSuccessful) {
-          for (document in task.result) {
-            val reservaEntity = document.toObject(ReservaEntity::class.java)
-            val restauranteEntity = document.toObject(RestauranteEntity::class.java)
-            val horarioEntity = document.toObject(HorarioEntity::class.java)
-            // Tiene solo idUbicacion, calle y numero, el resto de campos son nulls
-            val ubicacion = document.toObject(Ubicacion::class.java)
-            val reserva =
-              fromEntity(
-                reservaEntity,
-                fromEntity(restauranteEntity, ubicacion, null),
-                fromEntity(horarioEntity),
-                null,
-              )
-            listaReservas.add(reserva)
-          }
-          callback.onSuccess(listaReservas)
-        } else {
-          Timber.d("Falló la busqueda de reservas")
-          callback.onError(task.exception!!)
-        }
-      }
-  }
-
   override fun guardar(entidad: Reserva) {
     Timber.d("Guardando reserva: $entidad")
     api.createReservation(entidad.id, entidad).enqueue(object : Callback<String> {
@@ -171,17 +125,46 @@ class ReservaRepository private constructor() : IGenericRepository<Reserva> {
 
   fun cancelarReserva(reserva: Reserva) {
     Timber.d("Cancelando reserva por parte del usuario: $reserva")
-    api.updateReservation(reserva.id, EstadoReserva.CANCELADA_USUARIO).enqueue(object : Callback<Reserva> {
-      override fun onResponse(call: Call<Reserva>, response: Response<Reserva>) {
+    api.updateReservation(reserva.id, EstadoReserva.CANCELADA_USUARIO)
+      .enqueue(object : Callback<Reserva> {
+        override fun onResponse(call: Call<Reserva>, response: Response<Reserva>) {
+          if (response.isSuccessful) {
+            Timber.d("Reserva cancelada exitosamente")
+          } else {
+            Timber.e("Error: ${response.errorBody()}")
+          }
+        }
+
+        override fun onFailure(call: Call<Reserva>, t: Throwable) {
+          Timber.e(t)
+        }
+      })
+  }
+
+  fun buscarUltimasReservasPendientes(
+    idRestaurante: String,
+    idUsuario: String,
+    maxCantidad: Int,
+    callback: FirestoreCallback<List<Reserva>>
+  ) {
+    Timber.d(
+      "Buscando ultimas $maxCantidad reservas " +
+          "con idRestaurante $idRestaurante y idUsuario $idUsuario")
+    api.getLastReservationsByUserRestaurant(idRestaurante, idUsuario, maxCantidad).enqueue(object : Callback<List<Reserva>> {
+      override fun onResponse(call: Call<List<Reserva>>, response: Response<List<Reserva>>) {
         if (response.isSuccessful) {
-          Timber.d("Reserva cancelada exitosamente")
+          val data = response.body()
+          Timber.d("Reservas recibidas: $data")
+          callback.onSuccess(data!!)
         } else {
           Timber.e("Error: ${response.errorBody()}")
+          callback.onError(Throwable("Error recuperando Reserva"))
         }
       }
 
-      override fun onFailure(call: Call<Reserva>, t: Throwable) {
+      override fun onFailure(call: Call<List<Reserva>>, t: Throwable) {
         Timber.e(t)
+        callback.onError(t)
       }
     })
   }
@@ -191,6 +174,7 @@ class ReservaRepository private constructor() : IGenericRepository<Reserva> {
   override fun borrar(entidad: Reserva) {}
 
   companion object {
-    @JvmStatic val instance = ReservaRepository()
+    @JvmStatic
+    val instance = ReservaRepository()
   }
 }

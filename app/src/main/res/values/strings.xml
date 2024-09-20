@@ -188,6 +188,7 @@
     <string name="error_titulo_algo_salio_mal">Algo salió mal</string>
     <string name="error_buscando_detalle_restaurante">"Ocurrió un error al buscar la información del restaurante %1$s. Intente nuevamente en unos minutos."</string>
     <string name="error_buscando_opiniones_restaurante">"Ocurrió un error al buscar las opiniones del restaurante %1$s. Intente nuevamente en unos minutos."</string>
+    <string name="error_limite_reservas_alcanzado">"Alcanzó el limite de %1$d reservas en este bar"</string>
 
     <!-- Notification channel -->
     <string name="notificacion_channel_id_reserva">RESERVAS</string>
