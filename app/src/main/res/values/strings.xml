@@ -28,6 +28,8 @@
     <string name="boton_rechazar">Rechazar</string>
     <string name="boton_seleccionar">Seleccionar</string>
     <string name="boton_ver">Ver</string>
+    <string name="boton_si">Si</string>
+    <string name="boton_no">No</string>
 
     <!-- Descripcion de botones -->
     <string name="boton_ingresar_descripcion">Botón ingresar</string>
@@ -141,6 +143,7 @@
 
     <!-- Textos de ejemplo -->
     <string name="texto_ejemplo_bar_nombre">Restaurante 1</string>
+    <string name="texto_ejemplo_bar_estado_reserva">Concretada</string>
     <string name="texto_ejemplo_bar_direccion">Rivadavia 3186</string>
     <string name="texto_ejemplo_bar_distancia">a 200 mts</string>
     <string name="texto_ejemplo_bar_nota">1.0</string>
@@ -255,6 +258,9 @@
     <string name="pantalla_resumen_reserva_texto_nombre">[Nombre_Usuario]</string>
     <string name="pantalla_resumen_reserva_texto_mail">[Mail_Usuario]</string>
     <string name="pantalla_resumen_reserva_texto_telefono">[Telefono_Usuario]</string>
+
+    <string name="titulo_dialogo_cancelar_reserva">¿Cancelar reserva?</string>
+    <string name="mensaje_dialogo_cancelar_reserva">¿Está seguro que desea cancelar la reserva?</string>
 
     <!-- Pantalla Mis Favoritos -->
     <string name="pantalla_mis_favoritos_titulo">Mis Favoritos</string>

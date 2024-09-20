@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.barapp.R
-import com.barapp.data.repositories.ReservaRepository
 import com.barapp.databinding.FragmentPantallaResumenReservaBinding
 import com.barapp.viewModels.MainActivityViewModel
 import java.time.LocalDate
@@ -19,7 +18,6 @@ class PantallaResumenReserva : Fragment() {
   private lateinit var binding: FragmentPantallaResumenReservaBinding
 
   private val activitySharedViewModel: MainActivityViewModel by activityViewModels()
-  private val reservaRepository = ReservaRepository.instance
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -77,14 +75,14 @@ class PantallaResumenReserva : Fragment() {
 
   private fun cancelarReserva() {
     AlertDialog.Builder(requireContext())
-      .setTitle("Cancelar Reserva")
-      .setMessage("¿Estás seguro de que deseas cancelar la reserva?")
-      .setPositiveButton("Si") { dialog, _ ->
+      .setTitle(getString(R.string.titulo_dialogo_cancelar_reserva))
+      .setMessage(getString(R.string.mensaje_dialogo_cancelar_reserva))
+      .setPositiveButton(getString(R.string.boton_si)) { dialog, _ ->
         activitySharedViewModel.cancelarReserva()
         dialog.dismiss()
         NavHostFragment.findNavController(this).popBackStack()
       }
-      .setNegativeButton("No") { dialog, _ ->
+      .setNegativeButton(getString(R.string.boton_no)) { dialog, _ ->
         dialog.dismiss()
       }
       .create()
@@ -140,6 +138,7 @@ class PantallaResumenReserva : Fragment() {
       "JUNE" -> "Junio"
       "JULY" -> "Julio"
       "AUGUST" -> "Agosto"
+      "SEPTEMBER" -> "Septiembre"
       "OCTOBER" -> "Octubre"
       "NOVEMBER" -> "Noviembre"
       "DECEMBER" -> "Diciembre"
