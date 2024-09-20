@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.webkit.URLUtil
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.MenuProvider
 import androidx.core.widget.NestedScrollView
@@ -59,7 +60,7 @@ class PantallaBar : Fragment() {
   }
 
   private val ubicacionViewModel: UbicacionBarSharedViewModel by
-    navGraphViewModels(R.id.pantallaBar)
+  navGraphViewModels(R.id.pantallaBar)
 
   private val viewModel: PantallaBarViewModel by viewModels {
     PantallaBarViewModel.Factory(
@@ -73,10 +74,10 @@ class PantallaBar : Fragment() {
   private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 
   private val barAReservarViewModel: BarAReservarSharedViewModel by
-    navGraphViewModels(R.id.pantallaNavegacionPrincipal)
+  navGraphViewModels(R.id.pantallaNavegacionPrincipal)
 
   private val opinionesSharedViewModel: PantallaOpinionesSharedViewModel by
-    navGraphViewModels(R.id.pantallaBar)
+  navGraphViewModels(R.id.pantallaBar)
 
   private lateinit var binding: FragmentPantallaBarBinding
 
@@ -136,9 +137,12 @@ class PantallaBar : Fragment() {
         viewModel.restaurante.ubicacion.calle,
         viewModel.restaurante.ubicacion.numero,
       )
-    binding.txtViewPuntuacionRestaurante.text = viewModel.restaurante.puntuacion.toString().substring(0, 3)
+    binding.txtViewPuntuacionRestaurante.text =
+      viewModel.restaurante.puntuacion.toString().substring(0, 3)
     binding.ratingBarPuntuacion.rating = viewModel.restaurante.puntuacion.toFloat()
-    "(${viewModel.restaurante.cantidadOpiniones})".also { binding.txtViewCantidadOpiniones.text = it }
+    "(${viewModel.restaurante.cantidadOpiniones})".also {
+      binding.txtViewCantidadOpiniones.text = it
+    }
 
     Glide.with(requireContext())
       .load(viewModel.restaurante.logo)
@@ -193,11 +197,13 @@ class PantallaBar : Fragment() {
           binding.botonVerMasOpiniones.visibility = View.GONE
           binding.linearLayoutOpiniones.visibility = View.GONE
         }
+
         1 -> {
           setearOpinion(detalle.opiniones[0], binding.opinion1)
           binding.labelNoHayOpiniones.visibility = View.GONE
           binding.opinion2.opinionLayout.visibility = View.GONE
         }
+
         else -> {
           setearOpinion(detalle.opiniones[0], binding.opinion1)
           setearOpinion(detalle.opiniones[1], binding.opinion2)
@@ -207,15 +213,31 @@ class PantallaBar : Fragment() {
     }
 
     viewModel.loading.observe(viewLifecycleOwner) {
-      println("Loading: $it")
       setLoading(it)
     }
 
     viewModel.error.observe(viewLifecycleOwner) {
       it?.run {
-        printStackTrace()
+        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
         viewModel.errorMostrado()
       }
+    }
+
+    viewModel.loadingReservasPendientes.observe(viewLifecycleOwner) { loading ->
+      binding.fabReservar.isEnabled = !loading
+    }
+
+    viewModel.alcanzoLimiteReservas.observe(viewLifecycleOwner) { alcanzoLimite ->
+      if (!alcanzoLimite)
+        binding.fabReservar.setOnClickListener { mostrarPantallaReservar() }
+      else
+        binding.fabReservar.setOnClickListener {
+          Toast.makeText(
+            requireContext(),
+            resources.getString(R.string.error_limite_reservas_alcanzado, 3),
+            Toast.LENGTH_SHORT
+          ).show()
+        }
     }
 
     /*
@@ -263,8 +285,6 @@ class PantallaBar : Fragment() {
 
     binding.toolbar.setNavigationOnClickListener { volverAtras() }
     binding.botonAtras.setOnClickListener { volverAtras() }
-
-    binding.fabReservar.setOnClickListener { mostrarPantallaReservar() }
   }
 
   override fun onResume() {
@@ -346,7 +366,8 @@ class PantallaBar : Fragment() {
 
     // Copiar el bar y el detalle para crear la reserva
     barAReservarViewModel.barSeleccionado = barSeleccionadoViewModel.restaurante!!
-    barAReservarViewModel.detalleBarSeleccionado = barSeleccionadoViewModel.restaurante!!.detalleRestaurante!!
+    barAReservarViewModel.detalleBarSeleccionado =
+      barSeleccionadoViewModel.restaurante!!.detalleRestaurante!!
 
     NavHostFragment.findNavController(this)
       .navigate(R.id.action_pantallaBar_to_pantallaCrearReserva, null, null, extras)
@@ -385,11 +406,13 @@ class PantallaBar : Fragment() {
   }
 
   private fun mostrarMasOpiniones() {
-    opinionesSharedViewModel.nombreRestauranteSeleccionado = barSeleccionadoViewModel.restaurante!!.nombre
+    opinionesSharedViewModel.nombreRestauranteSeleccionado =
+      barSeleccionadoViewModel.restaurante!!.nombre
     opinionesSharedViewModel.idRestauranteSeleccionado = barSeleccionadoViewModel.restaurante!!.id
     opinionesSharedViewModel.caracteristicasRestauranteSeleccionado =
       barSeleccionadoViewModel.restaurante!!.detalleRestaurante!!.caracteristicas
-    opinionesSharedViewModel.puntuacionRestauranteSeleccionado = barSeleccionadoViewModel.restaurante!!.puntuacion
+    opinionesSharedViewModel.puntuacionRestauranteSeleccionado =
+      barSeleccionadoViewModel.restaurante!!.puntuacion
 
     NavHostFragment.findNavController(this)
       .navigate(R.id.action_pantallaBar_to_pantallaOpiniones)
@@ -406,7 +429,8 @@ class PantallaBar : Fragment() {
     binding.textViewOpinion.text =
       getString(R.string.pantalla_bar_texto_opinion, opinion.comentario)
     binding.ratingBarPuntuacion.rating = opinion.nota.toFloat()
-    binding.textViewCantidadPersonas.text = getTextoCantidadPersonasOpinion(opinion.cantidadPersonas)
+    binding.textViewCantidadPersonas.text =
+      getTextoCantidadPersonasOpinion(opinion.cantidadPersonas)
     "(${opinion.horario.tipoComida})".also { binding.textViewTipoComida.text = it }
     Glide.with(requireContext())
       .load(opinion.usuario.foto)
