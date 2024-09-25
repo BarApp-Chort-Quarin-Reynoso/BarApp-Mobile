@@ -132,9 +132,18 @@ class MainActivityViewModel(var origen: String?) : ViewModel() {
     })
   }
 
-  fun cancelarReserva() {
+  fun cancelarReserva(onComplete: () -> Unit) {
     reservaLD.value?. let {
-      reservaRepository.cancelarReserva(it)
+      reservaRepository.cancelarReserva(it, object : FirestoreCallback<Reserva> {
+        override fun onSuccess(result: Reserva) {
+          onComplete()
+        }
+
+        override fun onError(exception: Throwable) {
+          _error.postValue(exception)
+          onComplete()
+        }
+      })
     }
   }
 

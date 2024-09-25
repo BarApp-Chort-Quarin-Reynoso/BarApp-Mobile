@@ -143,7 +143,7 @@
 
     <!-- Textos de ejemplo -->
     <string name="texto_ejemplo_bar_nombre">Restaurante 1</string>
-    <string name="texto_ejemplo_bar_estado_reserva">Concretada</string>
+    <string name="texto_ejemplo_bar_estado_reserva">CANCELADA</string>
     <string name="texto_ejemplo_bar_direccion">Rivadavia 3186</string>
     <string name="texto_ejemplo_bar_distancia">a 200 mts</string>
     <string name="texto_ejemplo_bar_nota">1.0</string>
