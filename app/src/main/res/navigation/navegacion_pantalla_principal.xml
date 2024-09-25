@@ -48,9 +48,6 @@
         android:name="com.barapp.ui.pantallas.PantallaMisReservas"
         android:label="fragment_pantalla_mis_reservas"
         tools:layout="@layout/fragment_pantalla_mis_reservas" >
-        <action
-            android:id="@+id/action_pantallaMisReservas_to_pantallaCrearOpinion"
-            app:destination="@id/pantallaCrearOpinion" />
     </fragment>
     <action
         android:id="@+id/action_global_pantallaMisReservas"
@@ -62,9 +59,4 @@
         app:destination="@id/pantallaMiCuenta"
         app:launchSingleTop="true"
         app:popUpTo="@id/pantallaPrincipal" />
-    <fragment
-        android:id="@+id/pantallaCrearOpinion"
-        android:name="com.barapp.ui.pantallas.PantallaCrearOpinion"
-        android:label="PantallaCrearOpinion"
-        tools:layout="@layout/fragment_pantalla_crear_opinion"/>
 </navigation>

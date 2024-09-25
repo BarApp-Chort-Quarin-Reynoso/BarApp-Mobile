@@ -7,11 +7,10 @@ class DetalleRestaurante(
   var descripcion: String,
   var menu: String,
   var capacidadPorHorario: Int,
-  var horarios: MutableList<Horario>,
   var opiniones: MutableList<Opinion>,
   var caracteristicas: Map<String, CalificacionPromedio>,
 ) : BaseClass(id) {
-  constructor() : this(UUID.randomUUID().toString(), "", "", -1, ArrayList(), ArrayList(), HashMap())
+  constructor() : this(UUID.randomUUID().toString(), "", "", -1, ArrayList(), HashMap())
 
   constructor(
     descripcion: String,
@@ -23,17 +22,8 @@ class DetalleRestaurante(
     menu,
     capacidadPorHorario,
     ArrayList(),
-    ArrayList(),
     HashMap(),
   )
-
-  fun agregarHorario(horario: Horario) {
-    horarios.add(horario)
-  }
-
-  fun agregarOpinion(opinion: Opinion) {
-    opiniones.add(opinion)
-  }
 
   override fun toString(): String {
     return "DetalleRestaurante{" +
@@ -49,8 +39,6 @@ class DetalleRestaurante(
       ", capacidadPorHorario='" +
       capacidadPorHorario +
       '\'' +
-      ", horarios=" +
-      horarios +
       ", opiniones=" +
       opiniones +
       ", caracteristicas=" +

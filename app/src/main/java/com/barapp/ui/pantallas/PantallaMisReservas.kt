@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.barapp.R
 import com.barapp.databinding.FragmentPantallaMisReservasBinding
@@ -18,13 +16,13 @@ import com.barapp.ui.recyclerViewAdapters.ReservasPendientesRecyclerAdapter
 import com.barapp.util.Interpolator.Companion.emphasizedInterpolator
 import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.PantallaMisReservasViewModel
-import com.barapp.viewModels.sharedViewModels.ReservaSharedViewModel
 import com.faltenreich.skeletonlayout.Skeleton
 import com.faltenreich.skeletonlayout.applySkeleton
 import com.google.android.material.transition.MaterialFadeThrough
 
 interface OnReservaClicked {
   fun onReservaClicked()
+  fun onOpinarButtonClicked()
 }
 
 class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItemClickListener, ReservasPasadasRecyclerAdapter.OnOpinarButtonClickListener {
@@ -34,7 +32,6 @@ class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItem
   private lateinit var binding: FragmentPantallaMisReservasBinding
   private val viewModelMisReservas: PantallaMisReservasViewModel by viewModels()
   private val activityViewModel: MainActivityViewModel by activityViewModels()
-  private val reservaSharedViewModel: ReservaSharedViewModel by navGraphViewModels(R.id.pantallaMisReservas)
 
   private val reservasPasadasAdapter = ReservasPasadasRecyclerAdapter(ArrayList(), this)
   private val reservasPendientesAdapter = ReservasPendientesRecyclerAdapter(ArrayList(), this)
@@ -92,8 +89,8 @@ class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItem
         binding.labelPendientes.visibility = View.GONE
       } else {
         binding.labelPendientes.visibility = View.VISIBLE
-        reservasPendientesAdapter.setData(reservas)
       }
+      reservasPendientesAdapter.setData(reservas)
     }
 
     // Se setea observer de reservas pasadas
@@ -102,8 +99,8 @@ class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItem
         binding.labelPasadas.visibility = View.GONE
       } else {
         binding.labelPasadas.visibility = View.VISIBLE
-        reservasPasadasAdapter.setData(reservas)
       }
+      reservasPasadasAdapter.setData(reservas)
     }
 
     // Se setea observer de reservas pendientes
@@ -135,8 +132,12 @@ class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItem
   }
 
   override fun onOpinarButtonClick(position: Int) {
-    reservaSharedViewModel.reserva = viewModelMisReservas.reservasPasadas.value!![position]
-    NavHostFragment.findNavController(this)
-      .navigate(R.id.action_pantallaMisReservas_to_pantallaCrearOpinion)
+    activityViewModel.reserva = viewModelMisReservas.reservasPasadas.value!![position]
+    onReservaClicked.onOpinarButtonClicked()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    viewModelMisReservas.buscarReservas()
   }
 }

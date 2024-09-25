@@ -20,7 +20,7 @@ interface ReservationApiService {
   fun getReservation(@Path("id") id: String): Call<Reserva>
 
   @POST("/api/reservas/{id}/opinar")
-  fun sendReview(@Path("id") id: String, @Body opinion: Opinion): Call<Void>
+  fun sendReview(@Path("id") id: String, @Body opinion: Opinion): Call<Opinion>
 
   @GET("/api/reservas/usuario/{id}")
   fun getReservationsByUser(@Path("id") id: String): Call<List<Reserva>>

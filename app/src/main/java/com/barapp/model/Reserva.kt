@@ -17,6 +17,7 @@ class Reserva(
   var restaurante: Restaurante,
   var horario: Horario,
   var usuario: Usuario?,
+  var idOpinion: String? = null,
 ) : BaseClass(id) {
   constructor() :
     this(UUID.randomUUID().toString(), EstadoReserva.PENDIENTE, -1, LocalDate.MAX.toString(), Restaurante(), Horario(), null)

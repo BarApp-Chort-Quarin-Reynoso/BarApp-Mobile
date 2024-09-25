@@ -69,4 +69,9 @@
     <color name="barapp_yellow">#FDCC0D</color>
 
     <color name="orange_primary">#EB5905</color>
+    <color name="orange_secondary">#DB5205</color>
+    <color name="accepted_booking">#278017</color>
+    <color name="cancelled_booking">#BA1A1A</color>
+    <color name="pending_booking">#865300</color>
+
 </resources>

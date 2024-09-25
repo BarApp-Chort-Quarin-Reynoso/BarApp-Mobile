@@ -322,8 +322,11 @@
 
     <!-- Pantalla Crear Opinión -->
     <string name="pantalla_crear_opinion_label_calificacion_comida">[Calificador X]</string>
+    <string name="pantalla_crear_opinion_label_valoraciones_opcionales">Valorá las características (Opcional)</string>
+    <string name="pantalla_crear_opinion_label_comentario_opcional">Comentá sobre tu experiencia (Opcional)</string>
     <string name="pantalla_crear_opinion_label_calificacion_general">Calificación general</string>
-    <string name="pantalla_crear_opinion_hint_comentario">Escriba su comentario aquí (opcional)</string>
+    <string name="pantalla_crear_opinion_hint_comentario">Escriba su comentario aquí</string>
     <string name="pantalla_crear_opinion_boton_enviar">Enviar opinión</string>
+    <string name="pantalla_crear_opinion_snackbar_texto">¡Opinión enviada con éxito!</string>
 
 </resources>

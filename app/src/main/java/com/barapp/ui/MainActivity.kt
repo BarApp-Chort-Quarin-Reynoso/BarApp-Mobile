@@ -24,7 +24,6 @@ import com.barapp.util.interfaces.LogOutListener
 import com.barapp.util.notifications.NotificacionReservaManager
 import com.barapp.data.retrofit.RetrofitInstance
 import com.barapp.viewModels.MainActivityViewModel
-import com.barapp.viewModels.PantallaBarViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -204,9 +203,13 @@ class MainActivity :
   }
 
   override fun onReservaClicked() {
-
     NavHostFragment.findNavController(binding.fragmentContainerView.getFragment())
       .navigate(R.id.action_pantallaNavegacionPrincipal_to_pantallaResumenReserva, null, null)
+  }
+
+  override fun onOpinarButtonClicked() {
+    NavHostFragment.findNavController(binding.fragmentContainerView.getFragment())
+      .navigate(R.id.action_pantallaNavegacionPrincipal_to_pantallaCrearOpinion)
   }
 
   fun setLoading(loading: Boolean) {
