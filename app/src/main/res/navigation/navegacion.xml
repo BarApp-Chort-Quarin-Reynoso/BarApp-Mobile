@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_pantallaNavegacionPrincipal_to_pantallaResumenReserva"
             app:destination="@id/pantallaResumenReserva" />
+        <action
+            android:id="@+id/action_pantallaNavegacionPrincipal_to_pantallaCrearOpinion"
+            app:destination="@id/pantallaCrearOpinion" />
     </fragment>
 
     <fragment
@@ -87,6 +90,11 @@
         android:name="com.barapp.ui.pantallas.PantallaResumenReserva"
         android:label="PantallaResumenReserva"
         tools:layout="@layout/fragment_pantalla_resumen_reserva"/>
+    <fragment
+        android:id="@+id/pantallaCrearOpinion"
+        android:name="com.barapp.ui.pantallas.PantallaCrearOpinion"
+        android:label="PantallaCrearOpinion"
+        tools:layout="@layout/fragment_pantalla_crear_opinion"/>
     <fragment
         android:id="@+id/pantallaOpiniones"
         android:name="com.barapp.ui.pantallas.PantallaOpiniones"

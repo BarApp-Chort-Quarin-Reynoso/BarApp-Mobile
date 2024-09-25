@@ -8,7 +8,7 @@ class DetalleRestauranteEntity(
   var menu: String,
   var capacidadPorHorario: Int,
   var listaHorarioEntities: List<HorarioEntity>,
-  var listaOpinionEntities: List<OpinionUsuarioEntity>,
+  var listaOpinionEntities: List<OpinionEntity>,
 ) {
   constructor() : this(UUID.randomUUID().toString(), "", "", -1, ArrayList(), ArrayList())
 

@@ -1,19 +1,14 @@
 package com.barapp.data.repositories
 
 import com.barapp.data.entities.DetalleRestauranteEntity
-import com.barapp.data.entities.OpinionUsuarioEntity
+import com.barapp.data.entities.OpinionEntity
 import com.barapp.model.DetalleRestaurante
 import com.barapp.model.Usuario
 import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.utils.IGenericRepository
-import com.barapp.data.mappers.DetalleRestauranteMapper.fromEntity
-import com.barapp.data.mappers.DetalleRestauranteMapper.toEntity
-import com.barapp.data.mappers.HorarioMapper.fromEntityToList
-import com.barapp.data.mappers.OpinionMapper.fromOpinionUsuarioToList
 import com.barapp.data.retrofit.RestaurantApiService
 import com.barapp.data.retrofit.RetrofitInstance
 import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import retrofit2.Call
@@ -63,9 +58,9 @@ class DetalleRestauranteRepository private constructor() : IGenericRepository<De
           val detalleRestauranteEntity =
             documentSnapshot.toObject(DetalleRestauranteEntity::class.java)
           val listaOpinion = detalleRestauranteEntity.listaOpinionEntities
-          for (opinionUsuarioEntity in listaOpinion) {
-            if (opinionUsuarioEntity.idUsuario == usuario.id) {
-              opinionUsuarioEntity.foto = usuario.foto
+          for (opinionEntity in listaOpinion) {
+            if (opinionEntity.idUsuario == usuario.id) {
+              opinionEntity.foto = usuario.foto
               actualizarListaOpinion(detalleRestauranteEntity, listaOpinion)
             }
           }
@@ -78,7 +73,7 @@ class DetalleRestauranteRepository private constructor() : IGenericRepository<De
 
   fun actualizarListaOpinion(
     dr: DetalleRestauranteEntity?,
-    opinionUsuarioEntityList: List<OpinionUsuarioEntity>?,
+    opinionUsuarioEntityList: List<OpinionEntity>?,
   ) {
     db
       .collection(COLECCION_DETALLES_RESTAURANTES)

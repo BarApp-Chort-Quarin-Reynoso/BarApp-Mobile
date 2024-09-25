@@ -9,17 +9,14 @@ import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.utils.IGenericRepository
 import com.barapp.data.mappers.HorarioMapper.fromEntity
 import com.barapp.data.mappers.ReservaMapper.fromEntity
-import com.barapp.data.mappers.ReservaMapper.toReservaBDEntity
 import com.barapp.data.mappers.RestauranteMapper.fromEntity
 import com.barapp.data.retrofit.ReservationApiService
-import com.barapp.data.retrofit.RestaurantApiService
 import com.barapp.data.retrofit.RetrofitInstance
 import com.barapp.model.EstadoReserva
-import com.barapp.model.Restaurante
+import com.barapp.model.Opinion
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import retrofit2.Call
 import retrofit2.Callback
@@ -123,7 +120,7 @@ class ReservaRepository private constructor() : IGenericRepository<Reserva> {
     })
   }
 
-  fun cancelarReserva(reserva: Reserva) {
+  fun cancelarReserva(reserva: Reserva, callback: FirestoreCallback<Reserva>) {
     Timber.d("Cancelando reserva por parte del usuario: $reserva")
     api.updateReservation(reserva.id, EstadoReserva.CANCELADA_USUARIO)
       .enqueue(object : Callback<Reserva> {
@@ -156,6 +153,7 @@ class ReservaRepository private constructor() : IGenericRepository<Reserva> {
           val data = response.body()
           Timber.d("Reservas recibidas: $data")
           callback.onSuccess(data!!)
+          callback.onSuccess(response.body()!!)
         } else {
           Timber.e("Error: ${response.errorBody()}")
           callback.onError(Throwable("Error recuperando Reserva"))
@@ -163,6 +161,30 @@ class ReservaRepository private constructor() : IGenericRepository<Reserva> {
       }
 
       override fun onFailure(call: Call<List<Reserva>>, t: Throwable) {
+        Timber.e(t)
+        callback.onError(t)
+      }
+    })
+  }
+
+  fun enviarOpinion(
+    idReserva: String,
+    opinion: Opinion,
+    callback: FirestoreCallback<Opinion>,
+  ) {
+    Timber.d("Enviando opinion de reserva: $idReserva")
+    api.sendReview(idReserva, opinion).enqueue(object : Callback<Opinion> {
+      override fun onResponse(call: Call<Opinion>, response: Response<Opinion>) {
+        if (response.isSuccessful) {
+          Timber.d("Opinion enviada exitosamente")
+          callback.onSuccess(response.body()!!)
+        } else {
+          Timber.e("Error: ${response.errorBody()}")
+          callback.onError(Throwable("Error enviando opinion"))
+        }
+      }
+
+      override fun onFailure(call: Call<Opinion>, t: Throwable) {
         Timber.e(t)
         callback.onError(t)
       }

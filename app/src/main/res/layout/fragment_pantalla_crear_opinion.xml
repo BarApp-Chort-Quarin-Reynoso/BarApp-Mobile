@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.barapp.ui.pantallas.PantallaCrearOpinion">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,7 +13,8 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -37,41 +40,55 @@
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
+        <TextView
+            android:id="@+id/textViewValoracionesOpcionales"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:text="@string/pantalla_crear_opinion_label_valoraciones_opcionales"
+            android:visibility="gone"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp" />
+
         <LinearLayout
+                android:id="@+id/contenedorCalificadores"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/pantalla_crear_opinion_label_calificacion_comida"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp" />
-
-            <RatingBar
-                android:id="@+id/rating_bar_food"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:numStars="5"
-                android:stepSize="1" />
+                android:paddingEnd="16dp"
+                android:paddingBottom="50dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/pantalla_crear_opinion_label_calificacion_general"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_marginTop="30dp" />
+                android:layout_marginTop="20dp" />
 
             <RatingBar
-                android:id="@+id/ratingGeneral"
+                android:id="@+id/ratingBarPuntuacionGeneral"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:numStars="5"
-                android:stepSize="1" />
+                android:isIndicator="false"
+                android:clickable="true"
+                android:focusable="true"
+                android:rating="0"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/textViewPuntuacion"
+                app:layout_constraintEnd_toEndOf="parent"
+                style="@style/BarApp.RatingBarDisplayLarge" />
+
+            <TextView
+                android:id="@+id/textViewComentarioOpcional"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pantalla_crear_opinion_label_comentario_opcional"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp" />
 
             <EditText
                 android:id="@+id/comentarioOpinion"
@@ -81,18 +98,19 @@
                 android:hint="@string/pantalla_crear_opinion_hint_comentario"
                 android:inputType="textMultiLine"
                 android:lines="4"/>
-        </LinearLayout>
 
-        <Button
-            android:id="@+id/botonEnviarOpinion"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginVertical="20dp"
-            android:text="@string/pantalla_crear_opinion_boton_enviar"
-            android:contentDescription="@string/boton_enviar_opinion_descripcion"
-            app:icon="@drawable/icon_filled_done_24"
-            style="@style/Widget.Material3.Button.Icon"/>
+            <Button
+                android:id="@+id/botonEnviarOpinion"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="20dp"
+                android:text="@string/pantalla_crear_opinion_boton_enviar"
+                android:contentDescription="@string/boton_enviar_opinion_descripcion"
+                app:icon="@drawable/icon_filled_done_24"
+                android:backgroundTint="@color/orange_secondary"
+                style="@style/Widget.Material3.Button.Icon"/>
+        </LinearLayout>
 
     </LinearLayout>
 
