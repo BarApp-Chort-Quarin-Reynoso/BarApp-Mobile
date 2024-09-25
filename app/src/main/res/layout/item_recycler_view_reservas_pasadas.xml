@@ -22,13 +22,42 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:contentDescription="@string/imagen_logo_restaurante_descripcion"
-                app:layout_constraintBottom_toBottomOf="@+id/txtViewDatosReserva"
                 app:layout_constraintEnd_toStartOf="@+id/txtViewNombreRestaurante"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
                 app:srcCompat="@drawable/logo_mc" />
+
+            <TextView
+                android:id="@+id/txtViewEstadoReserva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textSize="12sp"
+                android:padding="5dp"
+                android:paddingStart="0dp"
+                android:textStyle="bold"
+                android:text="@string/texto_ejemplo_bar_estado_reserva"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="@color/md_theme_light_error"
+                app:layout_constraintStart_toEndOf="@id/imageViewLogo"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txtViewDatosReserva"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/texto_ejemplo_datos_reserva"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintBottom_toTopOf="@+id/txtViewNombreRestaurante"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/txtViewEstadoReserva"/>
 
             <TextView
                 android:id="@+id/txtViewNombreRestaurante"
@@ -41,44 +70,31 @@
                 app:layout_constraintBottom_toTopOf="@+id/txtViewDireccionRestaurante"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imageViewLogo"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/txtViewEstadoReserva" />
 
             <TextView
                 android:id="@+id/txtViewDireccionRestaurante"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/texto_ejemplo_bar_direccion"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="?android:attr/textColorSecondary"
-                app:layout_constraintBottom_toTopOf="@+id/txtViewDatosReserva"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imageViewLogo"
                 app:layout_constraintTop_toBottomOf="@id/txtViewNombreRestaurante" />
-
-            <TextView
-                android:id="@+id/txtViewDatosReserva"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/texto_ejemplo_datos_reserva"
-                android:textAppearance="?attr/textAppearanceBodyMedium"
-                android:textColor="?android:attr/textColorSecondary"
-                app:layout_constraintEnd_toStartOf="@+id/botonOpinar"
-                app:layout_constraintStart_toEndOf="@id/imageViewLogo"
-                app:layout_constraintTop_toBottomOf="@id/txtViewDireccionRestaurante" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/botonOpinar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/boton_opinar"
+                app:icon="@drawable/icon_outlined_star_24"
                 android:contentDescription="@string/boton_opinar_descripcion"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/txtViewDatosReserva"
                 app:layout_constraintTop_toBottomOf="@id/txtViewDireccionRestaurante"
                 style="@style/Widget.Material3.Button.TextButton" />
 

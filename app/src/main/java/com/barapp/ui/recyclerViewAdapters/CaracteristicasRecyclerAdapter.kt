@@ -1,6 +1,5 @@
 package com.barapp.ui.recyclerViewAdapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +24,6 @@ class CaracteristicasRecyclerAdapter(
 
     override fun onBindViewHolder(holder: CaracteristicaViewHolder, position: Int) {
         val caracteristica = caracteristicas.toList()[position]
-        println("Caracteristica: $caracteristica")
         holder.titulo.text = caracteristica.first
         if (caracteristica.second.cantidadOpiniones == 0) {
             holder.ratingBar.visibility = View.GONE
@@ -33,12 +31,6 @@ class CaracteristicasRecyclerAdapter(
         } else {
             holder.ratingBar.rating = caracteristica.second.puntuacion.toFloat()
         }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun actualizarCaracteristicas(caracteristicas: Map<String, CalificacionPromedio>) {
-        this.caracteristicas = caracteristicas
-        notifyDataSetChanged()
     }
 
     inner class CaracteristicaViewHolder(binding: CaracteristicaLayoutBinding) : RecyclerView.ViewHolder(binding.root) {

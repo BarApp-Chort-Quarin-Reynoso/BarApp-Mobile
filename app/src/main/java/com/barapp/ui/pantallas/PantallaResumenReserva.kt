@@ -78,9 +78,10 @@ class PantallaResumenReserva : Fragment() {
       .setTitle(getString(R.string.titulo_dialogo_cancelar_reserva))
       .setMessage(getString(R.string.mensaje_dialogo_cancelar_reserva))
       .setPositiveButton(getString(R.string.boton_si)) { dialog, _ ->
-        activitySharedViewModel.cancelarReserva()
-        dialog.dismiss()
-        NavHostFragment.findNavController(this).popBackStack()
+        activitySharedViewModel.cancelarReserva {
+          dialog.dismiss()
+          NavHostFragment.findNavController(this).popBackStack()
+        }
       }
       .setNegativeButton(getString(R.string.boton_no)) { dialog, _ ->
         dialog.dismiss()

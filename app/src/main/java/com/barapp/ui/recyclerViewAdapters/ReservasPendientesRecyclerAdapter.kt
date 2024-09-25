@@ -72,7 +72,7 @@ class ReservasPendientesRecyclerAdapter(
         "/" +
         reserva.getFechaAsLocalDate().monthValue +
         " | " +
-        reserva.horario.horario)
+        reserva.horario.horario.substring(0, 5))
     reservaHolder.titulo.text = reserva.restaurante.nombre
     reservaHolder.datosReserva.text = datosReserva
     Glide.with(reservaHolder.root.context)
