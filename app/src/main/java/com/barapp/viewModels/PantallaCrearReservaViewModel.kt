@@ -63,8 +63,8 @@ class PantallaCrearReservaViewModel : ViewModel() {
   private val _datePicker: MutableLiveData<MaterialDatePicker<Long>> = MutableLiveData()
   val datePicker: LiveData<MaterialDatePicker<Long>> = _datePicker
 
-  private val _habilitarCardDatePicker: MutableLiveData<Boolean> = MutableLiveData()
-  val habilitarCardDatePicker: LiveData<Boolean> = _habilitarCardDatePicker
+  private val _habilitarTextFieldFechaReserva: MutableLiveData<Boolean> = MutableLiveData()
+  val habilitarTextFieldFechaReserva: LiveData<Boolean> = _habilitarTextFieldFechaReserva
 
   private val _horariosDesayuno: MutableLiveData<Map<List<String>, Int>> = MutableLiveData()
   val horariosDesayuno: LiveData<Map<List<String>, Int>> = _horariosDesayuno
@@ -112,11 +112,7 @@ class PantallaCrearReservaViewModel : ViewModel() {
    * @author Julio Chort
    */
   fun agregarPersona() {
-    cantidadPersonas++
-    _textoCantidadPersonas.value = ("$cantidadPersonas personas")
-    _habilitarBotonQuitarPersona.value = true
-    _habilitarBotonAgregarPersona.value = (cantidadPersonas != obtenerMaximoPersonas())
-    actualizarEstadoChips()
+    setPersonas(cantidadPersonas + 1)
   }
 
   /**
@@ -126,12 +122,36 @@ class PantallaCrearReservaViewModel : ViewModel() {
    * @author Julio Chort
    */
   fun quitarPersona() {
+    setPersonas(cantidadPersonas - 1)
+  }
 
-    cantidadPersonas--
+  fun handleInputCantidadPersonas(cantidad: String) {
+    if (cantidad.isNotEmpty()) {
+      setPersonas(cantidad.toInt())
+    } else {
+      cantidadPersonas = 0
+    }
+  }
+
+  private fun setPersonas(cantidad: Int) {
+    if (cantidad == cantidadPersonas)
+      return
+
+    if (cantidad >= 15) {
+      cantidadPersonas = 15
+      _habilitarBotonQuitarPersona.value = true
+      _habilitarBotonAgregarPersona.value = false
+    } else if (cantidad <= 1) {
+      cantidadPersonas = 1
+      _habilitarBotonQuitarPersona.value = false
+      _habilitarBotonAgregarPersona.value = true
+    } else {
+      cantidadPersonas = cantidad
+      _habilitarBotonQuitarPersona.value = true
+      _habilitarBotonAgregarPersona.value = true
+    }
     _textoCantidadPersonas.value =
       if (cantidadPersonas == 1) "1 persona" else "$cantidadPersonas personas"
-    _habilitarBotonQuitarPersona.value = (cantidadPersonas > 1)
-    _habilitarBotonAgregarPersona.value = true
     actualizarEstadoChips()
   }
 
@@ -203,6 +223,7 @@ class PantallaCrearReservaViewModel : ViewModel() {
   }
 
   fun buscarHorariosPorMes(mesAnio: YearMonth) {
+    _habilitarTextFieldFechaReserva.postValue(false)
     if (horariosPorMes.value.isNullOrEmpty()) {
       val correo = barSeleccionado.correo
       val mesAnioString = mesAnio.format(formatterMonth)
@@ -225,6 +246,7 @@ class PantallaCrearReservaViewModel : ViewModel() {
   }
 
   fun setFechaSeleccionada(diaSeleccionado: LocalDate?) {
+    _habilitarTextFieldFechaReserva.postValue(true)
     _fechaReserva.postValue(diaSeleccionado)
 
     if (diaSeleccionado == null) {

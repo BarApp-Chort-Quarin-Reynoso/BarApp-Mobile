@@ -25,7 +25,7 @@ class PantallaConfirmacionReserva : Fragment() {
   private val viewModel: PantallaConfirmacionViewModel by viewModels()
 
   private val sharedViewModel: CrearReservaSharedViewModel by
-    navGraphViewModels(R.id.pantallaCrearReserva)
+  navGraphViewModels(R.id.pantallaCrearReserva)
 
   private val activitySharedViewModel: MainActivityViewModel by activityViewModels()
 
@@ -49,7 +49,12 @@ class PantallaConfirmacionReserva : Fragment() {
 
     binding.toolbar.subtitle = sharedViewModel.barSeleccionado.nombre
 
-    binding.textViewCantidadPersonas.text = sharedViewModel.textoCantidadPersonas
+    binding.textViewCantidadPersonas.text = sharedViewModel.cantidadPersonas.let {
+      if (it == 1)
+        getString(R.string.placeholder_persona, it)
+      else
+        getString(R.string.placeholder_personas, it)
+    }
     binding.textViewFechaReserva.text = sharedViewModel.textoFechaReserva
     binding.textViewHoraReserva.text = sharedViewModel.horaReserva.horario.substring(0, 5)
 

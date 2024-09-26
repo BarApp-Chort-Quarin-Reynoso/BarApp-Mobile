@@ -48,144 +48,82 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingHorizontal="20dp">
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardViewTamanioGrupo"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp">
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textFieldTamanioGrupo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="15dp"
+                android:hint="@string/pantalla_reservar_titulo_tamanio_grupo"
+                app:startIconDrawable="@drawable/icon_filled_person_24"
+                android:minHeight="80dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputTamanioGrupo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:minHeight="64dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/botonQuitarPersona"
+                    android:layout_width="47dp"
+                    android:layout_height="47dp"
+                    android:layout_marginHorizontal="3dp"
+                    android:textAlignment="center"
+                    android:contentDescription="@string/boton_quitar_persona_descripcion"
+                    app:icon="@drawable/icon_filled_remove_24"
+                    style="?attr/materialIconButtonOutlinedStyle"
+                    android:layout_gravity="center|end" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/botonAgregarPersona"
+                    android:layout_width="47dp"
+                    android:layout_height="47dp"
+                    android:layout_gravity="center|end"
+                    android:layout_marginHorizontal="5dp"
+                    android:textAlignment="center"
+                    android:contentDescription="@string/boton_agregar_persona_descripcion"
+                    app:icon="@drawable/icon_outlined_add_24"
+                    style="?attr/materialIconButtonOutlinedStyle" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textFieldFechaReserva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/pantalla_reservar_titulo_fecha_de_reserva"
+            app:startIconContentDescription="@string/imagen_calendario_descripcion"
+            app:startIconDrawable="@drawable/icon_outlined_insert_invitation_24"
+            android:minHeight="80dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputFechaReserva"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:focusable="false"
+                android:clickable="true"
+                android:maxLines="1"
+                android:singleLine="true" />
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/imageViewPersona"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="@dimen/card_inner_horizontal_margin"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:contentDescription="@string/imagen_persona_descripcion"
-                    app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
-                    app:srcCompat="@drawable/icon_filled_person_24" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/labelTamanioDeGrupo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center|start"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="10dp"
-                            android:text="@string/pantalla_reservar_titulo_tamanio_grupo"
-                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
-
-                        <TextView
-                            android:id="@+id/txtViewCantidadPersonas"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center|start"
-                            android:layout_marginStart="10dp"
-                            android:text="@string/pantalla_reservar_texto_cantidad_personas_inicial"
-                            android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-                            android:textSize="20sp"/>
-
-                    </LinearLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/botonQuitarPersona"
-                        android:layout_width="47dp"
-                        android:layout_height="47dp"
-                        android:layout_gravity="center|end"
-                        android:layout_marginHorizontal="3dp"
-                        android:textAlignment="center"
-                        android:contentDescription="@string/boton_quitar_persona_descripcion"
-                        app:icon="@drawable/icon_filled_remove_24"
-                        style="?attr/materialIconButtonOutlinedStyle"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/botonAgregarPersona"
-                        android:layout_width="47dp"
-                        android:layout_height="47dp"
-                        android:layout_gravity="center|end"
-                        android:layout_marginHorizontal="5dp"
-                        android:textAlignment="center"
-                        android:contentDescription="@string/boton_agregar_persona_descripcion"
-                        app:icon="@drawable/icon_outlined_add_24"
-                        style="?attr/materialIconButtonOutlinedStyle"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardViewFechaReserva"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            android:checkable="true"
-            android:clickable="true"
-            android:focusable="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/imageViewCalendario"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="@dimen/card_inner_horizontal_margin"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:contentDescription="@string/imagen_calendario_descripcion"
-                    app:shapeAppearance="@style/Widget.Barapp.RoundedImageView"
-                    app:srcCompat="@drawable/icon_outlined_insert_invitation_24" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/labelFechaReserva"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center|start"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/pantalla_reservar_titulo_fecha_de_reserva"
-                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
-
-                    <TextView
-                        android:id="@+id/textViewFechaReserva"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center|start"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/pantalla_reservar_texto_fecha_reserva"
-                        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-                        android:textSize="20sp"/>
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/labelHorariosDisponibles"

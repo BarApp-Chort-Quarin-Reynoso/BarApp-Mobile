@@ -6,7 +6,6 @@ import com.barapp.model.Restaurante
 import java.time.LocalDate
 
 class CrearReservaSharedViewModel : ViewModel() {
-  lateinit var textoCantidadPersonas: String
   lateinit var textoFechaReserva: String
 
   var cantidadPersonas = 0

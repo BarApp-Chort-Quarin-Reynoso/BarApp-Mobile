@@ -1,12 +1,12 @@
 package com.barapp.ui.pantallas
 
 import android.os.Bundle
-import android.os.Parcel
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.get
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -28,11 +28,9 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
-import com.google.android.material.datepicker.DayViewDecorator
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialContainerTransform
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.YearMonth
@@ -107,7 +105,7 @@ class PantallaCrearReserva : Fragment() {
       binding.botonCrearReserva.isEnabled = false
     }
 
-    binding.cardViewFechaReserva.setOnClickListener {
+    binding.textInputFechaReserva.setOnClickListener {
       viewModel.buscarHorariosPorMes(YearMonth.now())
       limpiarDatosViejosHorarios()
     }
@@ -193,8 +191,11 @@ class PantallaCrearReserva : Fragment() {
   /** @author Julio Chort */
   private fun volverTodoAComoEstaba() {
     // Cantidad de personas
-    binding.txtViewCantidadPersonas.text = sharedViewModelProximaPantalla.textoCantidadPersonas
-    viewModel.cantidadDePersonasDeTextoANumero(sharedViewModelProximaPantalla.textoCantidadPersonas)
+    binding.textInputTamanioGrupo.text?.clear()
+    binding.textInputTamanioGrupo.text?.insert(
+      0,
+      sharedViewModelProximaPantalla.cantidadPersonas.toString()
+    )
 
     // Horarios
     limpiarDatosViejosHorarios()
@@ -255,15 +256,30 @@ class PantallaCrearReserva : Fragment() {
     viewModel.todosChipsInhabilitadosMerienda = true
     viewModel.todosChipsInhabilitadosCena = true
 
-    viewModel.cantidadDePersonasDeTextoANumero(binding.txtViewCantidadPersonas.text.toString())
-
-    viewModel.textoCantidadPersonas.observe(viewLifecycleOwner) { textoCantPersonas ->
-      binding.txtViewCantidadPersonas.text = textoCantPersonas
+    viewModel.textoCantidadPersonas.observe(viewLifecycleOwner) { _ ->
+      binding.textInputTamanioGrupo.text?.let {
+        it.replace(0, it.length, viewModel.cantidadPersonas.toString())
+      }
     }
 
     viewModel.fechaReserva.observe(viewLifecycleOwner) { fecha ->
-      binding.textViewFechaReserva.text = fecha?.let { viewModel.fechaAFormatoTexto(fecha) }
-        ?: requireContext().resources.getString(R.string.pantalla_reservar_texto_fecha_reserva)
+      binding.textInputFechaReserva.text?.let { editable ->
+        editable.replace(
+          0,
+          editable.length,
+          fecha
+            ?.let { viewModel.fechaAFormatoTexto(fecha) }
+            ?: requireContext().resources.getString(R.string.pantalla_reservar_texto_fecha_reserva))
+      }
+    }
+
+    binding.textInputTamanioGrupo.doAfterTextChanged { text ->
+      if (text.toString().isEmpty()) {
+        binding.textFieldTamanioGrupo.error = "Se debe ingresar una cantidad de personas"
+      } else {
+        binding.textFieldTamanioGrupo.error = null
+      }
+      viewModel.handleInputCantidadPersonas(text.toString())
     }
 
     viewModel.habilitarBotonAgregarPersona.observe(viewLifecycleOwner) { banderaHabilitar ->
@@ -274,8 +290,9 @@ class PantallaCrearReserva : Fragment() {
       binding.botonQuitarPersona.isEnabled = banderaHabilitar
     }
 
-    viewModel.habilitarCardDatePicker.observe(viewLifecycleOwner) { banderaHabilitar ->
-      binding.cardViewFechaReserva.isEnabled = banderaHabilitar
+    viewModel.habilitarTextFieldFechaReserva.observe(viewLifecycleOwner) { banderaHabilitar ->
+      binding.textInputFechaReserva.isEnabled = banderaHabilitar
+      binding.textFieldFechaReserva.isEnabled = banderaHabilitar
     }
 
     viewModel.horariosDesayuno.observe(viewLifecycleOwner) { listaHorarios ->
@@ -505,12 +522,10 @@ class PantallaCrearReserva : Fragment() {
    * @author Julio Chort
    */
   private fun copiarDatosAlViewModelCompartido() {
-    sharedViewModelProximaPantalla.textoCantidadPersonas =
-      viewModel.textoCantidadPersonas.value.toString()
+    sharedViewModelProximaPantalla.cantidadPersonas = viewModel.cantidadPersonas
     sharedViewModelProximaPantalla.textoFechaReserva =
       viewModel.fechaReserva.value!!.let { fecha -> viewModel.fechaAFormatoTexto(fecha) }
 
-    sharedViewModelProximaPantalla.cantidadPersonas = viewModel.cantidadPersonas
     sharedViewModelProximaPantalla.fechaReserva = viewModel.fechaReserva.value!!
     sharedViewModelProximaPantalla.horaReserva = viewModel.horaReserva
 
