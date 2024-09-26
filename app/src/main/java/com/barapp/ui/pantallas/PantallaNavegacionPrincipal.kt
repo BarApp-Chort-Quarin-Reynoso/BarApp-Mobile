@@ -27,7 +27,9 @@ class PantallaNavegacionPrincipal : Fragment(), OnRestauranteClicked {
 
   private val restauranteSeleccionadoViewModel: RestauranteSeleccionadoSharedViewModel by
     navGraphViewModels(R.id.pantallaNavegacionPrincipal)
-  private val activitySharedViewModel: MainActivityViewModel by activityViewModels()
+  private val activitySharedViewModel: MainActivityViewModel by activityViewModels {
+    MainActivityViewModel.Factory(null)
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
