@@ -1,13 +1,12 @@
 package com.barapp.ui.recyclerViewAdapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.DiffUtil.DiffResult
 import androidx.recyclerview.widget.RecyclerView
 import com.barapp.R
 import com.barapp.data.mappers.RestauranteMapper.toRestauranteUsuario
@@ -21,7 +20,6 @@ import com.barapp.data.repositories.RestauranteFavoritoRepository
 import com.barapp.data.utils.FirestoreCallback
 import com.barapp.model.DetalleRestaurante
 import com.barapp.model.EstadoRestaurante
-import com.barapp.util.diffCallbacks.RestauranteDiffCallback
 import com.barapp.util.interfaces.LoadingHandler
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
@@ -30,10 +28,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.core.SingleEmitter
-import io.reactivex.rxjava3.schedulers.Schedulers
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import timber.log.Timber
 
@@ -116,12 +110,11 @@ class HorizontalRecyclerViewAdapter(
     holder.botonFavorito.setOnClickListener {
       if (holder.botonFavorito.isChecked) {
         holder.botonFavorito.setIconResource(R.drawable.icon_filled_favorite_24)
-        hacerFavorito(listaRestaurantes[position])
+        agregarFavorito(listaRestaurantes[position], holder)
       } else {
         holder.botonFavorito.setIconResource(R.drawable.icon_outlined_favorite_24)
-        eliminarFavorito(listaRestaurantes[position])
+        eliminarFavorito(listaRestaurantes[position], holder)
       }
-      handler.actualizarFavoritos()
     }
     if (distancias[restaurante.id] != null) {
       holder.distanciaRestaurante.visibility = View.VISIBLE
@@ -131,6 +124,15 @@ class HorizontalRecyclerViewAdapter(
       holder.distanciaRestaurante.visibility = View.INVISIBLE
     }
     holder.cardView.transitionName = idRecyclerView + restaurante.id
+  }
+
+  // Si el restaurante posee idRestaurante es un RestauranteUsuario (favorito o vistoRecientemente)
+  private fun getRealIdRestaurante(restaurante: Restaurante): String {
+    return if (restaurante.idRestaurante != "") {
+      restaurante.idRestaurante
+    } else {
+      restaurante.id
+    }
   }
 
   override fun onBindViewHolder(
@@ -161,19 +163,20 @@ class HorizontalRecyclerViewAdapter(
   }
 
   fun updateRestaurantesItems(newRestaurantes: List<Restaurante>) {
-    val disposable =
-      Single.create { emitter: SingleEmitter<DiffResult> ->
-        val diffCallback = RestauranteDiffCallback(listaRestaurantes, newRestaurantes)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        emitter.onSuccess(diffResult)
+      this.listaRestaurantes.clear()
+      this.listaRestaurantes.addAll(newRestaurantes)
+  }
+
+  @SuppressLint("NotifyDataSetChanged")
+  fun addToFavorites(holder: RestaurantesViewHolder, idRestaurante: String) {
+    for (restaurante in listaRestaurantes) {
+      if (restaurante.id == idRestaurante || restaurante.idRestaurante == idRestaurante) {
+        holder.botonFavorito.setIconResource(R.drawable.icon_filled_favorite_24)
+        holder.botonFavorito.isChecked = true
+        notifyDataSetChanged()
+        break
       }
-        .subscribeOn(Schedulers.computation())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe { result: DiffResult ->
-          listaRestaurantes.clear()
-          listaRestaurantes.addAll(newRestaurantes)
-          result.dispatchUpdatesTo(this)
-        }
+    }
   }
 
   fun setDistancias(distancias: HashMap<String, Int?>) {
@@ -181,22 +184,24 @@ class HorizontalRecyclerViewAdapter(
     notifyItemRangeChanged(0, distancias.size, CAMBIADA_DISTANCIA)
   }
 
-  private fun hacerFavorito(restaurante: Restaurante) {
+  private fun agregarFavorito(restaurante: Restaurante, holder: RestaurantesViewHolder) {
     val restauranteFavorito = toRestauranteUsuario(restaurante)
     restauranteFavorito.idUsuario = usuario.id
     restauranteFavoritoRepository.guardar(restauranteFavorito, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
       override fun onSuccess(result: List<String>) {
         usuario.detalleUsuario!!.idsRestaurantesFavoritos = HashSet(result)
+        handler.actualizarFavoritos(holder, getRealIdRestaurante(restaurante))
       }
 
       override fun onError(exception: Throwable) {}
     })
   }
 
-  private fun eliminarFavorito(restaurante: Restaurante) {
+  private fun eliminarFavorito(restaurante: Restaurante, holder: RestaurantesViewHolder) {
     restauranteFavoritoRepository.borrar(restaurante.id, usuario.id, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
       override fun onSuccess(result: List<String>) {
         usuario.detalleUsuario!!.idsRestaurantesFavoritos = HashSet(result)
+        handler.actualizarFavoritos(holder, getRealIdRestaurante(restaurante))
       }
 
       override fun onError(exception: Throwable) {}
@@ -270,15 +275,6 @@ class HorizontalRecyclerViewAdapter(
       )
     }
 
-    // Si el restaurante posee idRestaurante es un RestauranteUsuario (favorito o vistoRecientemente)
-    private fun getRealIdRestaurante(restaurante: Restaurante): String {
-      return if (restaurante.idRestaurante != "") {
-        restaurante.idRestaurante
-      } else {
-        restaurante.id
-      }
-    }
-
     private fun mostrarErrorAlgoSalioMal(message: String) {
       MaterialAlertDialogBuilder(root.context)
         .setIcon(R.drawable.icon_baseline_sentiment_very_dissatisfied_24)
@@ -294,7 +290,7 @@ class HorizontalRecyclerViewAdapter(
   }
 
   interface ActualizarFavoritos {
-    fun actualizarFavoritos()
+    fun actualizarFavoritos(holder: RestaurantesViewHolder, idRestaurante: String)
   }
 
   companion object {

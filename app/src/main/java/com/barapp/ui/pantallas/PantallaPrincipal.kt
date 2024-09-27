@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.barapp.R
 import com.barapp.databinding.FragmentPantallaPrincipalBinding
 import com.barapp.model.Restaurante
-import com.barapp.model.Usuario
 import com.barapp.ui.MainActivity
 import com.barapp.util.interfaces.OnRestauranteClicked
 import com.barapp.util.interfaces.OnSnackbarShowed
@@ -181,9 +180,7 @@ class PantallaPrincipal :
 
     pantallaPrincipalViewModel.listaRestaurantesDestacados.observe(viewLifecycleOwner) {
       listaRestaurante ->
-      mainActivityViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
-        cargarRecyclerViewRestaurantesDestacados(listaRestaurante, usuario)
-      }
+        cargarRecyclerViewRestaurantesDestacados(listaRestaurante)
     }
 
     pantallaPrincipalViewModel.distanciasDestacados.observe(viewLifecycleOwner) {
@@ -191,16 +188,13 @@ class PantallaPrincipal :
     }
 
     pantallaPrincipalViewModel.listaRestaurantesCercaDeTi.observe(viewLifecycleOwner) {
-      listaRestaurante ->
-      mainActivityViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
-        if (listaRestaurante.isEmpty()) {
+      listaRestaurante -> if (listaRestaurante.isEmpty()) {
           binding.labelCercaDeTi.visibility = View.GONE
           binding.recyclerViewHorizontalCercaDeTi.visibility = View.GONE
         } else {
-          cargarRecyclerViewCercaDeTi(listaRestaurante, usuario)
+          cargarRecyclerViewCercaDeTi(listaRestaurante)
           binding.labelCercaDeTi.visibility = View.VISIBLE
           binding.recyclerViewHorizontalCercaDeTi.visibility = View.VISIBLE
-        }
       }
     }
 
@@ -214,9 +208,9 @@ class PantallaPrincipal :
         binding.labelVistoRecientemente.visibility = View.GONE
         binding.recyclerViewHorizontalVistosRecientemente.visibility = View.GONE
       } else {
-        cargarRecyclerViewVistosRecientemente(listaRestaurante, pantallaPrincipalViewModel.usuario)
+        cargarRecyclerViewVistosRecientemente(listaRestaurante)
         binding.labelVistoRecientemente.visibility = View.VISIBLE
-        binding.labelVistoRecientemente.visibility = View.VISIBLE
+        binding.recyclerViewHorizontalVistosRecientemente.visibility = View.VISIBLE
       }
     }
 
@@ -239,34 +233,25 @@ class PantallaPrincipal :
     if (showSnackbarReservaExitosa) {
       showSnackbarReservaExitosa = false
 
-      val snackbar =
-        Snackbar.make(
-            requireView(),
-            getString(R.string.pantalla_confirmacion_reservas_snackbar_texto),
-            Snackbar.LENGTH_LONG,
-          )
-          .setDuration(Snackbar.LENGTH_LONG)
-          .show()
+      Snackbar.make(
+          requireView(),
+          getString(R.string.pantalla_confirmacion_reservas_snackbar_texto),
+          Snackbar.LENGTH_LONG,
+        )
+        .setDuration(Snackbar.LENGTH_LONG)
+        .show()
     }
   }
 
-  private fun cargarRecyclerViewRestaurantesDestacados(
-    restaurantes: List<Restaurante>,
-    usuario: Usuario,
-  ) {
-
+  private fun cargarRecyclerViewRestaurantesDestacados(restaurantes: List<Restaurante>) {
     adapterRestaurantesDestacados?.updateRestaurantesItems(restaurantes)
   }
 
-  private fun cargarRecyclerViewCercaDeTi(restaurantes: List<Restaurante>, usuario: Usuario) {
-
+  private fun cargarRecyclerViewCercaDeTi(restaurantes: List<Restaurante>) {
     cercaDeTiRecyclerAdapter?.updateRestaurantesItems(restaurantes)
   }
 
-  private fun cargarRecyclerViewVistosRecientemente(
-    restaurantes: List<Restaurante>,
-    usuario: Usuario?,
-  ) {
+  private fun cargarRecyclerViewVistosRecientemente(restaurantes: List<Restaurante>) {
     adapterVistosRecientemente?.updateRestaurantesItems(restaurantes)
   }
 
@@ -286,10 +271,10 @@ class PantallaPrincipal :
     fun onFabBuscarClicked(fabBuscar: View)
   }
 
-  override fun actualizarFavoritos() {
-    // adapterVistosRecientemente!!.notifyDataSetChanged()
-    // cercaDeTiRecyclerAdapter!!.notifyDataSetChanged()
-    // adapterRestaurantesDestacados!!.notifyDataSetChanged()
+  override fun actualizarFavoritos(holder: HorizontalRecyclerViewAdapter.RestaurantesViewHolder, idRestaurante: String) {
+    adapterRestaurantesDestacados?.addToFavorites(holder, idRestaurante)
+    cercaDeTiRecyclerAdapter?.addToFavorites(holder, idRestaurante)
+    adapterVistosRecientemente?.addToFavorites(holder, idRestaurante)
   }
 
   override fun showSnackbar(snackbar: Snackbar) {

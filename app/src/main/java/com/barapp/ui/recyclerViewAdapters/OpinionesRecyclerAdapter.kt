@@ -83,8 +83,4 @@ class OpinionesRecyclerAdapter (private val opiniones : MutableList<Opinion>) : 
             foto = binding.imageViewFotoPerfil
         }
     }
-
-    interface Callbacks {
-        fun actualizarCantidadOpiniones(opiniones: Int)
-    }
 }
