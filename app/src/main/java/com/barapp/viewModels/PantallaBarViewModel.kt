@@ -11,6 +11,7 @@ import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
 import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.repositories.RestauranteFavoritoRepository
+import com.barapp.util.RestauranteUtils.getRealIdRestaurante
 
 class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) : ViewModel() {
   private val restauranteFavoritoRepository = RestauranteFavoritoRepository.instance
@@ -56,7 +57,7 @@ class PantallaBarViewModel(var restaurante: Restaurante, var usuario: Usuario) :
 
   fun eliminarFavorito() {
     this._loading.value = true
-    restauranteFavoritoRepository.borrar(restaurante.id, usuario.id, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
+    restauranteFavoritoRepository.borrar(getRealIdRestaurante(restaurante), usuario.id, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
       override fun onSuccess(result: List<String>) {
         usuario.detalleUsuario!!.idsRestaurantesFavoritos = HashSet(result)
         _loading.postValue(false)

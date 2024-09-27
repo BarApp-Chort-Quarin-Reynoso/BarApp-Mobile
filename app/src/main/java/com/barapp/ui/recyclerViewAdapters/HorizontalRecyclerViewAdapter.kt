@@ -20,6 +20,7 @@ import com.barapp.data.repositories.RestauranteFavoritoRepository
 import com.barapp.data.utils.FirestoreCallback
 import com.barapp.model.DetalleRestaurante
 import com.barapp.model.EstadoRestaurante
+import com.barapp.util.RestauranteUtils.getRealIdRestaurante
 import com.barapp.util.interfaces.LoadingHandler
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
@@ -126,15 +127,6 @@ class HorizontalRecyclerViewAdapter(
     holder.cardView.transitionName = idRecyclerView + restaurante.id
   }
 
-  // Si el restaurante posee idRestaurante es un RestauranteUsuario (favorito o vistoRecientemente)
-  private fun getRealIdRestaurante(restaurante: Restaurante): String {
-    return if (restaurante.idRestaurante != "") {
-      restaurante.idRestaurante
-    } else {
-      restaurante.id
-    }
-  }
-
   override fun onBindViewHolder(
     holder: RestaurantesViewHolder,
     position: Int,
@@ -198,7 +190,7 @@ class HorizontalRecyclerViewAdapter(
   }
 
   private fun eliminarFavorito(restaurante: Restaurante, holder: RestaurantesViewHolder) {
-    restauranteFavoritoRepository.borrar(restaurante.id, usuario.id, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
+    restauranteFavoritoRepository.borrar(getRealIdRestaurante(restaurante), usuario.id, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
       override fun onSuccess(result: List<String>) {
         usuario.detalleUsuario!!.idsRestaurantesFavoritos = HashSet(result)
         handler.actualizarFavoritos(holder, getRealIdRestaurante(restaurante))

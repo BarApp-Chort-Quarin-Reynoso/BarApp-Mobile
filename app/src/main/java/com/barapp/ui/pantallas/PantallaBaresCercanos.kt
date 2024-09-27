@@ -28,6 +28,7 @@ import com.barapp.util.CambiarPermisosEnConfiguracion
 import com.barapp.util.Interpolator
 import com.barapp.util.Maps
 import com.barapp.util.MarkerUtils
+import com.barapp.util.RestauranteUtils.getRealIdRestaurante
 import com.barapp.util.interfaces.OnRestauranteClicked
 import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.PantallaBaresCercanosViewModel
@@ -358,7 +359,7 @@ class PantallaBaresCercanos : Fragment() {
    * @author Chort Julio
    */
   private fun eliminarFavorito(restaurante: Restaurante) {
-    restauranteFavoritoRepository.borrar(restaurante.id, mainActivityViewModel.usuario.value!!.id, mainActivityViewModel.usuario.value!!.idDetalleUsuario, object : FirestoreCallback<List<String>> {
+    restauranteFavoritoRepository.borrar(getRealIdRestaurante(restaurante), mainActivityViewModel.usuario.value!!.id, mainActivityViewModel.usuario.value!!.idDetalleUsuario, object : FirestoreCallback<List<String>> {
       override fun onSuccess(result: List<String>) {
         mainActivityViewModel.usuario.value!!.detalleUsuario!!.idsRestaurantesFavoritos = HashSet(result)
       }
