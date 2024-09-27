@@ -22,6 +22,7 @@ import com.barapp.data.repositories.DetalleUsuarioRepository
 import com.barapp.data.repositories.RestauranteFavoritoRepository
 import com.barapp.data.utils.FirestoreCallback
 import com.barapp.model.DetalleRestaurante
+import com.barapp.util.RestauranteUtils.getRealIdRestaurante
 import com.barapp.util.diffCallbacks.RestauranteDiffCallback
 import com.barapp.util.interfaces.LoadingHandler
 import com.bumptech.glide.Glide
@@ -139,7 +140,7 @@ class ResultadosRestauranteRecyclerAdapter(
   }
 
   private fun eliminarFavorito(restaurante: Restaurante, position: Int) {
-    restauranteFavoritoRepository.borrar(restaurante.id, usuario.id, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
+    restauranteFavoritoRepository.borrar(getRealIdRestaurante(restaurante), usuario.id, usuario.idDetalleUsuario, object : FirestoreCallback<List<String>> {
       override fun onSuccess(result: List<String>) {
         usuario.detalleUsuario!!.idsRestaurantesFavoritos = HashSet(result)
       }
