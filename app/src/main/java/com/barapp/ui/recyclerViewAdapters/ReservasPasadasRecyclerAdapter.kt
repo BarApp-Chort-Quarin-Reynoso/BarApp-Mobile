@@ -40,7 +40,7 @@ class ReservasPasadasRecyclerAdapter(private val reservas: MutableList<Reserva>,
       datosReserva = binding.txtViewDatosReserva
       botonOpinar = binding.botonOpinar
       binding.botonOpinar.setOnClickListener {
-        listener.onOpinarButtonClick(adapterPosition)
+        listener.onOpinarButtonClick(getBindingAdapterPosition())
       }
     }
   }

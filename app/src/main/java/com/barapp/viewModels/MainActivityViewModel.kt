@@ -1,6 +1,7 @@
 package com.barapp.viewModels
 
 import android.location.Location
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,6 +17,7 @@ import com.barapp.data.repositories.RestauranteVistoRecientementeRepository
 import com.barapp.data.repositories.UsuarioRepository
 import com.barapp.model.DetalleRestaurante
 import com.barapp.model.DetalleUsuario
+import com.barapp.util.Event
 import timber.log.Timber
 
 class MainActivityViewModel(var origen: String?) : ViewModel() {
@@ -39,6 +41,9 @@ class MainActivityViewModel(var origen: String?) : ViewModel() {
 
   private val _error = MutableLiveData<Throwable>()
   val error: LiveData<Throwable> = _error
+
+  private val _commonMessages = MutableLiveData<Event<String>>()
+  val commonMessages: LiveData<Event<String>> = _commonMessages
 
   /**
    * Busca el usuario y su detalle a partir de un idUsuario
@@ -159,6 +164,10 @@ class MainActivityViewModel(var origen: String?) : ViewModel() {
         callback.onError(exception)
       }
     })
+  }
+
+  fun postMessage(source: Fragment, message: String) {
+    _commonMessages.postValue(Event(source, message))
   }
 
   class Factory(private val origen: String?) : ViewModelProvider.Factory {

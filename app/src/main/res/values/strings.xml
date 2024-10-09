@@ -197,9 +197,11 @@
 
     <!-- Notification -->
     <string name="notificacion_reserva_title">Reserva en %1$s</string>
-    <string name="notificacion_reserva_text">Su reserva en %1$s es en media hora. ¡Lo estamos esperando!</string>
+    <string name="notificacion_reserva_text">Tu reserva es en media hora. ¡El local te estará esperando!</string>
     <string name="notificacion_reserva_cancelada_bar_title">Reserva cancelada</string>
-    <string name="notificacion_reserva_cancelada_bar_text">Lo sentimos. El bar %1$s ha cancelado su reserva. Motivo: %2$s</string>
+    <string name="notificacion_reserva_cancelada_bar_text">Lo sentimos. El bar %1$s ha cancelado tu reserva. Motivo: %2$s</string>
+    <string name="notificacion_pedir_opinion_title">¿Cómo estuvo tu comida?</string>
+    <string name="notificacion_pedir_opinion_text">Queremos saber tu opinión sobre %1$s.</string>
 
     <!-- Pantalla Crear Reserva -->
     <string name="pantalla_reservar_titulo_tamanio_grupo">Tamaño de grupo</string>
