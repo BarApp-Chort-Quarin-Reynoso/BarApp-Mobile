@@ -13,7 +13,9 @@ import com.barapp.model.Opinion
 import com.barapp.model.Usuario
 import timber.log.Timber
 
-class PantallaCrearOpinionViewModel(var reserva: Reserva) : ViewModel() {
+class PantallaCrearOpinionViewModel : ViewModel() {
+    lateinit var reserva: Reserva
+
     private val detalleRestauranteRepo: DetalleRestauranteRepository = DetalleRestauranteRepository.instance
     private val reservaRepository: ReservaRepository = ReservaRepository.instance
 
@@ -27,12 +29,10 @@ class PantallaCrearOpinionViewModel(var reserva: Reserva) : ViewModel() {
     val error: LiveData<Throwable?> = _error
 
     init {
-        buscarDetalleRestaurante()
+        _loading.value = true
     }
 
-    private fun buscarDetalleRestaurante() {
-        _loading.value = true
-
+    fun buscarDetalleRestaurante() {
         Timber.d("Buscando detalle restaurante de la reserva: $reserva")
 
         detalleRestauranteRepo.buscarPorId(
@@ -76,16 +76,5 @@ class PantallaCrearOpinionViewModel(var reserva: Reserva) : ViewModel() {
                 _error.postValue(exception)
             }
         })
-    }
-
-    class Factory(private val reserva: Reserva) :
-        ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(PantallaCrearOpinionViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST") return PantallaCrearOpinionViewModel(reserva) as T
-            }
-
-            throw IllegalArgumentException("UNKNOWN VIEW MODEL CLASS")
-        }
     }
 }

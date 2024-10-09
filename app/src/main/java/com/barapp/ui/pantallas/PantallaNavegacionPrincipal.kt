@@ -70,6 +70,13 @@ class PantallaNavegacionPrincipal : Fragment(), OnRestauranteClicked {
         navController.navigate(R.id.action_global_pantallaMisReservas)
         NavHostFragment.findNavController(this)
           .navigate(R.id.action_pantallaNavegacionPrincipal_to_pantallaResumenReserva)
+      } else if (intOrigen == MainActivity.NAVEGACION_DESDE_NOTIFICACION_OPINAR) {
+        val idReserva = requireActivity().intent.extras!!.getString("idReserva")!!
+        activitySharedViewModel.searchReserva(idReserva)
+        Timber.i("Se navega a opinar de bar {}", idReserva)
+        navController.navigate(R.id.action_global_pantallaMisReservas)
+        NavHostFragment.findNavController(this)
+          .navigate(R.id.action_pantallaNavegacionPrincipal_to_pantallaCrearOpinion)
       }
 
       activitySharedViewModel.origen = null

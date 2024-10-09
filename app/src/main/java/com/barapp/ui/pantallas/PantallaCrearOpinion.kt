@@ -20,16 +20,14 @@ class PantallaCrearOpinion : Fragment() {
 
     private val activitySharedViewModel: MainActivityViewModel by activityViewModels()
 
-    private val viewModel: PantallaCrearOpinionViewModel by viewModels{
-        PantallaCrearOpinionViewModel.Factory(activitySharedViewModel.reserva)
-    }
+    private val viewModel: PantallaCrearOpinionViewModel by viewModels()
 
     private lateinit var binding: FragmentPantallaCrearOpinionBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentPantallaCrearOpinionBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -39,7 +37,11 @@ class PantallaCrearOpinion : Fragment() {
 
         binding.toolbar.setNavigationOnClickListener { volverAtras() }
 
-        binding.labelNombreRestaurante.text = activitySharedViewModel.reserva.restaurante.nombre
+        activitySharedViewModel.reservaLD.observe(viewLifecycleOwner) { reserva ->
+            viewModel.reserva = reserva
+            viewModel.buscarDetalleRestaurante()
+            binding.labelNombreRestaurante.text = reserva.restaurante.nombre
+        }
 
         binding.botonEnviarOpinion.isEnabled = false
 
@@ -117,7 +119,9 @@ class PantallaCrearOpinion : Fragment() {
             activitySharedViewModel.usuario.value!!,
             caracteristicasValoradas.filterKeys { it != "Calificación general" }
         )
-        Toast.makeText(context, getString(R.string.pantalla_crear_opinion_snackbar_texto), Toast.LENGTH_SHORT).show()
+
+        activitySharedViewModel.postMessage(this, getString(R.string.pantalla_crear_opinion_snackbar_texto))
+
         volverAtras()
     }
 
