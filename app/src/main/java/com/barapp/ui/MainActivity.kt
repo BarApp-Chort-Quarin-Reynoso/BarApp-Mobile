@@ -31,7 +31,7 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import timber.log.Timber
 
 class MainActivity :
-  AppCompatActivity(), PantallaPrincipal.OnFabBuscarClicked, LogOutListener, OnReservaClicked {
+  AppCompatActivity(), LogOutListener {
 
   companion object {
     const val DESDE_BOTON_PRINCIPAL = 1
@@ -163,13 +163,6 @@ class MainActivity :
     NotificacionReservaManager.crearCanalNotificacion(this)
   }
 
-  override fun onFabBuscarClicked(fabBuscar: View) {
-    val extras = FragmentNavigatorExtras(fabBuscar to "transition_pantalla_buscar")
-
-    NavHostFragment.findNavController(binding.fragmentContainerView.getFragment())
-      .navigate(R.id.action_pantallaNavegacionPrincipal_to_pantallaBusqueda, null, null, extras)
-  }
-
   private fun obtenerUbicacion() {
     if (
       ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
@@ -199,16 +192,6 @@ class MainActivity :
 
   private fun pedirPermisos() {
     requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-  }
-
-  override fun onReservaClicked() {
-    NavHostFragment.findNavController(binding.fragmentContainerView.getFragment())
-      .navigate(R.id.action_pantallaNavegacionPrincipal_to_pantallaResumenReserva, null, null)
-  }
-
-  override fun onOpinarButtonClicked() {
-    NavHostFragment.findNavController(binding.fragmentContainerView.getFragment())
-      .navigate(R.id.action_pantallaNavegacionPrincipal_to_pantallaCrearOpinion)
   }
 
   fun setLoading(loading: Boolean) {

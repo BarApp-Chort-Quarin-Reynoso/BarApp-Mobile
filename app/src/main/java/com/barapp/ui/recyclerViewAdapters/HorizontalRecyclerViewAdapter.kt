@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.barapp.R
 import com.barapp.data.mappers.RestauranteMapper.toRestauranteUsuario
@@ -54,7 +55,10 @@ class HorizontalRecyclerViewAdapter(
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantesViewHolder {
     return RestaurantesViewHolder(
-      ItemRecyclerViewHorizontalBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+      ItemRecyclerViewHorizontalBinding.inflate(
+        LayoutInflater.from(parent.context),
+        parent,
+        false),
       listener,
     )
   }
@@ -124,7 +128,7 @@ class HorizontalRecyclerViewAdapter(
     } else {
       holder.distanciaRestaurante.visibility = View.INVISIBLE
     }
-    holder.cardView.transitionName = idRecyclerView + restaurante.id
+    holder.layoutCardView.transitionName = idRecyclerView + restaurante.id
   }
 
   override fun onBindViewHolder(
@@ -222,11 +226,13 @@ class HorizontalRecyclerViewAdapter(
     val botonFavorito: MaterialButton
     val root: View
     val cardView: MaterialCardView
+    val layoutCardView: ConstraintLayout
     private val listener: OnItemClickListener
 
     init {
       root = binding.root
       cardView = binding.cardView
+      layoutCardView = binding.layoutCardView
       nombreRestaurante = binding.txtViewNombreRestaurante
       ubicacionRestaurante = binding.txtViewUbicacionRestaurante
       distanciaRestaurante = binding.txtViewDistanciaRestaurante
@@ -255,7 +261,7 @@ class HorizontalRecyclerViewAdapter(
         object : FirestoreCallback<DetalleRestaurante> {
           override fun onSuccess(result: DetalleRestaurante) {
             restaurante.detalleRestaurante = result
-            listener.onClick(cardView, restaurante, distancias[restaurante.id])
+            listener.onClick(layoutCardView, restaurante, distancias[restaurante.id])
             loadingHandler.setLoading(false)
           }
 

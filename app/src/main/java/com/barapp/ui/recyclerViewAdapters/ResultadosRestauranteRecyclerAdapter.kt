@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DiffUtil.DiffResult
 import androidx.recyclerview.widget.RecyclerView
@@ -105,7 +106,7 @@ class ResultadosRestauranteRecyclerAdapter(
     } else {
       holder.distanciaRestaurante.visibility = View.INVISIBLE
     }
-    holder.card.transitionName = restaurante.id
+    holder.layoutCardView.transitionName = restaurante.id
   }
 
   override fun onBindViewHolder(holder: RestauranteViewHolder, position: Int, payloads: List<Any>) {
@@ -185,6 +186,7 @@ class ResultadosRestauranteRecyclerAdapter(
     listener: OnItemClickListener,
   ) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
     val card: CardView
+    val layoutCardView: ConstraintLayout
     val nombreRestaurante: TextView
     val ubicacionRestaurante: TextView
     val distanciaRestaurante: TextView
@@ -200,6 +202,7 @@ class ResultadosRestauranteRecyclerAdapter(
     init {
       root = binding.root
       card = binding.card
+      layoutCardView = binding.layoutCardView
       logoRestaurante = binding.imageViewLogo
       nombreRestaurante = binding.txtViewNombreRestaurante
       ubicacionRestaurante = binding.txtViewUbicacionRestaurante
@@ -226,7 +229,7 @@ class ResultadosRestauranteRecyclerAdapter(
         object : FirestoreCallback<DetalleRestaurante> {
           override fun onSuccess(result: DetalleRestaurante) {
             restaurante.detalleRestaurante = result
-            listener.onClick(card, restaurante, distancias[restaurante.id])
+            listener.onClick(layoutCardView, restaurante, distancias[restaurante.id])
             loadingHandler.setLoading(false)
           }
 

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -21,6 +22,7 @@ import com.barapp.model.EstadoReserva
 import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.sharedViewModels.RestauranteSeleccionadoSharedViewModel
 import com.google.android.material.transition.Hold
+import com.google.android.material.transition.MaterialContainerTransform
 import com.google.gson.Gson
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
@@ -48,7 +50,11 @@ class PantallaResumenReserva : Fragment() {
 
     binding = FragmentPantallaResumenReservaBinding.inflate(inflater, container, false)
 
-    barcodeLauncher = registerForActivityResult<ScanOptions, ScanIntentResult>(
+    binding.root.transitionName = arguments?.getString("transition_name")
+
+    sharedElementEnterTransition = MaterialContainerTransform()
+
+    barcodeLauncher = registerForActivityResult(
       ScanContract()
     ) { result: ScanIntentResult ->
       if (result.contents == null) {
@@ -88,6 +94,9 @@ class PantallaResumenReserva : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+
+    this.postponeEnterTransition()
+    view.doOnPreDraw { startPostponedEnterTransition() }
 
     binding.toolbar.setNavigationOnClickListener { volverAtras() }
 

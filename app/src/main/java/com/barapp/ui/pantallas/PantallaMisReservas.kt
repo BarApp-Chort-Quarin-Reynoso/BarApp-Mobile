@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.barapp.R
 import com.barapp.databinding.FragmentPantallaMisReservasBinding
@@ -22,8 +23,8 @@ import com.faltenreich.skeletonlayout.applySkeleton
 import com.google.android.material.transition.MaterialFadeThrough
 
 interface OnReservaClicked {
-  fun onReservaClicked()
-  fun onOpinarButtonClicked()
+  fun onReservaClicked(transitionView: View)
+  fun onOpinarButtonClicked(transitionView: View)
 }
 
 class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItemClickListener, ReservasPasadasRecyclerAdapter.OnOpinarButtonClickListener {
@@ -56,7 +57,8 @@ class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItem
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    onReservaClicked = requireActivity() as OnReservaClicked
+    onReservaClicked =
+      (parentFragment as NavHostFragment).parentFragment as OnReservaClicked
 
     binding.listaVacia.textListaVacia.text = getString(R.string.lista_vacia_mis_reservas)
 
@@ -129,11 +131,11 @@ class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItem
   override fun onClick(transitionView: View, reserva: Reserva) {
     activityViewModel.setReservaSync(reserva)
 
-    onReservaClicked.onReservaClicked()
+    onReservaClicked.onReservaClicked(transitionView)
   }
 
-  override fun onOpinarButtonClick(position: Int) {
-    activityViewModel.setReservaSync( viewModelMisReservas.reservasPasadas.value!![position])
-    onReservaClicked.onOpinarButtonClicked()
+  override fun onOpinarButtonClick(transitionView: View, reserva: Reserva) {
+    activityViewModel.setReservaSync(reserva)
+    onReservaClicked.onOpinarButtonClicked(transitionView)
   }
 }

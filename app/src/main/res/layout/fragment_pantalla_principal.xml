@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.barapp.ui.pantallas.PantallaPrincipal">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -48,7 +49,8 @@
                 android:id="@+id/recyclerViewHorizontalRestaurantesDestacados"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:transitionGroup="true">
 
             </androidx.recyclerview.widget.RecyclerView>
 
@@ -126,7 +128,8 @@
                 android:id="@+id/recyclerViewHorizontalCercaDeTi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:transitionGroup="true">
 
             </androidx.recyclerview.widget.RecyclerView>
 
@@ -143,7 +146,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewHorizontalVistosRecientemente"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:transitionGroup="true"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

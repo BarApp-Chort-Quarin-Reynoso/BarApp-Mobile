@@ -20,13 +20,18 @@ import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.sharedViewModels.RestauranteSeleccionadoSharedViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.Hold
+import com.google.android.material.transition.MaterialSharedAxis
 import timber.log.Timber
 
-class PantallaNavegacionPrincipal : Fragment(), OnRestauranteClicked {
+class PantallaNavegacionPrincipal :
+  Fragment(),
+  OnRestauranteClicked,
+  PantallaPrincipal.OnFabBuscarClicked,
+  OnReservaClicked {
   private lateinit var binding: FragmentPantallaNavegacionPrincipalBinding
 
   private val restauranteSeleccionadoViewModel: RestauranteSeleccionadoSharedViewModel by
-    navGraphViewModels(R.id.pantallaNavegacionPrincipal)
+  navGraphViewModels(R.id.pantallaNavegacionPrincipal)
   private val activitySharedViewModel: MainActivityViewModel by activityViewModels {
     MainActivityViewModel.Factory(null)
   }
@@ -94,10 +99,10 @@ class PantallaNavegacionPrincipal : Fragment(), OnRestauranteClicked {
         // Muestra un snackbar informando al usuario de que su reserva fue realizada exitosamente
         val snackbar =
           Snackbar.make(
-              requireView(),
-              getString(R.string.pantalla_confirmacion_reservas_snackbar_texto),
-              Snackbar.LENGTH_LONG,
-            )
+            requireView(),
+            getString(R.string.pantalla_confirmacion_reservas_snackbar_texto),
+            Snackbar.LENGTH_LONG,
+          )
             .setDuration(Snackbar.LENGTH_LONG)
 
         fragment.showSnackbar(snackbar)
@@ -118,10 +123,55 @@ class PantallaNavegacionPrincipal : Fragment(), OnRestauranteClicked {
 
     val extras = FragmentNavigatorExtras(transitionView to (transitionView.transitionName ?: ""))
 
+    exitTransition = Hold().apply {
+      excludeTarget(transitionView, true)
+    }
+    reenterTransition = Hold().apply {
+      excludeTarget(transitionView, true)
+    }
+
     restauranteSeleccionadoViewModel.setSyncRestaurante(restaurante)
     restauranteSeleccionadoViewModel.distancia = distancia
 
     NavHostFragment.findNavController(this)
       .navigate(R.id.action_pantallaNavegacionPrincipal_to_pantallaBar, bundle, null, extras)
+  }
+
+  override fun onFabBuscarClicked(fabBuscar: View) {
+    val extras = FragmentNavigatorExtras(fabBuscar to "transition_pantalla_buscar")
+
+    exitTransition = Hold()
+    reenterTransition = null
+
+    NavHostFragment.findNavController(this)
+      .navigate(R.id.action_pantallaNavegacionPrincipal_to_pantallaBusqueda, null, null, extras)
+  }
+
+  override fun onOpinarButtonClicked(transitionView: View) {
+    exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+    reenterTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+
+    NavHostFragment.findNavController(this)
+      .navigate(R.id.action_pantallaNavegacionPrincipal_to_pantallaCrearOpinion)
+  }
+
+  override fun onReservaClicked(transitionView: View) {
+    val bundle = Bundle()
+    bundle.putString("transition_name", transitionView.transitionName)
+
+    exitTransition = Hold().apply {
+      excludeTarget(transitionView, true)
+    }
+    reenterTransition = null
+
+    val extras = FragmentNavigatorExtras(transitionView to (transitionView.transitionName ?: ""))
+
+    NavHostFragment.findNavController(this)
+      .navigate(
+        R.id.action_pantallaNavegacionPrincipal_to_pantallaResumenReserva,
+        bundle,
+        null,
+        extras
+      )
   }
 }

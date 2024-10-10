@@ -15,6 +15,7 @@ import com.barapp.R
 import com.barapp.databinding.FragmentPantallaCrearOpinionBinding
 import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.PantallaCrearOpinionViewModel
+import com.google.android.material.transition.MaterialSharedAxis
 
 class PantallaCrearOpinion : Fragment() {
 
@@ -29,6 +30,10 @@ class PantallaCrearOpinion : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPantallaCrearOpinionBinding.inflate(inflater, container, false)
+
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+
         return binding.root
     }
 
