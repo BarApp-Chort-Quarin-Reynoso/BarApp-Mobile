@@ -7,6 +7,7 @@ import com.barapp.model.Restaurante
 import com.barapp.model.Usuario
 import com.barapp.data.repositories.ReservaRepository
 import com.barapp.model.EstadoReserva
+import com.barapp.util.RestauranteUtils.getRealIdRestaurante
 import java.time.LocalDate
 
 class PantallaConfirmacionViewModel : ViewModel() {
@@ -16,6 +17,10 @@ class PantallaConfirmacionViewModel : ViewModel() {
   lateinit var usuario: Usuario
 
   fun crearReserva(cantPersonas: Int, fechaReserva: LocalDate, horaReserva: Horario): Reserva {
+
+    val realBarSeleccionadoId = getRealIdRestaurante(barSeleccionado)
+    barSeleccionado.id = realBarSeleccionadoId
+
     val reserva = Reserva(EstadoReserva.PENDIENTE, cantPersonas, fechaReserva.toString(), barSeleccionado, horaReserva, usuario)
 
     reservaRepository.guardar(reserva)
