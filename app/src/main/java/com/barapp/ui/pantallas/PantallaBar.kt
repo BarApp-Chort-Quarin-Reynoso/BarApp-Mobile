@@ -1,6 +1,7 @@
 package com.barapp.ui.pantallas
 
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.MenuProvider
+import androidx.core.view.doOnPreDraw
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels

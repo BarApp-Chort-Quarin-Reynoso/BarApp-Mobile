@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.barapp.databinding.ItemRecyclerViewReservasPendientesBinding
 import com.barapp.barapp.model.Reserva
@@ -25,6 +26,7 @@ class ReservasPendientesRecyclerAdapter(
     listener: OnItemClickListener,
   ) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
     val card: CardView
+    val layoutCardView: ViewGroup
     val imagenRestaurante: ImageView
     val imagenLogoRestaurante: ImageView
     val titulo: TextView
@@ -36,6 +38,7 @@ class ReservasPendientesRecyclerAdapter(
     init {
       root = binding.root
       card = binding.cardView
+      layoutCardView = binding.layoutCardView
       imagenRestaurante = binding.imageViewFoto
       imagenLogoRestaurante = binding.imageViewLogo
       titulo = binding.txtViewNombreRestaurante
@@ -46,7 +49,7 @@ class ReservasPendientesRecyclerAdapter(
     }
 
     override fun onClick(v: View) {
-      this.listener.onClick(card, reservas[bindingAdapterPosition])
+      this.listener.onClick(layoutCardView, reservas[bindingAdapterPosition])
     }
   }
 
@@ -90,7 +93,7 @@ class ReservasPendientesRecyclerAdapter(
         )
       )
       .into(reservaHolder.imagenRestaurante)
-    reservaHolder.card.transitionName = reserva.restaurante.id
+    reservaHolder.layoutCardView.transitionName = reserva.id
   }
 
   override fun getItemCount(): Int {

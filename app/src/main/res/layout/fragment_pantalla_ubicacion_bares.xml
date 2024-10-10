@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:transitionGroup="true"
     tools:context="com.barapp.ui.pantallas.PantallaBaresCercanos">
 
     <androidx.fragment.app.FragmentContainerView
@@ -16,7 +17,8 @@
         android:layout_marginTop="?attr/actionBarSize"
         tools:layout="@layout/empty_layout"
         map:mapType="normal"
-        map:useViewLifecycle="true"/>
+        map:useViewLifecycle="true"
+        android:transitionGroup="true"/>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/pedirPermisosLayout"

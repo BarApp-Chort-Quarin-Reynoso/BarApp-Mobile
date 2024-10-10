@@ -39,9 +39,7 @@ class ReservasPasadasRecyclerAdapter(private val reservas: MutableList<Reserva>,
       direccion = binding.txtViewDireccionRestaurante
       datosReserva = binding.txtViewDatosReserva
       botonOpinar = binding.botonOpinar
-      binding.botonOpinar.setOnClickListener {
-        listener.onOpinarButtonClick(getBindingAdapterPosition())
-      }
+
     }
   }
 
@@ -88,6 +86,10 @@ class ReservasPasadasRecyclerAdapter(private val reservas: MutableList<Reserva>,
       .load(reserva.restaurante.logo)
       .apply(RequestOptions.circleCropTransform())
       .into(reservaHolder.imagenLogoRestaurante)
+
+    reservaHolder.botonOpinar.setOnClickListener {
+      listener.onOpinarButtonClick(reservaHolder.card, reserva)
+    }
   }
 
   private fun getTagEstadoReserva(estado: EstadoReserva, context: Context): Pair<String, Int> {
@@ -122,6 +124,6 @@ class ReservasPasadasRecyclerAdapter(private val reservas: MutableList<Reserva>,
   }
 
   interface OnOpinarButtonClickListener {
-    fun onOpinarButtonClick(position: Int)
+    fun onOpinarButtonClick(transitionView: View, reserva: Reserva)
   }
 }

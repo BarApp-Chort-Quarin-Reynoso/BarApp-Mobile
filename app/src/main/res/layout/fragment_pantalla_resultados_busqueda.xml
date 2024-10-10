@@ -63,7 +63,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewRestaurantes"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:transitionGroup="true" />
 
     <include
         layout="@layout/lista_vacia_disenio"

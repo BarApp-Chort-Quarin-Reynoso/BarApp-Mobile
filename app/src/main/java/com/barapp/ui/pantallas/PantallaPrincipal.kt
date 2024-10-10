@@ -74,7 +74,8 @@ class PantallaPrincipal :
     postponeEnterTransition()
     OneShotPreDrawListener.add(view) { startPostponedEnterTransition() }
 
-    onFabBuscarClickedListener = requireActivity() as OnFabBuscarClicked
+    onFabBuscarClickedListener =
+      (parentFragment as NavHostFragment).parentFragment as OnFabBuscarClicked
     onRestauranteClicked =
       (parentFragment as NavHostFragment).parentFragment as OnRestauranteClicked
 

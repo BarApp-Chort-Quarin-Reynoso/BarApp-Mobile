@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:dividerPadding="25sp"
     android:orientation="vertical"
-    tools:context="com.barapp.ui.pantallas.PantallaResumenReserva">
+    tools:context="com.barapp.ui.pantallas.PantallaResumenReserva"
+    android:background="?android:colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

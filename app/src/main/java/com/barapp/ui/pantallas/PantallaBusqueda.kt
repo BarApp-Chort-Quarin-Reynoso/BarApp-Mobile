@@ -32,7 +32,9 @@ class PantallaBusqueda : Fragment() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    sharedElementEnterTransition = MaterialContainerTransform()
+    sharedElementEnterTransition = MaterialContainerTransform().apply {
+      drawingViewId = R.id.activityFragmentContainerView
+    }
   }
 
   override fun onCreateView(
@@ -77,6 +79,9 @@ class PantallaBusqueda : Fragment() {
   }
 
   private fun realizarBusqueda(texto: String) {
+    exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+    reenterTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+
     val bundle = Bundle()
     bundle.putString("textoBusqueda", texto)
     NavHostFragment.findNavController(this)
@@ -99,7 +104,7 @@ class PantallaBusqueda : Fragment() {
     )
 
     textView.layoutParams = params
-    textView.setOnClickListener() {
+    textView.setOnClickListener {
       guardarBusqueda(textView.text)
       realizarBusqueda(textView.text.toString())
     }
