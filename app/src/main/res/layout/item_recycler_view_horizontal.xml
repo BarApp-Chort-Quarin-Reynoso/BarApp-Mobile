@@ -7,7 +7,7 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         style="?attr/materialCardViewElevatedStyle"
-        android:layout_width="342dp"
+        android:layout_width="326dp"
         android:layout_height="228dp"
         android:layout_margin="@dimen/layout_margin_card_view"
         android:clipToPadding="false"
@@ -37,9 +37,9 @@
                 android:layout_gravity="center"
                 android:background="@color/md_theme_light_surface"
                 android:padding="8dp"
-                android:visibility="gone"
                 android:text="@string/cardview_texto_reservas_pausadas"
                 android:textColor="@android:color/black"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/imageViewFoto"
                 app:layout_constraintEnd_toEndOf="@+id/imageViewFoto"
                 app:layout_constraintStart_toStartOf="@+id/imageViewFoto"
@@ -119,8 +119,8 @@
                 android:id="@+id/linearLayoutOpiniones"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginBottom="5dp"
+                android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread"
@@ -138,10 +138,10 @@
 
                 <RatingBar
                     android:id="@+id/ratingBarPuntuacion"
+                    style="@style/BarApp.RatingBarSmallDisplaySmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    style="@style/BarApp.RatingBarSmallDisplaySmall" />
+                    android:layout_marginTop="5dp" />
 
                 <TextView
                     android:id="@+id/txtViewCantidadOpiniones"

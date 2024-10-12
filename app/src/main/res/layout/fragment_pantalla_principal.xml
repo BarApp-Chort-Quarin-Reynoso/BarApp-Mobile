@@ -41,8 +41,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-medium"
                 android:text="@string/pantalla_principal_restaurantes_destacados"
-                android:textAppearance="@style/BarApp.TextAppearanceTitle" />
+                android:textAppearance="@style/BarApp.TextAppearanceTitleMain" />
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -50,7 +51,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:transitionGroup="true">
+                android:transitionGroup="true"
+                android:layout_marginBottom="15dp" >
 
             </androidx.recyclerview.widget.RecyclerView>
 
@@ -120,8 +122,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="sans-serif-medium"
                 android:text="@string/pantalla_principal_cerca_de_ti"
-                android:textAppearance="@style/BarApp.TextAppearanceTitle" />
+                android:textAppearance="@style/BarApp.TextAppearanceTitleMain" />
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -139,8 +143,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
+                android:fontFamily="sans-serif-medium"
                 android:text="@string/pantalla_principal_vistos_recientemente"
-                android:textAppearance="@style/BarApp.TextAppearanceTitle" />
+                android:textAppearance="@style/BarApp.TextAppearanceTitleMain" />
 
 
             <androidx.recyclerview.widget.RecyclerView

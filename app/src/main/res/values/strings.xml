@@ -298,7 +298,6 @@
     <string name="menu_title_reservas">Reservas</string>
     <string name="menu_title_mi_cuenta">Mi cuenta</string>
 
-    <string name="placeholder_telefono_argentina">"+54 %1$s"</string>
     <string name="placeholder_nombre_apellido">"%1$s %2$s"</string>
     <string name="placeholder_restaurante_encontrado">"%1$d restaurante encontrado"</string>
     <string name="placeholder_restaurantes_encontrados">"%1$d restaurantes encontrados"</string>

@@ -71,11 +71,7 @@ class PantallaConfirmacionReserva : Fragment() {
         activitySharedViewModel.usuario.value?.apellido
       )
     binding.textViewMail.text = activitySharedViewModel.usuario.value?.detalleUsuario?.mail
-    binding.textViewTelefono.text =
-      getString(
-        R.string.placeholder_telefono_argentina,
-        activitySharedViewModel.usuario.value?.detalleUsuario?.telefono,
-      )
+    binding.textViewTelefono.text = activitySharedViewModel.usuario.value?.detalleUsuario?.telefono
 
     binding.botonConfirmarReserva.setOnClickListener {
       viewModel.usuario = activitySharedViewModel.usuario.value!!
