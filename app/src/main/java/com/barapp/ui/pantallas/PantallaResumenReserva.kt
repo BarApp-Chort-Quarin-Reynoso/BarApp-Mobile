@@ -129,11 +129,7 @@ class PantallaResumenReserva : Fragment() {
           usuario.apellido,
         )
       binding.textViewMail.text = usuario.detalleUsuario?.mail
-      binding.textViewTelefono.text =
-        getString(
-          R.string.placeholder_telefono_argentina,
-          usuario.detalleUsuario?.telefono,
-        )
+      binding.textViewTelefono.text = usuario.detalleUsuario?.telefono
     }
 
     binding.botonConcretarReserva.setOnClickListener {
