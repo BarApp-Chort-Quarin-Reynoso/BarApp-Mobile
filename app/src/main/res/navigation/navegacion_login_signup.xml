@@ -13,10 +13,18 @@
         <action
             android:id="@+id/action_pantallaLogin_to_pantallaSignUp"
             app:destination="@id/pantallaSignUp" />
+        <action
+            android:id="@+id/action_pantallaLogin_to_pantallaOlvidePassword"
+            app:destination="@id/pantallaOlvidePassword" />
     </fragment>
     <fragment
         android:id="@+id/pantallaSignUp"
         android:name="com.barapp.ui.loginSignup.PantallaSignUp"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" />
+    <fragment
+        android:id="@+id/pantallaOlvidePassword"
+        android:name="com.barapp.ui.loginSignup.PantallaOlvidePassword"
+        android:label="fragment_pantalla_olvide_password"
+        tools:layout="@layout/fragment_pantalla_olvide_password" />
 </navigation>

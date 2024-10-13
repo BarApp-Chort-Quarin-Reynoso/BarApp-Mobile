@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -22,8 +23,11 @@ import com.barapp.ui.AuthActivity
 import com.barapp.data.retrofit.LoginService
 import com.barapp.data.retrofit.RetrofitInstance
 import com.barapp.viewModels.authViewModels.PantallaLoginViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,6 +42,7 @@ class PantallaLogin : Fragment() {
   private lateinit var contrasenia: TextInputLayout
   private lateinit var botonLoguearse: Button
   private lateinit var botonRegistrarse: Button
+  private lateinit var botonOlvideContrasenia: Button
   private lateinit var botonGoogle: ImageButton
   private lateinit var botonFacebook: ImageButton
 
@@ -59,6 +64,7 @@ class PantallaLogin : Fragment() {
     // Componentes
     botonLoguearse = binding.botonIngresar
     botonRegistrarse = binding.botonRegistrarse
+    botonOlvideContrasenia = binding.botonOlvideContrasenia
     email = binding.txtViewEmail
     contrasenia = binding.txtViewContrasenia
     botonGoogle = binding.botonGoogle
@@ -89,6 +95,11 @@ class PantallaLogin : Fragment() {
     botonRegistrarse.setOnClickListener {
       NavHostFragment.findNavController(this).navigate(R.id.action_pantallaLogin_to_pantallaSignUp)
     }
+
+    botonOlvideContrasenia.setOnClickListener {
+      NavHostFragment.findNavController(this).navigate(R.id.action_pantallaLogin_to_pantallaOlvidePassword)
+    }
+
     botonGoogle.setOnClickListener {
       val message = getString(R.string.login_with_google_not_implemented)
       Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
