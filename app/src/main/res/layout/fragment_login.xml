@@ -145,12 +145,31 @@
             android:padding="0dp"
             android:text="@string/boton_registrarse"
             android:textAllCaps="false"
+            android:minHeight="36dip"
+            android:maxHeight="36dip"
             android:textColor="@color/md_theme_light_primaryContainer"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@+id/labelNoTienesCuenta" />
+
+        <Button
+            android:id="@+id/botonOlvideContrasenia"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/olvid_la_contrase_a"
+            android:maxHeight="36dip"
+            android:minHeight="36dip"
+            android:padding="0dp"
+            android:text="@string/olvid_la_contrase_a"
+            android:textAllCaps="false"
+            android:textColor="@color/md_theme_light_primaryContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/botonRegistrarse" />
 
         <ImageView
             android:id="@+id/imageView4"

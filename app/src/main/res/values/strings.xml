@@ -332,5 +332,8 @@
     <string name="pantalla_crear_opinion_hint_comentario">Escriba su comentario aquí</string>
     <string name="pantalla_crear_opinion_boton_enviar">Enviar opinión</string>
     <string name="pantalla_crear_opinion_snackbar_texto">¡Opinión enviada con éxito!</string>
+    <string name="olvid_la_contrase_a">Olvidé la contraseña</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
