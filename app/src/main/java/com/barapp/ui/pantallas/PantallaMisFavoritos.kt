@@ -77,6 +77,7 @@ class PantallaMisFavoritos : Fragment(), ResultadosRestauranteRecyclerAdapter.Ca
             ArrayList(),
             usuario,
             this,
+            this,
             object : ResultadosRestauranteRecyclerAdapter.OnItemClickListener {
               override fun onClick(
                 transitionView: View,
@@ -85,8 +86,7 @@ class PantallaMisFavoritos : Fragment(), ResultadosRestauranteRecyclerAdapter.Ca
               ) {
                 onRestauranteClicked.onRestauranteClicked(restaurante, transitionView, distancia)
               }
-            },
-            this
+            }
           )
       }
 

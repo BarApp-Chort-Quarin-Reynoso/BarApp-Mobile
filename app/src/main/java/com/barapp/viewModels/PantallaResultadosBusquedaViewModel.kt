@@ -4,13 +4,13 @@ import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.barapp.model.Restaurante
-import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.repositories.RestauranteRepository
+import com.barapp.data.utils.FirestoreCallback
+import com.barapp.model.Restaurante
 import com.barapp.util.Maps.Companion.calcularDistanciasABares
+import timber.log.Timber
 import java.util.Locale
 import java.util.stream.Collectors
-import timber.log.Timber
 
 class PantallaResultadosBusquedaViewModel : ViewModel() {
   private val restauranteRepository: RestauranteRepository = RestauranteRepository.instance
@@ -26,6 +26,8 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
   val loading: LiveData<Boolean> = _loading
   private val _error = MutableLiveData<Throwable>()
   val error: LiveData<Throwable> = _error
+
+  var minEstrellas: Int = 0
 
   fun buscarRestaurantesSegunTexto(textoBusqueda: String) {
       if (_listaRestaurantes.value != null) return
@@ -102,10 +104,8 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
     Timber.d("RestFilters")
 
     val listaRestaurantesCompleta = listaRestaurantesCompleta.value
-    if (listaRestaurantesCompleta != null) {
-      _listaRestaurantes.postValue(listaRestaurantesCompleta!!)
+    listaRestaurantesCompleta?.let {
+      _listaRestaurantes.postValue(it)
     }
-
   }
-
 }
