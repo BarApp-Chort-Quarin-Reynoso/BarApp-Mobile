@@ -39,8 +39,8 @@ class ResultadosRestauranteRecyclerAdapter(
   private val restaurantes: MutableList<Restaurante>,
   private val usuario: Usuario,
   private val handler: Callbacks,
+  private val loadingHandler: LoadingHandler,
   private val listener: OnItemClickListener,
-  private val loadingHandler: LoadingHandler
 ) : RecyclerView.Adapter<RestauranteViewHolder>() {
   private var distancias: HashMap<String, Int?>
   private val detalleUsuarioRepository: DetalleUsuarioRepository
@@ -87,7 +87,7 @@ class ResultadosRestauranteRecyclerAdapter(
       holder.botonFavorito.setIconResource(R.drawable.icon_filled_favorite_24)
       holder.botonFavorito.isChecked = true
     } else {
-      holder.botonFavorito.setIconResource(R.drawable.icon_outlined_star_24)
+      holder.botonFavorito.setIconResource(R.drawable.icon_outlined_favorite_24)
       holder.botonFavorito.isChecked = false
     }
     holder.botonFavorito.setOnClickListener {
@@ -95,7 +95,7 @@ class ResultadosRestauranteRecyclerAdapter(
         holder.botonFavorito.setIconResource(R.drawable.icon_filled_favorite_24)
         hacerFavorito(restaurantes[position])
       } else {
-        holder.botonFavorito.setIconResource(R.drawable.icon_outlined_star_24)
+        holder.botonFavorito.setIconResource(R.drawable.icon_outlined_favorite_24)
         eliminarFavorito(restaurantes[position], position)
       }
     }
