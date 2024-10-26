@@ -4,13 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.barapp.barapp.model.Reserva
-import com.barapp.data.utils.FirestoreCallback
 import com.barapp.data.repositories.ReservaRepository
+import com.barapp.data.utils.FirestoreCallback
 import com.barapp.model.EstadoReserva
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.util.*
+import java.util.stream.Collectors
 import kotlin.collections.ArrayList
 import timber.log.Timber
 
@@ -70,8 +71,10 @@ class PantallaMisReservasViewModel : ViewModel() {
       }
     }
 
+    val reversed = pasadas.reversed()
+
     _reservasPendientes.postValue(pendientes)
-    _reservasPasadas.postValue(pasadas)
+    _reservasPasadas.postValue(reversed)
   }
 
   /**
