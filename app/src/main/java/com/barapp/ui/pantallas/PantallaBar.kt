@@ -1,16 +1,19 @@
 package com.barapp.ui.pantallas
 
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.MenuProvider
-import androidx.core.view.doOnPreDraw
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -25,12 +28,11 @@ import com.barapp.databinding.OpinionLayoutBinding
 import com.barapp.model.EstadoRestaurante
 import com.barapp.model.Opinion
 import com.barapp.model.Restaurante
-import com.barapp.ui.AuthActivity
 import com.barapp.ui.MainActivity
 import com.barapp.util.Interpolator
-import com.barapp.viewModels.sharedViewModels.BarAReservarSharedViewModel
 import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.PantallaBarViewModel
+import com.barapp.viewModels.sharedViewModels.BarAReservarSharedViewModel
 import com.barapp.viewModels.sharedViewModels.PantallaOpinionesSharedViewModel
 import com.barapp.viewModels.sharedViewModels.RestauranteSeleccionadoSharedViewModel
 import com.barapp.viewModels.sharedViewModels.UbicacionBarSharedViewModel
@@ -44,7 +46,7 @@ import com.google.android.material.transition.Hold
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialSharedAxis
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 /**
  * Esta clase es un [Fragment] que se utiliza para mostrar un bar en especifico. A traves del mismo
@@ -300,10 +302,6 @@ class PantallaBar : Fragment() {
     binding.botonAtras.setOnClickListener { volverAtras() }
   }
 
-  override fun onResume() {
-    super.onResume()
-  }
-
   private fun mostrarBotonesToolbar() {
     binding.toolbar.navigationIcon =
       ResourcesCompat.getDrawable(resources, R.drawable.icon_outlined_arrow_back_24, null)
@@ -425,6 +423,13 @@ class PantallaBar : Fragment() {
       restaurante.detalleRestaurante!!.caracteristicas
     opinionesSharedViewModel.puntuacionRestauranteSeleccionado =
       restaurante.puntuacion
+
+    exitTransition =
+      MaterialSharedAxis(MaterialSharedAxis.X, true)
+        .excludeTarget(R.id.fabReservar, true)
+    reenterTransition =
+      MaterialSharedAxis(MaterialSharedAxis.X, false)
+        .excludeTarget(R.id.fabReservar, true)
 
     NavHostFragment.findNavController(this)
       .navigate(R.id.action_pantallaBar_to_pantallaOpiniones)
