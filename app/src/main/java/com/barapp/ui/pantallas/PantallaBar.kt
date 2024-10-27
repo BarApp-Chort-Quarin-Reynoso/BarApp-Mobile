@@ -197,24 +197,25 @@ class PantallaBar : Fragment() {
           binding.botonMenu.isEnabled = false
         }
 
+        if (restaurante.puntuacion == 0.0)
+          binding.linearLayoutOpiniones.visibility = View.GONE
+
         when (detalle.opiniones.size) {
           0 -> {
             binding.opinion1.opinionLayout.visibility = View.GONE
             binding.opinion2.opinionLayout.visibility = View.GONE
             binding.botonVerMasOpiniones.visibility = View.GONE
-            binding.linearLayoutOpiniones.visibility = View.GONE
+            binding.labelNoHayOpiniones.visibility = View.VISIBLE
           }
 
           1 -> {
             setearOpinion(detalle.opiniones[0], binding.opinion1)
-            binding.labelNoHayOpiniones.visibility = View.GONE
             binding.opinion2.opinionLayout.visibility = View.GONE
           }
 
           else -> {
             setearOpinion(detalle.opiniones[0], binding.opinion1)
             setearOpinion(detalle.opiniones[1], binding.opinion2)
-            binding.labelNoHayOpiniones.visibility = View.GONE
           }
         }
       }
@@ -281,9 +282,6 @@ class PantallaBar : Fragment() {
 
     binding.botonMenu.setOnClickListener { mostrarMenu() }
     binding.botonUbicacion.setOnClickListener { mostrarUbicacion() }
-
-
-
     binding.botonFavorito.setOnClickListener { cambiarFavorito() }
 
     binding.toolbar.addMenuProvider(
@@ -440,15 +438,14 @@ class PantallaBar : Fragment() {
         opinion.usuario.apellido,
       )
     binding.textViewFecha.text = getFechaFormateada(opinion.fecha)
-    binding.textViewOpinion.text =
-      getString(R.string.pantalla_bar_texto_opinion, opinion.comentario)
+    binding.textViewOpinion.text = opinion.comentario
     if (opinion.comentario == "") {
-      binding.textViewOpinion.visibility = View.INVISIBLE
+      binding.textViewOpinion.visibility = View.GONE
     }
     binding.ratingBarPuntuacion.rating = opinion.nota.toFloat()
     binding.textViewCantidadPersonas.text =
       getTextoCantidadPersonasOpinion(opinion.cantidadPersonas)
-    "(${opinion.horario.tipoComida})".also { binding.textViewTipoComida.text = it }
+    "${opinion.horario.tipoComida}".also { binding.textViewTipoComida.text = it }
     Glide.with(requireContext())
       .load(opinion.usuario.foto)
       .apply(RequestOptions.circleCropTransform())
@@ -469,7 +466,7 @@ class PantallaBar : Fragment() {
 
   private fun getFechaFormateada(fecha: String): String {
     val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale("es", "ES"))
+    val outputFormat = SimpleDateFormat("dd MMM. yyyy", Locale("es", "ES"))
     val date = inputFormat.parse(fecha)
     return outputFormat.format(date!!)
   }

@@ -136,7 +136,7 @@
 
     <string name="pantalla_bar_texto_nombre_usuario">%1$s %2$s</string>
     <string name="pantalla_bar_texto_opinion">\"%1$s\"</string>
-    <string name="pantalla_bar_texto_no_hay_opiniones">Aun no existen opiniones sobre este bar.</string>
+    <string name="pantalla_bar_texto_no_hay_opiniones">Aún no hay comentarios sobre este bar.</string>
 
     <!-- Pantalla Ubicacion Bares -->
     <string name="pantalla_ubicacion_pedir_ubicacion">Se necesita acceder a su ubicación para mostrar los bares cercanos</string>
