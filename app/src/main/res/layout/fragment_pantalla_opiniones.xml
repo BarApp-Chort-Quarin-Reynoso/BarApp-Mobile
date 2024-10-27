@@ -85,14 +85,16 @@
                 android:id="@+id/recyclerViewCaracteristicas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:transitionGroup="true"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewOpiniones"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/card_inner_horizontal_margin" />
+            android:padding="@dimen/card_inner_horizontal_margin"
+            android:transitionGroup="true"/>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
