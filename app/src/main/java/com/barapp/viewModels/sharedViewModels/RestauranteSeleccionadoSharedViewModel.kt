@@ -29,7 +29,6 @@ class RestauranteSeleccionadoSharedViewModel : ViewModel() {
   fun buscarRestaurante(idRestaurante: String) {
     restauranteRepository.buscarPorIdConDetalle(idRestaurante, object : FirestoreCallback<Restaurante> {
       override fun onSuccess(restaurante: Restaurante) {
-        println("restaurante: " + restaurante)
         _restaurante.postValue(restaurante)
       }
 

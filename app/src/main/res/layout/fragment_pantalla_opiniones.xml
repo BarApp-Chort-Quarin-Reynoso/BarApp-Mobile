@@ -70,7 +70,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="@dimen/card_inner_horizontal_margin"
-            app:divider="@drawable/empty_divider_title_body"
+            app:divider="@drawable/empty_divider"
             app:showDividers="middle">
 
             <TextView

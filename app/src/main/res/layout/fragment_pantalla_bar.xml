@@ -194,6 +194,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginEnd="@dimen/card_inner_horizontal_margin"
+                    android:gravity="center"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textViewDireccion"
                     app:layout_constraintHorizontal_chainStyle="spread">
@@ -205,20 +207,19 @@
                         android:layout_marginEnd="2dp"
                         android:text="@string/texto_ejemplo_bar_nota"
                         android:textAppearance="?attr/textAppearanceBodyMedium"
-                        android:textColor="?android:attr/textColorSecondary" />
+                        android:textColor="?android:attr/textColorSecondary"/>
 
                     <RatingBar
                         android:id="@+id/ratingBarPuntuacion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="1dp"
-                        style="@style/BarApp.RatingBarSmallDisplaySmall" />
+                        style="@style/BarApp.RatingBarSmallDisplaySmall"/>
 
                     <TextView
                         android:id="@+id/txtViewCantidadOpiniones"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/card_inner_horizontal_margin"
                         android:text="@string/texto_ejemplo_bar_cantidad_opiniones"
                         android:textAppearance="?attr/textAppearanceBodyMedium"
                         android:textColor="?android:attr/textColorSecondary"/>
@@ -233,7 +234,7 @@
                 android:backgroundTint="@color/md_theme_light_surface1_overlay"
                 android:orientation="vertical"
                 android:padding="@dimen/card_inner_horizontal_margin"
-                app:divider="@drawable/empty_divider_title_body"
+                app:divider="@drawable/empty_divider"
                 app:showDividers="middle">
 
                 <TextView
@@ -267,7 +268,7 @@
                 android:backgroundTint="@color/md_theme_light_surface1_overlay"
                 android:orientation="vertical"
                 android:padding="@dimen/card_inner_horizontal_margin"
-                app:divider="@drawable/empty_divider_title_body"
+                app:divider="@drawable/empty_divider"
                 app:showDividers="middle">
 
                 <TextView
@@ -284,15 +285,17 @@
                     android:layout_marginVertical="10dp"
                     android:gravity="center_horizontal"
                     android:text="@string/pantalla_bar_texto_no_hay_opiniones"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+                    android:textStyle="italic"
+                    android:visibility="gone"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
                 <include
                     android:id="@+id/opinion1"
-                    layout="@layout/opinion_layout" />
+                    layout="@layout/opinion_layout"/>
 
                 <include
                     android:id="@+id/opinion2"
-                    layout="@layout/opinion_layout" />
+                    layout="@layout/opinion_layout"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/botonVerMasOpiniones"
