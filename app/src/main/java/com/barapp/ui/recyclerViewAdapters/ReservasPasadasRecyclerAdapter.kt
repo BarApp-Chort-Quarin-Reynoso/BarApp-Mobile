@@ -14,6 +14,7 @@ import com.barapp.databinding.ItemRecyclerViewReservasPasadasBinding
 import com.barapp.barapp.model.Reserva
 import com.barapp.model.EstadoReserva
 import com.barapp.ui.recyclerViewAdapters.ReservasPasadasRecyclerAdapter.ReservasPasadasViewHolder
+import com.barapp.util.format.FormatUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
@@ -60,9 +61,7 @@ class ReservasPasadasRecyclerAdapter(private val reservas: MutableList<Reserva>,
       (reserva.cantidadPersonas.toString() +
         personaPluralOSingular +
         " | " +
-        reserva.getFechaAsLocalDate().dayOfMonth +
-        "/" +
-        reserva.getFechaAsLocalDate().monthValue +
+        reserva.getFechaAsLocalDate().format(FormatUtils.getDateFormat()) +
         " | " +
         reserva.horario.horario.substring(0,5))
     reservaHolder.titulo.text = reserva.restaurante.nombre

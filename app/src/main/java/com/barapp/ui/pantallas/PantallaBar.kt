@@ -30,6 +30,7 @@ import com.barapp.model.Opinion
 import com.barapp.model.Restaurante
 import com.barapp.ui.MainActivity
 import com.barapp.util.Interpolator
+import com.barapp.util.format.FormatUtils
 import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.PantallaBarViewModel
 import com.barapp.viewModels.sharedViewModels.BarAReservarSharedViewModel
@@ -46,6 +47,7 @@ import com.google.android.material.transition.Hold
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialSharedAxis
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Locale
 
 /**
@@ -470,9 +472,9 @@ class PantallaBar : Fragment() {
   }
 
   private fun getFechaFormateada(fecha: String): String {
-    val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    val outputFormat = SimpleDateFormat("dd MMM. yyyy", Locale("es", "ES"))
-    val date = inputFormat.parse(fecha)
-    return outputFormat.format(date!!)
+    val inputFormat = FormatUtils.getPersistDateFormat()
+    val outputFormat = FormatUtils.getDateFormat()
+    val date = LocalDate.parse(fecha, inputFormat)
+    return outputFormat.format(date)
   }
 }

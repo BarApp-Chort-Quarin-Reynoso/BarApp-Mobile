@@ -34,7 +34,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <TextView
                 android:id="@+id/labelDestacados"
                 android:layout_width="wrap_content"
