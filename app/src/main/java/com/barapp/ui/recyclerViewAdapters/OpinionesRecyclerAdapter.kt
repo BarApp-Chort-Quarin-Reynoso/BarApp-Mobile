@@ -9,9 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.barapp.databinding.OpinionLayoutBinding
 import com.barapp.model.Opinion
+import com.barapp.util.format.FormatUtils
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
+import java.text.Normalizer.Form
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Locale
 
 class OpinionesRecyclerAdapter (private val opiniones : MutableList<Opinion>) : RecyclerView.Adapter<OpinionesRecyclerAdapter.OpinionViewHolder>() {
@@ -36,7 +39,7 @@ class OpinionesRecyclerAdapter (private val opiniones : MutableList<Opinion>) : 
         }
         holder.rating.rating = opinion.nota.toFloat()
         holder.cantidadPersonas.text = getTextoCantidadPersonas(opinion.cantidadPersonas)
-        "(${opinion.horario.tipoComida})".also { holder.tipoComida.text = it }
+        "${opinion.horario.tipoComida}".also { holder.tipoComida.text = it }
         Glide.with(holder.itemView.context)
             .load(opinion.usuario.foto)
             .into(holder.foto)
@@ -51,10 +54,10 @@ class OpinionesRecyclerAdapter (private val opiniones : MutableList<Opinion>) : 
     }
 
     private fun getFechaFormateada(fecha: String): String {
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale("es", "ES"))
-        val date = inputFormat.parse(fecha)
-        return outputFormat.format(date!!)
+        val inputFormat = FormatUtils.getPersistDateFormat()
+        val outputFormat = FormatUtils.getDateFormat()
+        val date = LocalDate.parse(fecha, inputFormat)
+        return outputFormat.format(date)
     }
 
     override fun getItemCount(): Int {

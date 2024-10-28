@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.barapp.databinding.ItemRecyclerViewReservasPendientesBinding
 import com.barapp.barapp.model.Reserva
 import com.barapp.ui.recyclerViewAdapters.ReservasPendientesRecyclerAdapter.ReservasPendientesViewHolder
+import com.barapp.util.format.FormatUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -71,9 +72,7 @@ class ReservasPendientesRecyclerAdapter(
       (reserva.cantidadPersonas.toString() +
         personaPluralOSingular +
         " | " +
-        reserva.getFechaAsLocalDate().dayOfMonth +
-        "/" +
-        reserva.getFechaAsLocalDate().monthValue +
+        reserva.getFechaAsLocalDate().format(FormatUtils.getShortDateFormat()) +
         " | " +
         reserva.horario.horario.substring(0, 5))
     reservaHolder.titulo.text = reserva.restaurante.nombre
