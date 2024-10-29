@@ -4,22 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.barapp.R
-import com.barapp.databinding.FragmentPantallaMisReservasBinding
 import com.barapp.barapp.model.Reserva
+import com.barapp.databinding.FragmentPantallaMisReservasBinding
+import com.barapp.ui.MainActivity
 import com.barapp.ui.recyclerViewAdapters.ReservasPasadasRecyclerAdapter
 import com.barapp.ui.recyclerViewAdapters.ReservasPendientesRecyclerAdapter
 import com.barapp.util.Interpolator.Companion.emphasizedInterpolator
 import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.PantallaMisReservasViewModel
-import com.faltenreich.skeletonlayout.Skeleton
-import com.faltenreich.skeletonlayout.applySkeleton
 import com.google.android.material.transition.MaterialFadeThrough
 
 interface OnReservaClicked {
@@ -37,9 +35,6 @@ class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItem
 
   private val reservasPasadasAdapter = ReservasPasadasRecyclerAdapter(ArrayList(), this)
   private val reservasPendientesAdapter = ReservasPendientesRecyclerAdapter(ArrayList(), this)
-
-  private lateinit var skeletonReservasPendientesRecycler: Skeleton
-  private lateinit var skeletonReservasPasadasRecycler: Skeleton
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -76,16 +71,6 @@ class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItem
     binding.recyclerViewReservasPendientes.adapter = reservasPendientesAdapter
     binding.recyclerViewReservasPasadas.adapter = reservasPasadasAdapter
 
-    skeletonReservasPasadasRecycler =
-      binding.recyclerViewReservasPasadas.applySkeleton(
-        R.layout.item_recycler_view_reservas_pasadas
-      )
-
-    skeletonReservasPendientesRecycler =
-      binding.recyclerViewReservasPendientes.applySkeleton(
-        R.layout.item_recycler_view_reservas_pendientes
-      )
-
     // Se setea observer de reservas pendientes
     viewModelMisReservas.reservasPendientes.observe(viewLifecycleOwner) { reservas ->
       if (reservas.isEmpty()) {
@@ -118,12 +103,15 @@ class PantallaMisReservas : Fragment(), ReservasPendientesRecyclerAdapter.OnItem
     }
 
     viewModelMisReservas.loading.observe(viewLifecycleOwner) { loading ->
+      (activity as MainActivity).setLoading(loading)
       if (loading) {
-        skeletonReservasPendientesRecycler.showSkeleton()
-        skeletonReservasPasadasRecycler.showSkeleton()
+        binding.labelPasadas.visibility = View.GONE
+        binding.labelPendientes.visibility = View.GONE
+        binding.recyclerViewReservasPendientes.visibility = View.GONE
+        binding.recyclerViewReservasPasadas.visibility = View.GONE
       } else {
-        skeletonReservasPendientesRecycler.showOriginal()
-        skeletonReservasPasadasRecycler.showOriginal()
+        binding.recyclerViewReservasPendientes.visibility = View.VISIBLE
+        binding.recyclerViewReservasPasadas.visibility = View.VISIBLE
       }
     }
   }

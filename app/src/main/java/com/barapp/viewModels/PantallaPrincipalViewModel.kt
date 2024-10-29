@@ -49,14 +49,8 @@ class PantallaPrincipalViewModel(
   val distanciasVistosRecientemente: LiveData<HashMap<String, Int?>> =
     _distanciasVistosRecientemente
 
-  private val _loadingCercaDeTi = MutableLiveData<Boolean>()
-  val loadingCercaDeTi: LiveData<Boolean> = _loadingCercaDeTi
-
-  private val _loadingDestacados = MutableLiveData<Boolean>()
-  val loadingDestacados: LiveData<Boolean> = _loadingDestacados
-
-  private val _loadingVistosRecientemente = MutableLiveData<Boolean>()
-  val loadingVistosRecientemente: LiveData<Boolean> = _loadingVistosRecientemente
+  private val _loading = MutableLiveData<Boolean>()
+  val loading: LiveData<Boolean> = _loading
 
   private val _error = MutableLiveData<Throwable>()
   val error: LiveData<Throwable> = _error
@@ -64,20 +58,20 @@ class PantallaPrincipalViewModel(
   private val disposables: MutableList<Disposable>
 
   init {
+    _loading.value = true
     disposables = ArrayList()
   }
 
   fun buscarRestaurantesDestacados() {
-    _loadingDestacados.value = true
     restauranteRepository.buscarDestacados(
       object : FirestoreCallback<List<Restaurante>> {
         override fun onSuccess(result: List<Restaurante>) {
-          _loadingDestacados.value = false
+          _loading.value = false
           _listaRestaurantesDestacados.value = result
         }
 
         override fun onError(exception: Throwable) {
-          _loadingDestacados.value = false
+          _loading.value = false
           _error.value = exception
         }
       }
@@ -85,17 +79,16 @@ class PantallaPrincipalViewModel(
   }
 
   fun buscarRestaurantesCercaDeTi() {
-    _loadingCercaDeTi.value = true
     // Buscar restaurantes
     restauranteRepository.buscarTodos(
       object : FirestoreCallback<List<Restaurante>> {
         override fun onSuccess(result: List<Restaurante>) {
-          _loadingCercaDeTi.value = false
+          _loading.value = false
           _listaRestaurantesCercaDeTi.postValue(result)
         }
 
         override fun onError(exception: Throwable) {
-          _loadingCercaDeTi.value = false
+          _loading.value = false
           _error.postValue(exception)
         }
       }
@@ -103,17 +96,16 @@ class PantallaPrincipalViewModel(
   }
 
   fun buscarRestaurantesVistosRecientemente() {
-    _loadingVistosRecientemente.value = true
     restauranteVistoRecientementeRepository.buscarVistosRecientementeDelUsuario(
       usuario!!.id,
       object : FirestoreCallback<LinkedList<Restaurante>> {
         override fun onSuccess(result: LinkedList<Restaurante>) {
-          _loadingVistosRecientemente.value = false
+          _loading.value = false
           _listaRestaurantesVistosRecientemente.postValue(result)
         }
 
         override fun onError(exception: Throwable) {
-          _loadingVistosRecientemente.value = false
+          _loading.value = false
           _error.postValue(exception)
         }
       },

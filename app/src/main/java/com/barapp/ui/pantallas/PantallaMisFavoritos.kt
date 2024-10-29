@@ -39,8 +39,6 @@ class PantallaMisFavoritos : Fragment(), ResultadosRestauranteRecyclerAdapter.Ca
 
   private var adapter: ResultadosRestauranteRecyclerAdapter? = null
 
-  private lateinit var skeletonListaRestaurantes: Skeleton
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
@@ -113,6 +111,17 @@ class PantallaMisFavoritos : Fragment(), ResultadosRestauranteRecyclerAdapter.Ca
     }
 
     pantallaMisFavoritosViewModel.distancias.observe(viewLifecycleOwner) { cargarDistancias(it) }
+
+    pantallaMisFavoritosViewModel.loading.observe(viewLifecycleOwner) { loading ->
+      (activity as MainActivity).setLoading(loading)
+      if (loading) {
+        binding.txtViewCantidadResultadosEncontrados.visibility = View.GONE
+        binding.recyclerViewRestaurantes.visibility = View.GONE
+      } else {
+        binding.txtViewCantidadResultadosEncontrados.visibility = View.VISIBLE
+        binding.recyclerViewRestaurantes.visibility = View.VISIBLE
+      }
+    }
 
     binding.botonSwap.setOnClickListener {
       Toast.makeText(binding.root.context, R.string.boton_ordenar_lista_accion, Toast.LENGTH_SHORT)

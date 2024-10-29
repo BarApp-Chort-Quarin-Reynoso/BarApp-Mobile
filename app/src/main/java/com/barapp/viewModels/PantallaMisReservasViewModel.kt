@@ -35,6 +35,10 @@ class PantallaMisReservasViewModel : ViewModel() {
   private val _error = MutableLiveData<Throwable>()
   val error: LiveData<Throwable> = _error
 
+  init {
+    _loading.value = true
+  }
+
   fun buscarReservas() {
     _loading.value = true
 

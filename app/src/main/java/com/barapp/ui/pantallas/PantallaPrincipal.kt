@@ -14,18 +14,21 @@ import com.barapp.R
 import com.barapp.databinding.FragmentPantallaPrincipalBinding
 import com.barapp.model.Restaurante
 import com.barapp.ui.MainActivity
-import com.barapp.util.interfaces.OnRestauranteClicked
-import com.barapp.util.interfaces.OnSnackbarShowed
 import com.barapp.ui.recyclerViewAdapters.HorizontalRecyclerViewAdapter
 import com.barapp.util.Interpolator
 import com.barapp.util.interfaces.LoadingHandler
+import com.barapp.util.interfaces.OnRestauranteClicked
+import com.barapp.util.interfaces.OnSnackbarShowed
 import com.barapp.viewModels.MainActivityViewModel
 import com.barapp.viewModels.PantallaPrincipalViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialFadeThrough
 
 class PantallaPrincipal :
-  Fragment(), HorizontalRecyclerViewAdapter.ActualizarFavoritos, OnSnackbarShowed, LoadingHandler {
+    Fragment(),
+    HorizontalRecyclerViewAdapter.ActualizarFavoritos,
+    OnSnackbarShowed,
+    LoadingHandler {
   companion object {
     const val ID_CERCA_DE_TI = "1"
     const val ID_VISTOS_RECIENTEMENTE = "2"
@@ -53,15 +56,15 @@ class PantallaPrincipal :
     super.onCreate(savedInstanceState)
 
     enterTransition =
-      MaterialFadeThrough().apply { interpolator = Interpolator.emphasizedInterpolator() }
+        MaterialFadeThrough().apply { interpolator = Interpolator.emphasizedInterpolator() }
     exitTransition =
-      MaterialFadeThrough().apply { interpolator = Interpolator.emphasizedInterpolator() }
+        MaterialFadeThrough().apply { interpolator = Interpolator.emphasizedInterpolator() }
   }
 
   override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?,
+      inflater: LayoutInflater,
+      container: ViewGroup?,
+      savedInstanceState: Bundle?,
   ): View {
     binding = FragmentPantallaPrincipalBinding.inflate(inflater, container, false)
     return binding.root
@@ -75,89 +78,93 @@ class PantallaPrincipal :
     OneShotPreDrawListener.add(view) { startPostponedEnterTransition() }
 
     onFabBuscarClickedListener =
-      (parentFragment as NavHostFragment).parentFragment as OnFabBuscarClicked
+        (parentFragment as NavHostFragment).parentFragment as OnFabBuscarClicked
     onRestauranteClicked =
-      (parentFragment as NavHostFragment).parentFragment as OnRestauranteClicked
+        (parentFragment as NavHostFragment).parentFragment as OnRestauranteClicked
 
     mainActivityViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
       pantallaPrincipalViewModel.usuario = usuario
 
       if (adapterRestaurantesDestacados == null) {
         adapterRestaurantesDestacados =
-          HorizontalRecyclerViewAdapter(
-            ArrayList(),
-            usuario,
-            this,
-            ID_DESTACADOS,
-            object : HorizontalRecyclerViewAdapter.OnItemClickListener {
-              override fun onClick(
-                transitionView: View,
-                restaurante: Restaurante,
-                distancia: Int?,
-              ) {
-                onRestauranteClicked.onRestauranteClicked(restaurante, transitionView, distancia)
-              }
-            },
-            this
-          )
+            HorizontalRecyclerViewAdapter(
+                ArrayList(),
+                usuario,
+                this,
+                ID_DESTACADOS,
+                object : HorizontalRecyclerViewAdapter.OnItemClickListener {
+                  override fun onClick(
+                      transitionView: View,
+                      restaurante: Restaurante,
+                      distancia: Int?,
+                  ) {
+                    onRestauranteClicked.onRestauranteClicked(
+                        restaurante, transitionView, distancia)
+                  }
+                },
+                this)
       }
 
       if (cercaDeTiRecyclerAdapter == null) {
         cercaDeTiRecyclerAdapter =
-          HorizontalRecyclerViewAdapter(
-            ArrayList(),
-            usuario,
-            this,
-            ID_CERCA_DE_TI,
-            object : HorizontalRecyclerViewAdapter.OnItemClickListener {
-              override fun onClick(
-                transitionView: View,
-                restaurante: Restaurante,
-                distancia: Int?,
-              ) {
-                onRestauranteClicked.onRestauranteClicked(restaurante, transitionView, distancia)
-              }
-            },
-            this
-          )
+            HorizontalRecyclerViewAdapter(
+                ArrayList(),
+                usuario,
+                this,
+                ID_CERCA_DE_TI,
+                object : HorizontalRecyclerViewAdapter.OnItemClickListener {
+                  override fun onClick(
+                      transitionView: View,
+                      restaurante: Restaurante,
+                      distancia: Int?,
+                  ) {
+                    onRestauranteClicked.onRestauranteClicked(
+                        restaurante, transitionView, distancia)
+                  }
+                },
+                this)
       }
 
       if (adapterVistosRecientemente == null) {
         adapterVistosRecientemente =
-          HorizontalRecyclerViewAdapter(
-            ArrayList(),
-            usuario,
-            this,
-            ID_VISTOS_RECIENTEMENTE,
-            object : HorizontalRecyclerViewAdapter.OnItemClickListener {
-              override fun onClick(
-                transitionView: View,
-                restaurante: Restaurante,
-                distancia: Int?,
-              ) {
-                onRestauranteClicked.onRestauranteClicked(restaurante, transitionView, distancia)
-              }
-            },
-            this
-          )
+            HorizontalRecyclerViewAdapter(
+                ArrayList(),
+                usuario,
+                this,
+                ID_VISTOS_RECIENTEMENTE,
+                object : HorizontalRecyclerViewAdapter.OnItemClickListener {
+                  override fun onClick(
+                      transitionView: View,
+                      restaurante: Restaurante,
+                      distancia: Int?,
+                  ) {
+                    onRestauranteClicked.onRestauranteClicked(
+                        restaurante, transitionView, distancia)
+                  }
+                },
+                this)
       }
 
       binding.recyclerViewHorizontalRestaurantesDestacados.layoutManager =
-        LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+          LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
       binding.recyclerViewHorizontalRestaurantesDestacados.adapter = adapterRestaurantesDestacados
 
       binding.recyclerViewHorizontalCercaDeTi.layoutManager =
-        LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+          LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
       binding.recyclerViewHorizontalCercaDeTi.adapter = cercaDeTiRecyclerAdapter
 
       binding.recyclerViewHorizontalVistosRecientemente.layoutManager =
-        LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+          LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
       binding.recyclerViewHorizontalVistosRecientemente.adapter = adapterVistosRecientemente
 
       pantallaPrincipalViewModel.buscarRestaurantesVistosRecientemente()
       pantallaPrincipalViewModel.buscarRestaurantesDestacados()
       pantallaPrincipalViewModel.buscarRestaurantesCercaDeTi()
     }
+
+    binding.labelDestacados.visibility = View.GONE
+    binding.labelCercaDeTi.visibility = View.GONE
+    binding.labelVistoRecientemente.visibility = View.GONE
 
     mainActivityViewModel.ubicacionUsuario.observe(viewLifecycleOwner) { ubicacion ->
       pantallaPrincipalViewModel.ubicacionDisponible(ubicacion)
@@ -172,16 +179,18 @@ class PantallaPrincipal :
         }
 
         pantallaPrincipalViewModel.listaRestaurantesVistosRecientemente.observe(
-          viewLifecycleOwner
-        ) {
-          pantallaPrincipalViewModel.calcularDistanciasVistosRecientemente()
-        }
+            viewLifecycleOwner) {
+              pantallaPrincipalViewModel.calcularDistanciasVistosRecientemente()
+            }
       }
     }
 
     pantallaPrincipalViewModel.listaRestaurantesDestacados.observe(viewLifecycleOwner) {
-      listaRestaurante ->
+        listaRestaurante ->
+      if (listaRestaurante.isNotEmpty()) {
+        binding.labelDestacados.visibility = View.VISIBLE
         cargarRecyclerViewRestaurantesDestacados(listaRestaurante)
+      }
     }
 
     pantallaPrincipalViewModel.distanciasDestacados.observe(viewLifecycleOwner) {
@@ -189,13 +198,10 @@ class PantallaPrincipal :
     }
 
     pantallaPrincipalViewModel.listaRestaurantesCercaDeTi.observe(viewLifecycleOwner) {
-      listaRestaurante -> if (listaRestaurante.isEmpty()) {
-          binding.labelCercaDeTi.visibility = View.GONE
-          binding.recyclerViewHorizontalCercaDeTi.visibility = View.GONE
-        } else {
-          cargarRecyclerViewCercaDeTi(listaRestaurante)
-          binding.labelCercaDeTi.visibility = View.VISIBLE
-          binding.recyclerViewHorizontalCercaDeTi.visibility = View.VISIBLE
+        listaRestaurante ->
+      if (listaRestaurante.isNotEmpty()) {
+        cargarRecyclerViewCercaDeTi(listaRestaurante)
+        binding.labelCercaDeTi.visibility = View.VISIBLE
       }
     }
 
@@ -204,19 +210,24 @@ class PantallaPrincipal :
     }
 
     pantallaPrincipalViewModel.listaRestaurantesVistosRecientemente.observe(viewLifecycleOwner) {
-      listaRestaurante ->
-      if (listaRestaurante.isEmpty()) {
-        binding.labelVistoRecientemente.visibility = View.GONE
-        binding.recyclerViewHorizontalVistosRecientemente.visibility = View.GONE
-      } else {
+        listaRestaurante ->
+      if (listaRestaurante.isNotEmpty()) {
         cargarRecyclerViewVistosRecientemente(listaRestaurante)
         binding.labelVistoRecientemente.visibility = View.VISIBLE
-        binding.recyclerViewHorizontalVistosRecientemente.visibility = View.VISIBLE
       }
     }
 
     pantallaPrincipalViewModel.distanciasVistosRecientemente.observe(viewLifecycleOwner) {
       cargarDistanciasRecyclerViewVistosRecientemente(it)
+    }
+
+    pantallaPrincipalViewModel.loading.observe(viewLifecycleOwner) { loading ->
+      setLoading(loading)
+      if (loading) {
+        binding.cardViewNovedades.visibility = View.GONE
+      } else {
+        binding.cardViewNovedades.visibility = View.VISIBLE
+      }
     }
 
     pantallaPrincipalViewModel.error.observe(viewLifecycleOwner) {
@@ -235,12 +246,12 @@ class PantallaPrincipal :
       showSnackbarReservaExitosa = false
 
       Snackbar.make(
-          requireView(),
-          getString(R.string.pantalla_confirmacion_reservas_snackbar_texto),
-          Snackbar.LENGTH_LONG,
-        )
-        .setDuration(Snackbar.LENGTH_LONG)
-        .show()
+              requireView(),
+              getString(R.string.pantalla_confirmacion_reservas_snackbar_texto),
+              Snackbar.LENGTH_LONG,
+          )
+          .setDuration(Snackbar.LENGTH_LONG)
+          .show()
     }
   }
 
@@ -272,7 +283,10 @@ class PantallaPrincipal :
     fun onFabBuscarClicked(fabBuscar: View)
   }
 
-  override fun actualizarFavoritos(holder: HorizontalRecyclerViewAdapter.RestaurantesViewHolder, idRestaurante: String) {
+  override fun actualizarFavoritos(
+      holder: HorizontalRecyclerViewAdapter.RestaurantesViewHolder,
+      idRestaurante: String
+  ) {
     adapterRestaurantesDestacados?.addToFavorites(holder, idRestaurante)
     cercaDeTiRecyclerAdapter?.addToFavorites(holder, idRestaurante)
     adapterVistosRecientemente?.addToFavorites(holder, idRestaurante)

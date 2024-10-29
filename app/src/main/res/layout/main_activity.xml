@@ -26,7 +26,8 @@
             android:layout_height="match_parent"
             android:background="@android:color/black"
             android:alpha="0.5"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:clickable="true"/>
 
         <ProgressBar
             android:id="@+id/loadingProgressBar"
@@ -34,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone"/>
+
     </FrameLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>
