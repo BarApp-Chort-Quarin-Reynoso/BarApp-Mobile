@@ -26,6 +26,10 @@ class PantallaMisFavoritosViewModel : ViewModel() {
   private val _error = MutableLiveData<Throwable>()
   val error: LiveData<Throwable> = _error
 
+  init {
+    _loading.value = true
+  }
+
   fun buscarFavoritos(idUsuario: String) {
     _loading.value = true
     restauranteFavoritoRepository.buscarFavoritosDelUsuario(

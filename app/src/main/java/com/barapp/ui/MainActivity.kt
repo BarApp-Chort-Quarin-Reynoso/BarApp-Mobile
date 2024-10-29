@@ -14,15 +14,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.navigation.fragment.FragmentNavigatorExtras
-import androidx.navigation.fragment.NavHostFragment
 import com.barapp.R
+import com.barapp.data.retrofit.RetrofitInstance
 import com.barapp.databinding.MainActivityBinding
-import com.barapp.ui.pantallas.OnReservaClicked
-import com.barapp.ui.pantallas.PantallaPrincipal
 import com.barapp.util.interfaces.LogOutListener
 import com.barapp.util.notifications.NotificacionReservaManager
-import com.barapp.data.retrofit.RetrofitInstance
 import com.barapp.viewModels.MainActivityViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
