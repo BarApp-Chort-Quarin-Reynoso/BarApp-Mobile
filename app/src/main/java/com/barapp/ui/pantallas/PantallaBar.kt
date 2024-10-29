@@ -252,7 +252,7 @@ class PantallaBar : Fragment() {
     }
 
     viewModel.loadingReservasPendientes.observe(viewLifecycleOwner) { loading ->
-      binding.fabReservar.isEnabled = !loading
+      binding.fabReservar.isEnabled = !loading && viewModel.restaurante?.estado == EstadoRestaurante.HABILITADO
     }
 
     viewModel.alcanzoLimiteReservas.observe(viewLifecycleOwner) { alcanzoLimite ->
