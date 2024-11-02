@@ -35,26 +35,6 @@
             android:text="@string/pantalla_mis_favoritos_label_cantidad_favoritos_encontrados"
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/botonSwap"
-            style="?attr/materialIconButtonFilledStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:contentDescription="@string/boton_ordenar_descripcion"
-            app:backgroundTint="@color/md_theme_light_background"
-            app:icon="@drawable/icon_outlined_swap_vert_24" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/botonFiltros"
-            style="?attr/materialIconButtonFilledStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:contentDescription="@string/boton_filtros_descripcion"
-            app:backgroundTint="@color/md_theme_light_background"
-            app:icon="@drawable/icon_outlined_tune_24" />
-
     </LinearLayout>
 
 

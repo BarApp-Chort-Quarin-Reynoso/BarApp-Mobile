@@ -123,16 +123,6 @@ class PantallaMisFavoritos : Fragment(), ResultadosRestauranteRecyclerAdapter.Ca
       }
     }
 
-    binding.botonSwap.setOnClickListener {
-      Toast.makeText(binding.root.context, R.string.boton_ordenar_lista_accion, Toast.LENGTH_SHORT)
-        .show()
-    }
-
-    binding.botonFiltros.setOnClickListener {
-      Toast.makeText(binding.root.context, R.string.boton_filtros_lista_accion, Toast.LENGTH_SHORT)
-        .show()
-    }
-
     onRestauranteClicked =
       (parentFragment as NavHostFragment).parentFragment as OnRestauranteClicked
 
