@@ -85,7 +85,7 @@ class PantallaResultadosBusqueda : Fragment(), ResultadosRestauranteRecyclerAdap
     }
 
     binding.botonSwap.setOnClickListener {
-      pantallaResultadosBusquedaViewModel.ordenarPorRating()
+      pantallaResultadosBusquedaViewModel.ordenarPorRating(requireView(), requireContext())
     }
 
     binding.botonFiltros.setOnClickListener {
@@ -104,12 +104,15 @@ class PantallaResultadosBusqueda : Fragment(), ResultadosRestauranteRecyclerAdap
       }
 
     binding.btnApply.setOnClickListener {
+
       pantallaResultadosBusquedaViewModel.applyFilters()
+      standardBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
     binding.btnResetAll.setOnClickListener {
       pantallaResultadosBusquedaViewModel.resetFilters()
       binding.chipGroupRatings.clearCheck()
+      standardBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
   }
 
