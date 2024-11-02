@@ -279,6 +279,7 @@
 
     <!--Pantalla Resultado busqueda-->
     <string name="pantalla_resultados_busqueda_label_cantidad_resultados_encontrados">[Cantidad resultados encontrados]</string>
+    <string name="pantalla_resultados_busqueda_label_ordenar_por">Ordenado por orden %1$s</string>
 
     <!-- Pantalla Mi Cuenta -->
     <string name="pantalla_mi_cuenta_titulo">Mi Cuenta</string>
