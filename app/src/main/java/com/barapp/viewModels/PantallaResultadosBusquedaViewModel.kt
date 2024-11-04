@@ -91,13 +91,6 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
         }
         _listaRestaurantes.postValue(listaOrdenada)
         _orderedDescending.postValue(orderedDescending.value != true)
-        Snackbar.make(
-          view,
-          context.getString(R.string.pantalla_resultados_busqueda_label_ordenar_por, if (orderedDescending.value == true) "ascendente" else "descendente"),
-          Snackbar.LENGTH_LONG,
-        )
-          .setDuration(Snackbar.LENGTH_LONG)
-          .show()
     }
   }
 
