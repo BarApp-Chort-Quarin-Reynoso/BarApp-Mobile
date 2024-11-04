@@ -36,7 +36,7 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
 
   var minEstrellas: Int = 0
 
-  fun buscarRestaurantesSegunTexto(textoBusqueda: String, callback: () -> Unit) {
+  fun buscarRestaurantesSegunTexto(textoBusqueda: String) {
       _textoBusquedaIngresado.postValue(textoBusqueda)
 
       restauranteRepository.buscarTodos(
@@ -46,14 +46,16 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
             _listaRestaurantes.postValue(
               result
                 .stream()
-                .filter { restaurante: Restaurante ->
+                .filter { restaurante ->
                   restaurante.nombre
                     .uppercase(Locale.getDefault())
                     .contains(textoBusqueda.uppercase(Locale.getDefault()))
                 }
+                .filter { restaurante ->
+                  minEstrellas == 0 || restaurante.puntuacion > minEstrellas
+                }
                 .collect(Collectors.toList())
             )
-            callback()
           }
 
           override fun onError(exception: Throwable) {
@@ -100,22 +102,6 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
   }
 
   fun applyFilters() {
-    buscarRestaurantesSegunTexto(textoBusquedaIngresado.value!!) {
-      GlobalScope.launch(Dispatchers.Main) {
-        delay(500)
-      val listaRestaurantesCompleta = listaRestaurantes.value
-      if (listaRestaurantesCompleta != null) {
-        if (minEstrellas == 0) {
-          _listaRestaurantes.postValue(listaRestaurantesCompleta!!)
-        } else {
-          val listaFiltrada = listaRestaurantesCompleta
-            .filter { restaurante: Restaurante ->
-              restaurante.puntuacion > minEstrellas
-            }
-          _listaRestaurantes.postValue(listaFiltrada)
-        }
-      }
-      }
-    }
+    buscarRestaurantesSegunTexto(textoBusquedaIngresado.value!!)
   }
 }
