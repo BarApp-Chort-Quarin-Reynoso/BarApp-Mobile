@@ -67,7 +67,7 @@ class PantallaResultadosBusqueda : Fragment(), ResultadosRestauranteRecyclerAdap
 
     pantallaResultadosBusquedaViewModel.buscarRestaurantesSegunTexto(
       arguments?.getString("textoBusqueda") ?: ""
-    ) { this.setLoading(false) }
+    )
 
     pantallaResultadosBusquedaViewModel.listaRestaurantes.observe(viewLifecycleOwner) { listaRestaurantes ->
       mainActivityViewModel.usuario.observe(viewLifecycleOwner) { usuario: Usuario ->
