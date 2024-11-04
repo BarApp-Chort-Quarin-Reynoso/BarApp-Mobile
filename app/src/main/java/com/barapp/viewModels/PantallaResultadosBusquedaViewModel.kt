@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 import java.util.Locale
 import java.util.stream.Collectors
+import kotlinx.coroutines.*
 
 class PantallaResultadosBusquedaViewModel : ViewModel() {
   private val restauranteRepository: RestauranteRepository = RestauranteRepository.instance
@@ -35,12 +36,13 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
 
   var minEstrellas: Int = 0
 
-  fun buscarRestaurantesSegunTexto(textoBusqueda: String) {
+  fun buscarRestaurantesSegunTexto(textoBusqueda: String, callback: () -> Unit) {
       _textoBusquedaIngresado.postValue(textoBusqueda)
 
       restauranteRepository.buscarTodos(
         object : FirestoreCallback<List<Restaurante>> {
           override fun onSuccess(result: List<Restaurante>) {
+            println("result size: ${result.size}")
             _listaRestaurantes.postValue(
               result
                 .stream()
@@ -51,6 +53,7 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
                 }
                 .collect(Collectors.toList())
             )
+            callback()
           }
 
           override fun onError(exception: Throwable) {
@@ -76,15 +79,6 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
     this.ubicacionUsuario = ubicacionUsuario
   }
 
-  fun ordenarPorDistancia() {
-    val listaRestaurantes = listaRestaurantes.value
-    val distancias = distancias.value
-    if (listaRestaurantes != null && distancias != null) {
-      val listaOrdenada = listaRestaurantes.sortedBy { distancias[it.id] }
-      _listaRestaurantes.postValue(listaOrdenada)
-    }
-  }
-
   fun ordenarPorRating(view: View, context: Context) {
     val listaRestaurantes = listaRestaurantes.value
     if (listaRestaurantes != null) {
@@ -106,17 +100,22 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
   }
 
   fun applyFilters() {
-    val listaRestaurantesCompleta = listaRestaurantes.value
-    if (listaRestaurantesCompleta != null) {
-      val listaFiltrada = listaRestaurantesCompleta
-        .filter { restaurante: Restaurante ->
-          restaurante.puntuacion > minEstrellas
+    buscarRestaurantesSegunTexto(textoBusquedaIngresado.value!!) {
+      GlobalScope.launch(Dispatchers.Main) {
+        delay(500)
+      val listaRestaurantesCompleta = listaRestaurantes.value
+      if (listaRestaurantesCompleta != null) {
+        if (minEstrellas == 0) {
+          _listaRestaurantes.postValue(listaRestaurantesCompleta!!)
+        } else {
+          val listaFiltrada = listaRestaurantesCompleta
+            .filter { restaurante: Restaurante ->
+              restaurante.puntuacion > minEstrellas
+            }
+          _listaRestaurantes.postValue(listaFiltrada)
         }
-      _listaRestaurantes.postValue(listaFiltrada)
+      }
+      }
     }
-  }
-
-  fun resetFilters() {
-    buscarRestaurantesSegunTexto(textoBusquedaIngresado.value!!)
   }
 }
