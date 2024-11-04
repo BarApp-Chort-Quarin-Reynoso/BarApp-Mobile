@@ -279,7 +279,6 @@
 
     <!--Pantalla Resultado busqueda-->
     <string name="pantalla_resultados_busqueda_label_cantidad_resultados_encontrados">[Cantidad resultados encontrados]</string>
-    <string name="pantalla_resultados_busqueda_label_ordenar_por">Ordenado por puntuación %1$s</string>
 
     <!-- Pantalla Mi Cuenta -->
     <string name="pantalla_mi_cuenta_titulo">Mi Cuenta</string>
@@ -301,7 +300,7 @@
 
     <string name="placeholder_nombre_apellido">"%1$s %2$s"</string>
     <string name="placeholder_restaurante_encontrado">"%1$d restaurante encontrado"</string>
-    <string name="placeholder_restaurantes_encontrados">"%1$d restaurantes encontrados"</string>
+    <string name="placeholder_restaurantes_encontrados">"%1$d restaurantes coincidentes"</string>
     <string name="placeholder_persona">"%1$d persona"</string>
     <string name="placeholder_personas">"%1$d personas"</string>
 
