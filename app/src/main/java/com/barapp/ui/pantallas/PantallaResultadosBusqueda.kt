@@ -67,7 +67,7 @@ class PantallaResultadosBusqueda : Fragment(), ResultadosRestauranteRecyclerAdap
 
     pantallaResultadosBusquedaViewModel.buscarRestaurantesSegunTexto(
       arguments?.getString("textoBusqueda") ?: ""
-    )
+    ) { this.setLoading(false) }
 
     pantallaResultadosBusquedaViewModel.listaRestaurantes.observe(viewLifecycleOwner) { listaRestaurantes ->
       mainActivityViewModel.usuario.observe(viewLifecycleOwner) { usuario: Usuario ->
@@ -95,22 +95,25 @@ class PantallaResultadosBusqueda : Fragment(), ResultadosRestauranteRecyclerAdap
 
     binding.toolbar.setNavigationOnClickListener { volverAtras() }
 
-    pantallaResultadosBusquedaViewModel.minEstrellas =
-      when (binding.chipGroupRatings.checkedChipId) {
+    binding.chipGroupRatings.setOnCheckedChangeListener { group, checkedId ->
+      binding.btnApply.isEnabled = checkedId != View.NO_ID
+      pantallaResultadosBusquedaViewModel.minEstrellas = when (checkedId) {
         R.id.chip2estrellas -> 2
         R.id.chip3estrellas -> 3
         R.id.chip4estrellas -> 4
         else -> 0
       }
+    }
+
+    binding.btnApply.isEnabled = binding.chipGroupRatings.checkedChipId != View.NO_ID
 
     binding.btnApply.setOnClickListener {
-
       pantallaResultadosBusquedaViewModel.applyFilters()
       standardBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
     binding.btnResetAll.setOnClickListener {
-      pantallaResultadosBusquedaViewModel.resetFilters()
+      pantallaResultadosBusquedaViewModel.applyFilters()
       binding.chipGroupRatings.clearCheck()
       standardBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
