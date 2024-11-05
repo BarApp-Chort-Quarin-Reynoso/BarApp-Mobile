@@ -16,7 +16,7 @@ import timber.log.Timber
 
 class Maps {
   companion object {
-    private const val distanciaMaximaAMostrar = 1000
+    private const val distanciaMaximaAMostrar = 2000
     private const val factorRedondeo = 50
 
     /**

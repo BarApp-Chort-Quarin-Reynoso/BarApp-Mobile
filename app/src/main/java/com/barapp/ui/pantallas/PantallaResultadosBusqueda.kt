@@ -85,7 +85,7 @@ class PantallaResultadosBusqueda : Fragment(), ResultadosRestauranteRecyclerAdap
     }
 
     binding.botonSwap.setOnClickListener {
-      pantallaResultadosBusquedaViewModel.ordenarPorRating(requireView(), requireContext())
+      pantallaResultadosBusquedaViewModel.ordenarPorRating()
     }
 
     binding.botonFiltros.setOnClickListener {
