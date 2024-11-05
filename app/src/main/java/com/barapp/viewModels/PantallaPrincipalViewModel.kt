@@ -13,7 +13,7 @@ import com.barapp.data.repositories.RestauranteVistoRecientementeRepository
 import com.barapp.util.Maps.Companion.calcularDistanciasABares
 import io.reactivex.rxjava3.disposables.Disposable
 import java.util.LinkedList
-import timber.log.Timber
+import java.util.stream.Collectors
 
 class PantallaPrincipalViewModel(
   private val restauranteRepository: RestauranteRepository,
@@ -30,6 +30,10 @@ class PantallaPrincipalViewModel(
 
   private val _listaRestaurantesCercaDeTi = MutableLiveData<List<Restaurante>>()
   val listaRestaurantesCercaDeTi: LiveData<List<Restaurante>> = _listaRestaurantesCercaDeTi
+
+  private val _listaRestaurantesFiltradaCercaDeTi = MutableLiveData<List<Restaurante>>()
+  val listaRestaurantesFiltradaCercaDeTi: LiveData<List<Restaurante>> = _listaRestaurantesFiltradaCercaDeTi
+
 
   private val _listaRestaurantesDestacados = MutableLiveData<List<Restaurante>>()
   val listaRestaurantesDestacados: LiveData<List<Restaurante>> = _listaRestaurantesDestacados
@@ -130,6 +134,20 @@ class PantallaPrincipalViewModel(
           Unit
         }
       disposables.add(subscription)
+    }
+  }
+
+  fun filterRestaurantesCercaDeTi() {
+    val distancias = distanciasCercaDeTi.value
+    val listaRestaurantes = listaRestaurantesCercaDeTi.value
+    if (distancias != null && listaRestaurantes != null) {
+      val result = listaRestaurantes
+        .stream()
+        .filter { restaurante ->
+          distancias[restaurante.id] != null
+        }
+        .collect(Collectors.toList())
+      _listaRestaurantesFiltradaCercaDeTi.postValue(result)
     }
   }
 

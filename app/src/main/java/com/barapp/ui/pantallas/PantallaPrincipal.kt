@@ -197,15 +197,19 @@ class PantallaPrincipal :
       cargarDistanciasRecyclerViewDestacados(it)
     }
 
-    pantallaPrincipalViewModel.listaRestaurantesCercaDeTi.observe(viewLifecycleOwner) {
-        listaRestaurante ->
-      if (listaRestaurante.isNotEmpty()) {
-        cargarRecyclerViewCercaDeTi(listaRestaurante)
+    pantallaPrincipalViewModel.listaRestaurantesFiltradaCercaDeTi.observe(viewLifecycleOwner) {
+        listaRestaurantesFiltrada ->
+      if (listaRestaurantesFiltrada.isNotEmpty()) {
+        cargarRecyclerViewCercaDeTi(listaRestaurantesFiltrada)
         binding.labelCercaDeTi.visibility = View.VISIBLE
+      } else {
+        binding.labelCercaDeTi.visibility = View.GONE
+        binding.recyclerViewHorizontalCercaDeTi.visibility = View.GONE
       }
     }
 
     pantallaPrincipalViewModel.distanciasCercaDeTi.observe(viewLifecycleOwner) {
+      pantallaPrincipalViewModel.filterRestaurantesCercaDeTi()
       cargarDistanciasRecyclerViewCercaDeTi(it)
     }
 

@@ -1,21 +1,15 @@
 package com.barapp.viewModels
 
-import android.content.Context
 import android.location.Location
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.barapp.R
 import com.barapp.data.repositories.RestauranteRepository
 import com.barapp.data.utils.FirestoreCallback
 import com.barapp.model.Restaurante
 import com.barapp.util.Maps.Companion.calcularDistanciasABares
-import com.google.android.material.snackbar.Snackbar
-import timber.log.Timber
 import java.util.Locale
 import java.util.stream.Collectors
-import kotlinx.coroutines.*
 
 class PantallaResultadosBusquedaViewModel : ViewModel() {
   private val restauranteRepository: RestauranteRepository = RestauranteRepository.instance
@@ -42,7 +36,6 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
       restauranteRepository.buscarTodos(
         object : FirestoreCallback<List<Restaurante>> {
           override fun onSuccess(result: List<Restaurante>) {
-            println("result size: ${result.size}")
             _listaRestaurantes.postValue(
               result
                 .stream()
@@ -66,7 +59,6 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
   }
 
   fun calcularDistancias() {
-    Timber.e("calcularDistancias ejecutado")
     if (listaRestaurantes.value != null && ubicacionUsuario != null) {
       val subscription =
         calcularDistanciasABares(listaRestaurantes.value!!, ubicacionUsuario!!) {
@@ -81,7 +73,7 @@ class PantallaResultadosBusquedaViewModel : ViewModel() {
     this.ubicacionUsuario = ubicacionUsuario
   }
 
-  fun ordenarPorRating(view: View, context: Context) {
+  fun ordenarPorRating() {
     val listaRestaurantes = listaRestaurantes.value
     if (listaRestaurantes != null) {
         val listaOrdenada = if (orderedDescending.value == true) {
