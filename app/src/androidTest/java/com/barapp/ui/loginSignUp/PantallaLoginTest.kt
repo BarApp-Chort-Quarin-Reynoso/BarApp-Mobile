@@ -1,5 +1,6 @@
 package com.barapp.ui.loginSignUp
 
+import android.Manifest
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -11,13 +12,16 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
+import com.barapp.BuildConfig
 import com.barapp.R
 import com.barapp.ui.MainActivity
 import com.google.android.material.textfield.TextInputLayout
 import org.hamcrest.Description
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.TypeSafeMatcher
+import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.Test
@@ -40,8 +44,20 @@ class PantallaLoginTest {
             "android.permission.ACCESS_FINE_LOCATION"
         )
 
+    @Before
+    fun setup() {
+        val notificationsPermission = Manifest.permission.POST_NOTIFICATIONS
+        val locationPermission = Manifest.permission.ACCESS_FINE_LOCATION
+        getInstrumentation().uiAutomation.grantRuntimePermission(BuildConfig.APPLICATION_ID, notificationsPermission)
+        Thread.sleep(1000)
+        getInstrumentation().uiAutomation.grantRuntimePermission(BuildConfig.APPLICATION_ID, locationPermission)
+    }
+
     @Test
     fun test1loginWithEmptyEmailAndPassword() {
+        // Wait a bit
+        Thread.sleep(5000)
+
         // Enter empty email
         val emailInput = onView(allOf(isDescendantOfA(withId(R.id.txtViewEmail)), isAssignableFrom(EditText::class.java)))
         emailInput.perform(replaceText(""), closeSoftKeyboard())
@@ -54,6 +70,9 @@ class PantallaLoginTest {
         val loginButton = onView(withId(R.id.botonIngresar))
         loginButton.perform(click())
 
+        // Wait a bit
+        Thread.sleep(5000)
+
         // Check if login was unsuccessful by checking if the user is still on the login screen
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val expectedErrorText = context.getString(R.string.error_campo_obligatorio)
@@ -63,6 +82,9 @@ class PantallaLoginTest {
 
     @Test
     fun test2loginWithInvalidEmail() {
+        // Wait a bit
+        Thread.sleep(5000)
+
         // Enter invalid email
         val emailInput = onView(allOf(isDescendantOfA(withId(R.id.txtViewEmail)), isAssignableFrom(EditText::class.java)))
         emailInput.perform(replaceText("invalidEmail"), closeSoftKeyboard())
@@ -75,6 +97,9 @@ class PantallaLoginTest {
         val loginButton = onView(withId(R.id.botonIngresar))
         loginButton.perform(click())
 
+        // Wait a bit
+        Thread.sleep(5000)
+
         // Check if login was unsuccessful by checking if the user is still on the login screen
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val expectedErrorText = context.getString(R.string.error_mail_no_valido)
@@ -83,6 +108,9 @@ class PantallaLoginTest {
 
     @Test
     fun test3loginWithShortPassword() {
+        // Wait a bit
+        Thread.sleep(5000)
+
         // Enter valid email
         val emailInput = onView(allOf(isDescendantOfA(withId(R.id.txtViewEmail)), isAssignableFrom(EditText::class.java)))
         emailInput.perform(replaceText("usuariodeprueba@gmail.com"), closeSoftKeyboard())
@@ -95,6 +123,9 @@ class PantallaLoginTest {
         val loginButton = onView(withId(R.id.botonIngresar))
         loginButton.perform(click())
 
+        // Wait a bit
+        Thread.sleep(5000)
+
         // Check if login was unsuccessful by checking if the user is still on the login screen
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val expectedErrorText = context.getString(R.string.error_campo_por_debajo_valor, 5)
@@ -103,22 +134,25 @@ class PantallaLoginTest {
 
     @Test
     fun test4loginWithValidEmailAndPassword() {
+        // Wait a bit
+        Thread.sleep(5000)
+
         // Enter email
         val emailInput = onView(allOf(isDescendantOfA(withId(R.id.txtViewEmail)), isAssignableFrom(
             EditText::class.java)))
-        emailInput.perform(replaceText("usuariodeprueba@gmail.com"), closeSoftKeyboard())
+        emailInput.perform(replaceText("pruebacu@gmail.com"), closeSoftKeyboard())
 
         // Enter password
         val passwordInput = onView(allOf(isDescendantOfA(withId(R.id.txtViewContrasenia)), isAssignableFrom(
             EditText::class.java)))
-        passwordInput.perform(replaceText("prueba123"), closeSoftKeyboard())
+        passwordInput.perform(replaceText("password123"), closeSoftKeyboard())
 
         // Click on login button
         val loginButton = onView(withId(R.id.botonIngresar))
         loginButton.perform(click())
 
         // Wait a bit
-        Thread.sleep(2000)
+        Thread.sleep(5000)
 
         // Check if login was successful
         val labelDestacados = onView(
