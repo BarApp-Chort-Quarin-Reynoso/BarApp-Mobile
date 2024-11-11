@@ -19,6 +19,10 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
+import android.Manifest
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import com.barapp.BuildConfig
+
 
 @LargeTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -30,8 +34,19 @@ class PantallaResultadosBusquedaTest {
   var mActivityScenarioRule = ActivityScenarioRule(MainActivity::class.java)
 
   @Before
+  fun setup() {
+    val notificationsPermission = Manifest.permission.POST_NOTIFICATIONS
+    val locationPermission = Manifest.permission.ACCESS_FINE_LOCATION
+    getInstrumentation().uiAutomation.grantRuntimePermission(BuildConfig.APPLICATION_ID, notificationsPermission)
+    Thread.sleep(1000)
+    getInstrumentation().uiAutomation.grantRuntimePermission(BuildConfig.APPLICATION_ID, locationPermission)
+  }
+
+  @Before
   fun login() {
 
+    // Wait a bit
+    Thread.sleep(5000)
     // Check if the user is already logged in by checking if a specific view is displayed
     val isUserLoggedIn = try {
       val labelDestacados = onView(
@@ -58,7 +73,7 @@ class PantallaResultadosBusquedaTest {
         )
       )
       emailInput.perform(
-        ViewActions.replaceText("usuariodeprueba@gmail.com"),
+        ViewActions.replaceText("pruebacu@gmail.com"),
         ViewActions.closeSoftKeyboard()
       )
 
@@ -70,14 +85,14 @@ class PantallaResultadosBusquedaTest {
           )
         )
       )
-      passwordInput.perform(ViewActions.replaceText("prueba123"), ViewActions.closeSoftKeyboard())
+      passwordInput.perform(ViewActions.replaceText("password123"), ViewActions.closeSoftKeyboard())
 
       // Click on login button
       val loginButton = onView(withId(R.id.botonIngresar))
       loginButton.perform(click())
 
       // Wait a bit
-      Thread.sleep(2000)
+      Thread.sleep(5000)
     }
     val searchButton = onView(withId(R.id.floating_action_button_buscar))
     searchButton.perform(click())
