@@ -28,7 +28,7 @@ import org.junit.runners.MethodSorters
 class PantallaSignUpTest {
 
   // Change the email each time you run the test
-  private val email = "test3@test.com"
+  private val email = "test4@test.com"
 
   @Rule
   @JvmField
