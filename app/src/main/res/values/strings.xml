@@ -218,7 +218,7 @@
 
     <string name="pantalla_reservar_titulo_calendario">Seleccione un día para la reserva</string>
 
-    <string name="pantalla_reservar_texto_ayuda_horarios_deshabilitados">Los horarios se visualizarán deshabilitados en función del tamaño de grupo seleccionado.</string>
+    <string name="pantalla_reservar_texto_ayuda_horarios_deshabilitados">Los horarios se habilitan según el tamaño de grupo seleccionado.</string>
     <string name="pantalla_reservar_titulo_dialog">No existen horarios disponibles</string>
     <string name="pantalla_reservar_texto_dialog">No existen horarios disponibles para la fecha seleccionada. Por favor, seleccione una nueva fecha y vuelva a intentarlo.</string>
 
@@ -233,7 +233,7 @@
     <string name="pantalla_confirmacion_reservas_label_nombre">Nombre</string>
     <string name="pantalla_confirmacion_reservas_label_mail">Mail</string>
     <string name="pantalla_confirmacion_reservas_label_telefono">Teléfono</string>
-    <string name="pantalla_confirmacion_reservas_label_recordatorio_reserva">Recordá que la reserva permanece pendiente un máximo de 15 minutos. Pasado ese tiempo la misma es automáticamente cancelada.</string>
+    <string name="pantalla_confirmacion_reservas_label_recordatorio_reserva">Recordá que la reserva permanece pendiente un máximo de 30 minutos. Pasado ese tiempo la misma es automáticamente cancelada.</string>
 
     <string name="pantalla_confirmacion_reservas_titulo_nombre_restaurante">[Nombre_Restaurante]</string>
     <string name="pantalla_confirmacion_reservas_texto_cantidad_personas">[Cantidad_Personas]</string>
